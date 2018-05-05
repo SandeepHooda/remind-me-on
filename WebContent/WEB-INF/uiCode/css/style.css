@@ -1,3 +1,14 @@
+.white{
+	background-color: white;
+}
+.userName {
+	font: italic bold 12px/30px Georgia, serif;
+	margin-right: 15px;
+}
+.centerText {
+	bottom: -200px;
+	left: 40%;
+}
 .loginBtn {
   box-sizing: border-box;
   position: relative;
@@ -174,6 +185,10 @@ $num-colors: 10;
 }
 
 @media (max-width: 730px) {
+	.centerText {
+	bottom: -200px;
+	left: 21%;
+	}
 	.jcarouseText ul {
 		height: 50px;
 		line-height: 30px;

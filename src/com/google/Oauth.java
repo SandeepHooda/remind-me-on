@@ -32,6 +32,10 @@ import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.vo.LoginVO;
+
+import mangodb.MangoDB;
 
 
 /**
@@ -53,10 +57,16 @@ public class Oauth extends HttpServlet {
     }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * Important notes
 	 */
+    //https://console.cloud.google.com/apis/credentials?project=remind-me-on&authuser=5
+    //Also change redirect URI
+   private static String client_secret = "clarCZYMkThQBzW8AmlwTFAd";
+   private static String client_id = "442257875897-aklpbvb97dsrleaf4g98mjjngdmf8t18.apps.googleusercontent.com";
+   //Enanle people.googleapis.com from https://console.cloud.google.com/apis/library?project=remind-me-on&authuser=5
+   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+				
 		String code = request.getParameter("code");
 		String client_id = request.getParameter("client_id");
 		String state = request.getParameter("state");
@@ -65,32 +75,13 @@ public class Oauth extends HttpServlet {
 			state = "1";
 		}
 		if (null == client_id) {//Just a safety check - It don't happen
-			client_id = "559854542242-5m328qq95bodvr86ju4doafhli1gqmri.apps.googleusercontent.com";
+			client_id = this.client_id;
 		
 		}
 		 if (null != code) {
-			/* String uname = request.getParameter("uname");
-				String psw = request.getParameter("psw");
 			
-			if ("alexatestsanhoo1@gmail.com".equalsIgnoreCase(uname) && "Sandeep@1234".equals(psw)) {
-				access_token = UUID.randomUUID().toString();
-				response.sendRedirect("https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=MYFQ2S2E4F1Y#state="+state+"&access_token="+access_token+"&token_type=Bearer");
-			}else {
-				response.sendRedirect("https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=MYFQ2S2E4F1Y#state="+state+"&token_type=Bearer");
-			}*/
-			 String access_token = getAccesstoken(request, response, code, client_id);
-			
-			String email = getUserEmail(access_token).get("email");
-			String name = getUserEmail(access_token).get("name");
-			addCookie("email", email,request, response );
-			addCookie("name" , name,request, response );
-			addCookie("cookieAccess" , access_token,request, response );
-			addCookie("userdetails" , "{\"name\":\""+name+"\",\"avatar_url\":\"https://avatars0.githubusercontent.com/u/24775543?v=4\"}",request, response );
-			
-			 EmailAddess toAddress = new EmailAddess();
-			 toAddress.setAddress("sonu.hooda@gmail.com");
-			new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to iot index.html", 	email +" "+name, null, null));
-			response.sendRedirect("/ui/index.html?regID="+email);
+			 addCookiedToResponseAndRecordLoginInDB(request, response, code);
+			response.sendRedirect("/ui/index.html");
 		}else {
 			//showLoginPage(response,state);
 			getAuthCode(request, response,client_id, state);
@@ -98,7 +89,32 @@ public class Oauth extends HttpServlet {
 		
 	}
 	
-	
+	private void addCookiedToResponseAndRecordLoginInDB(HttpServletRequest request, HttpServletResponse response, String code) throws IOException {
+		String access_token = getAccesstoken(request, response, code, client_id);
+		
+		//Set cookies
+		String email = getUserEmail(access_token).get("email");
+		String name = getUserEmail(access_token).get("name");
+		addCookie("email", email,request, response );
+		addCookie("name" , name,request, response );
+		addCookie("cookieAccess" , access_token,request, response );
+		addCookie("userdetails" , "{\"name\":\""+name+"\",\"avatar_url\":\"https://avatars0.githubusercontent.com/u/24775543?v=4\"}",request, response );
+		
+		//Insert in DB
+		LoginVO loginVO = new LoginVO();
+		loginVO.setEmailID(email);
+		loginVO.setName(name);
+		addCookie("regID" , loginVO.getRegID(),request, response );
+		 Gson  json = new Gson();
+         String data = json.toJson(loginVO, new TypeToken<LoginVO>() {}.getType());
+		
+         MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users", data, null);
+		
+		//Notify sandeep via email
+		 EmailAddess toAddress = new EmailAddess();
+		 toAddress.setAddress("sonu.hooda@gmail.com");
+		new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to Remind-me-on app by ", 	email +" "+name, null, null));
+	}
 	private void addCookie(String cookieName, String cookieValue ,HttpServletRequest request, HttpServletResponse response){
 		Cookie cookie = new Cookie(cookieName,cookieValue);
 	      cookie.setMaxAge(60*60*24); 
@@ -108,7 +124,7 @@ public class Oauth extends HttpServlet {
 	private void getAuthCode(HttpServletRequest request, HttpServletResponse response, String client_id, String state){
 		//Client id + redirect url + scope + response type
 	
-			String redirectUrl = "https://accounts.google.com/o/oauth2/auth?response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&client_id="+client_id+"&state="+state+"&redirect_uri=https%3A%2F%2Fpersonal-reminder.appspot.com%2FOauth";
+			String redirectUrl = "https://accounts.google.com/o/oauth2/auth?response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&client_id="+client_id+"&state="+state+"&redirect_uri=https%3A%2F%2Fremind-me-on.appspot.com%2FOauth";
 			try {
 				response.sendRedirect(redirectUrl);
 			} catch (IOException e) {
@@ -120,11 +136,11 @@ public class Oauth extends HttpServlet {
 	private String getAccesstoken(HttpServletRequest request, HttpServletResponse res, String code, String client_id) throws IOException{
 		log.info("Got auth code , now try to get access token  "+code);
 		
-		String client_secret = "NOw39wYJLlvz8EzpIpcqwJ19";
+		
 	
 		
 		
-		String urlParameters  = "grant_type=authorization_code&client_id="+client_id+"&client_secret="+client_secret+"&redirect_uri=https%3A%2F%2Fpersonal-reminder.appspot.com%2FOauth&code="+code;
+		String urlParameters  = "grant_type=authorization_code&client_id="+client_id+"&client_secret="+client_secret+"&redirect_uri=https%3A%2F%2Fremind-me-on.appspot.com%2FOauth&code="+code;
 		byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
 		int    postDataLength = postData.length;
 		

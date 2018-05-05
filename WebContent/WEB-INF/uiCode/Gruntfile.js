@@ -132,7 +132,7 @@ module.exports = function (grunt) {
                     {expand: true,  cwd: '<%= js_src_path %>',src: "lib/ngCordova/dist/ng-cordova.min.js", dest: '<%= js_build_path %>/', filter: 'isFile'},
                     {expand: true,  cwd: '<%= js_src_path %>',src: "lib/numberPicker/ionic-numberpicker.bundle.min.js", dest: '<%= js_build_path %>/', filter: 'isFile'},
                     {expand: true,  cwd: '<%= js_src_path %>',src: "lib/**/*", dest: '<%= js_build_path %>/', filter: 'isFile'},
-                    {expand: true,  cwd: '<%= js_src_path %>',src: "img/Easy-Day.jpg", dest: '<%= js_build_path %>/', filter: 'isFile'},
+                    {expand: true,  cwd: '<%= js_src_path %>',src: "img/secratory.png", dest: '<%= js_build_path %>/', filter: 'isFile'},
                     {expand: true,  cwd: '<%= js_src_path %>',src: "img/red.gif", dest: '<%= js_build_path %>/', filter: 'isFile'},
                     {expand: true,  cwd: '<%= js_src_path %>',src: "lib/ionic/css/ionic.css", dest: '<%= js_build_path %>/', filter: 'isFile'},
 					{expand: true,  cwd: '<%= js_src_path %>',src: "css/style.css", dest: '<%= js_build_path %>/', filter: 'isFile'}
