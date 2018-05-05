@@ -18,7 +18,8 @@ APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state',
 	    return "";
 	}
 	var regID = getCookie('regID');
-	 if (regID){
+	var regIDStorege = window.localStorage.getItem('regID');
+	 if (regID && regIDStorege != 'invalid'){
 		 window.localStorage.setItem('regID', regID);
 		 window.localStorage.setItem('name', getCookie('name'));
 	 }
@@ -30,22 +31,21 @@ APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state',
 			$scope.userName ="Hello Guest";
 		}
 	
-	if (window.localStorage.getItem('regID')){
+	if (regIDStorege && regIDStorege != 'invalid' ){
 		$state.transitionTo('menu.tab.home');
-	}else {
-		if (document.URL.indexOf("?") > 0) {
-			let splitURL = document.URL.split("?");
-			let splitParams = splitURL[1].split("&");
-			let singleURLParam = splitParams[0].split('=');
-			alert(singleURLParam[1].split('#')[0])
-	
-		}
+	}else if (regIDStorege == 'invalid'){
+		localStorage.removeItem('regID');
 	}
 	$scope.showMenu = function () {
 	    $ionicSideMenuDelegate.toggleLeft();
 	};
 	 
 	 theCtrl.signIN = function(){
+		 if(window.localStorage.getItem('regID')){
+			 localStorage.removeItem('regID');
+			 localStorage.removeItem('name');
+		 }
+		 
 		 window.open("/Oauth", "_self");
 	 }
 	 

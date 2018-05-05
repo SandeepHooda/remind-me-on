@@ -8,6 +8,10 @@ APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$
 		 $http.get('/ws/login/validate/'+regID)
 	  		.then(function(response){
 	  			if (!response.data){
+	  				window.localStorage.setItem('regID', 'invalid');
+	  				localStorage.removeItem('name');
+	  				document.cookie = 'regID' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	  				document.cookie = 'name' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	  				$state.transitionTo('menu.login');
 	  			}
 	  		},
