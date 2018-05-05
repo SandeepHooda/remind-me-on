@@ -25,6 +25,9 @@ public class MangoDB {
 	private static URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
 	
 	public static String getDocumentWithQuery(String dbName, String collection,  String documentKey, boolean isKeyString, String mlabApiKey, String query){
+		if (null == mlabApiKey) {
+			mlabApiKey = mlabKeyReminder;
+		}
 		String httpsURL  = "https://api.mlab.com/api/1/databases/"+dbName+"/collections/"+collection+"?apiKey="+mlabApiKey;
 		if (null != documentKey){
 			if (isKeyString){

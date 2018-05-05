@@ -1,9 +1,20 @@
-APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$state',
-    function($scope, $ionicSideMenuDelegate,$state){
+APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$state','$http',
+    function($scope, $ionicSideMenuDelegate,$state,$http){
 	var theCtrl = this;
-	
-	if (!window.localStorage.getItem('regID')){
+	var regID = window.localStorage.getItem('regID');
+	if (!regID){
 		$state.transitionTo('menu.login');
+	}else {
+		 $http.get('/ws/login/validate/'+regID)
+	  		.then(function(response){
+	  			if (!response.data){
+	  				$state.transitionTo('menu.login');
+	  			}
+	  		},
+			function(response){
+				$state.transitionTo('menu.login');
+				
+			});
 	}
 	var name = window.localStorage.getItem('name');
 	if (name ){
