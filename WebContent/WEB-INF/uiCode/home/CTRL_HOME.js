@@ -21,7 +21,12 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state',
 	//cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications de.appplant.cordova.plugin.local-notification
 	
 	var theCtrl = this;
-	
+	var name = window.localStorage.getItem('name');
+	if (name ){
+		$scope.userName = "Welcome "+name;
+	}else {
+		$scope.userName ="Hello Guest";
+	}
 	theCtrl.addNewReminder  = function(){
 		$state.transitionTo('menu.newReminder');
 	}

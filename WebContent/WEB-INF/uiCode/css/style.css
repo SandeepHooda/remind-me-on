@@ -4,6 +4,7 @@
 .userName {
 	font: italic bold 12px/30px Georgia, serif;
 	margin-right: 15px;
+	color :white;
 }
 .centerText {
 	bottom: -200px;
@@ -187,7 +188,7 @@ $num-colors: 10;
 @media (max-width: 730px) {
 	.centerText {
 	bottom: -200px;
-	left: 21%;
+	left: 1%;
 	}
 	.jcarouseText ul {
 		height: 50px;

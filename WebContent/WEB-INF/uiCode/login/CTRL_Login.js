@@ -23,6 +23,12 @@ APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state',
 		 window.localStorage.setItem('name', getCookie('name'));
 	 }
 
+	 var name = window.localStorage.getItem('name');
+		if (name ){
+			$scope.userName = "Welcome "+name;
+		}else {
+			$scope.userName ="Hello Guest";
+		}
 	
 	if (window.localStorage.getItem('regID')){
 		$state.transitionTo('menu.tab.home');

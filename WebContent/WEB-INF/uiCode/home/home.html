@@ -5,19 +5,23 @@
 </ion-header-bar>
 
 <ion-content class="padding">
-	<span class="whitecolor">
-	 <!-- Search bar -->
-	    <div class="list list-inset width90">
-		  <label class="item item-input">
-		    <i class="icon ion-search placeholder-icon"></i>
-		    <input type="text" placeholder="Search" ng-change="$ctrl.filterProduts()" ng-model="$ctrl.searchInput">
-		  </label>
-		</div>
-	</span>
-	
-	<button ng-click="$ctrl.addNewReminder()" id="floatingBtn" name="add new" title="Go to top" ng-click="newReminder()">
-		 <i class="icon ion-plus"></i>
-	</button>
-	
+	<div>
+	<span class="userName">{{userName}}</span>
+	</div>
+	<div>
+		<span class="whitecolor">
+		 <!-- Search bar -->
+		    <div class="list list-inset width90">
+			  <label class="item item-input">
+			    <i class="icon ion-search placeholder-icon"></i>
+			    <input type="text" placeholder="Search" ng-change="$ctrl.filterProduts()" ng-model="$ctrl.searchInput">
+			  </label>
+			</div>
+		</span>
+		
+		<button ng-click="$ctrl.addNewReminder()" id="floatingBtn" name="add new" title="Go to top" ng-click="newReminder()">
+			 <i class="icon ion-plus"></i>
+		</button>
+	</div>
 </ion-content>
 </ion-view>
