@@ -30,6 +30,8 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state',
 	theCtrl.addNewReminder  = function(){
 		$state.transitionTo('menu.newReminder');
 	}
-	
+	theCtrl.logOut = function(){
+		$scope.$emit('logOut');
+	}
 	 
 }])

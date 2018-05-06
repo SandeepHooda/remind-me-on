@@ -33,7 +33,7 @@ import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.vo.LoginVO;
+import com.login.vo.LoginVO;
 
 import mangodb.MangoDB;
 

@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state',
-    function($scope,$state){
+APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state','$http',
+    function($scope,$state,$http){
 	var theCtrl = this;
 	
 	function getCookie(cname) {
@@ -49,6 +49,8 @@ APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state',
 		 window.open("/Oauth", "_self");
 	 }
 	 
+	 
+	
 	 
 	  
 }

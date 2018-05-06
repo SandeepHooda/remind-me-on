@@ -1,7 +1,10 @@
 package mangodb;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -135,6 +138,32 @@ public static void createNewDocumentInCollection(String dbName,String collection
 	        	
 	        }
 		
+	}
+	
+public static void deleteDocument(String dbName,String collection,  String dataKeyTobeDeleted, String key){
+	if (null == key) {
+		key = mlabKeyReminder;
+	}
+		
+		String httpsURL = "https://api.mlab.com/api/1/databases/"+dbName+"/collections/"+collection+"/"+dataKeyTobeDeleted+"?apiKey="+key;
+		 HttpURLConnection connection = null;
+		 try {
+			
+			 URL url = new URL(httpsURL);
+	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.DELETE, lFetchOptions);
+	            HTTPHeader header = new HTTPHeader("Content-type", "application/json");
+	            
+	            req.setHeader(header);
+	            fetcher.fetch(req);
+	            
+	         
+	        } catch (IOException e) {
+	        	e.printStackTrace();
+	        } finally {
+	            if (connection != null) {
+	                connection.disconnect();
+	              }
+	            }
 	}
 	
 

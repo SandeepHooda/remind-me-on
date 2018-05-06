@@ -14,5 +14,10 @@ public interface LoginEndpoint {
 	@Path("/login/validate/{regID}")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response validateRegID(@PathParam("regID") String regID);
+	
+	@GET
+	@Path("/logout/{regID}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response logout(@PathParam("regID") String regID);
 
 }

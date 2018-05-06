@@ -24,4 +24,14 @@ public class LoginEndpointImpl implements LoginEndpoint {
 		}
 	}
 
+	@Override
+	public Response logout(String regID) {
+		try{
+			
+			return Response.ok().entity(loginFacade.logout(regID)).build();
+		}catch(Exception e){
+			return Response.serverError().entity("Internal Server error").build();
+		}
+	}
+
 }

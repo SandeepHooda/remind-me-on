@@ -1,18 +1,53 @@
-<ion-view title="Personal Reminder" cache-view="false"  class="backhroundcolor " ng-init="getAllProducts()" ng-controller="CTRL_HOME as $ctrl">
+<ion-view title="Personal Reminder" cache-view="false"  class="backhroundcolor " ng-init="getAllProducts()" ng-controller="CTRL_NewReminder as $ctrl">
 
 <ion-header-bar class="bar-positive">
       <h1 class="title">Personal Reminder</h1>   
 </ion-header-bar>
 
-<ion-content class="padding">
-	<span class="whitecolor">
-	 <!-- Search bar -->
-	    <div class="fullwith">
-		 
-		    <label>Add new reminder </label>
-		</div>
-	</span>
-
+<ion-content >
+	<div class="textBoxSmall paddingCenter">
+ 		<input id="year" class="smallInput" type="text" placeholder="YYYY *" ng-model="reminder.year" ng-change="moveToMonth()">
+	</div>
+	<div class="textBoxSmall">
+ 		<input id="month" class="verySmallInput" type="text" placeholder="MM *" ng-model="reminder.month" ng-change="moveToDay()">
+	</div>
+	<div class="textBoxSmall">
+ 		<input id="day" class="verySmallInput" type="text" placeholder="DD *" ng-model="reminder.day" ng-change="moveToHour()">
+	</div>
+	<div class="textBoxSmall">
+ 		<input id="hour" class="verySmallInput" type="text" placeholder="HH *" ng-model="reminder.hour" ng-change="moveToMinute()">
+	</div>
+	<div class="textBoxSmall">
+ 		<input id="minute" class="verySmallInput" type="text" placeholder="Min *" ng-model="reminder.minute" ng-change="moveToSubject()">
+	</div>
 	
+
+
+	<br/><br/>
+	 <div class="fullwidth">
+		<hr/>
+	</div>
+	 
+	 
+     <div class="textBoxMedium">
+ 		<input id="subject" class="fluidInput" type="text" placeholder="Subject *" ng-model="reminder.reminderSubject">
+	 </div>
+	  <div class="textBoxMedium">
+ 		<input  class="fluidInput" type="text" placeholder="Text *" ng-model="reminder.reminderText">
+	</div>
+	
+
+	<br/><br/>
+	 <div class="fullwidth">
+		<hr/>
+	</div>
+	
+ 
+
+	<div class="centerBtn">
+		<button class="button button-balanced order-button" ng-click="addReminder()"> Add Reminder
+			 <i class="icon ion-android-add-circle"></i>
+		</button>
+   </div>
 </ion-content>
 </ion-view>
