@@ -33,7 +33,7 @@
  		<input id="subject" class="fluidInput" type="text" placeholder="Subject *" ng-model="reminder.reminderSubject">
 	 </div>
 	  <div class="textBoxMedium">
- 		<input  class="fluidInput" type="text" placeholder="Text *" ng-model="reminder.reminderText">
+ 		<input  class="fluidInput" type="text" placeholder="Text *" ng-model="reminder.reminderText" ng-keyup="checkEnter()">
 	</div>
 	
 
@@ -45,7 +45,7 @@
  
 
 	<div class="centerBtn">
-		<button class="button button-balanced order-button" ng-click="addReminder()"> Add Reminder
+		<button class="button button-balanced order-button" ng-click="addReminder()" > Add Reminder
 			 <i class="icon ion-android-add-circle"></i>
 		</button>
    </div>

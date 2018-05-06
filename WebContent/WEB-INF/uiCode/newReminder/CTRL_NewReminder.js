@@ -61,6 +61,11 @@ APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$
 		}
 		
 	}
+	$scope.checkEnter = function(){
+		if(event.keyCode == 13){
+			$scope.addReminder();
+		}
+	}
 	$scope.addReminder = function(){
 		var reminderObj = {};
 		reminderObj.regID = window.localStorage.getItem('regID');
@@ -68,6 +73,12 @@ APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$
 		reminderObj.time = $scope.reminder.hour+"_"+$scope.reminder.minute;
 		reminderObj.reminderSubject = $scope.reminder.reminderSubject ;
 		reminderObj.reminderText = $scope.reminder.reminderText;
+		if(!$scope.reminder.year || !$scope.reminder.month || !$scope.reminder.day || !$scope.reminder.hour || !$scope.reminder.minute ||
+				!$scope.reminder.reminderSubject || !$scope.reminder.reminderText ){
+			$scope.popUp('Invalid entry', 'Please fill all the mandatory fields',null );
+			return;
+		}
+			
 		$scope.showBusy();
 		$http.post('/ws/reminder/',reminderObj , config)
   		.then(function(response){
