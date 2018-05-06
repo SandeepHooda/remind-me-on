@@ -63,8 +63,16 @@ APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$
 	}
 	$scope.checkEnter = function(){
 		if(event.keyCode == 13){
-			$scope.addReminder();
+			//$scope.addReminder();
 		}
+	}
+	$scope.reminder.makeACall = true;
+	$scope.reminder.sendText = true;
+	$scope.toggleCall = function (){
+		$scope.reminder.makeACall = !$scope.reminder.makeACall;
+	}
+	$scope.toggleSMS = function (){
+		$scope.reminder.sendText = !$scope.reminder.sendText;
 	}
 	$scope.addReminder = function(){
 		var reminderObj = {};

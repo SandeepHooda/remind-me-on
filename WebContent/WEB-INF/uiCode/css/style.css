@@ -1,4 +1,32 @@
+.buttonAnimation {
+ /* padding: 15px 25px;
+  font-size: 14px;*/
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 9px #999;
+}
 
+.buttonAnimation:hover {background-color: #3e8e41}
+
+.buttonAnimationOffState {background-color: #c0c0c0}
+.buttonAnimationONState {background-color: #4CAF50}
+.buttonAnimation:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.inline {
+	display: inline;
+	padding-left: 10px;
+}
+.notifyButtons {
+	padding-left: 40%;
+}
 .movefocus4 {  margin: 5px;  }
 .white{
 	background-color: white;
@@ -200,6 +228,9 @@ $num-colors: 10;
 }
 
 @media (max-width: 730px) {
+	.notifyButtons {
+	padding-left: 10%;
+}
 	.verySmallInput {
 	
 	background:white;
@@ -437,7 +468,7 @@ div.paddingCenter{
 	padding-left:40%;
 }
 .centerBtn {
-	padding-top: 50px;
+	padding-top: 70px;
 	padding-left: 45%;
 }
 @media (max-width: 730px) {
@@ -445,7 +476,7 @@ div.paddingCenter{
 	padding-left:0px;
 }
 .centerBtn {
-	padding-top: 5px;
+	padding-top: 75px;
 	padding-left: 30%;
 
 }

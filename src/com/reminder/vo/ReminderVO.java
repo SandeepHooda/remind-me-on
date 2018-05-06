@@ -8,6 +8,8 @@ public class ReminderVO {
 	private String reminderSubject;
 	private String reminderText;
 	private String repeatFrequency;
+	private boolean makeACall;
+	private boolean sendText;
 	public String getRegID() {
 		return regID;
 	}
@@ -43,6 +45,18 @@ public class ReminderVO {
 	}
 	public void setRepeatFrequency(String repeatFrequency) {
 		this.repeatFrequency = repeatFrequency;
+	}
+	public boolean isMakeACall() {
+		return makeACall;
+	}
+	public void setMakeACall(boolean makeACall) {
+		this.makeACall = makeACall;
+	}
+	public boolean isSendText() {
+		return sendText;
+	}
+	public void setSendText(boolean sendText) {
+		this.sendText = sendText;
 	}
 
 }
