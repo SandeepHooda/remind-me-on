@@ -17,7 +17,10 @@ APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$
 	  				localStorage.removeItem('name');
 	  				document.cookie = 'regID' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	  				document.cookie = 'name' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	  				
 	  				$state.transitionTo('menu.login');
+	  			}else {
+	  				$scope.$emit('getMyRemindersList');
 	  			}
 	  		},
 			function(response){

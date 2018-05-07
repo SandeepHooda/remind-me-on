@@ -1,3 +1,12 @@
+.topSpace {
+	padding-top: 10px;
+}
+.smallPadding {
+	padding: 2px !important;
+}
+.selectFrequency {
+	min-width: 100px;
+}
 .buttonAnimation {
  /* padding: 15px 25px;
   font-size: 14px;*/
@@ -11,11 +20,33 @@
   box-shadow: 0 9px #999;
 }
 
+
 .buttonAnimation:hover {background-color: #3e8e41}
 
 .buttonAnimationOffState {background-color: #c0c0c0}
 .buttonAnimationONState {background-color: #4CAF50}
 .buttonAnimation:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.buttonAnimationSmall {
+  	max-width: 100px !important;
+    max-height: 25px !important;
+    min-height: 25px !important;
+    line-height: 0px !important;
+	 text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 5px #999;
+}
+
+.buttonAnimationSmall:active {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
@@ -417,6 +448,7 @@ button.accordion.active:after {
   color: white;    /*Text color for each item*/
 }
  
+ 
 /*Changes the border for the last item*/
 .custom .item:last-child {
   border-bottom: 1px solid #666;
@@ -468,7 +500,6 @@ div.paddingCenter{
 	padding-left:40%;
 }
 .centerBtn {
-	padding-top: 70px;
 	padding-left: 45%;
 }
 @media (max-width: 730px) {
@@ -476,9 +507,7 @@ div.paddingCenter{
 	padding-left:0px;
 }
 .centerBtn {
-	padding-top: 75px;
-	padding-left: 30%;
-
+	padding-left: 25%;
 }
 div.width90 {width: 82%;}
 #floatingBtn {
@@ -487,7 +516,7 @@ div.width90 {width: 82%;}
 div.textBoxMedium {
 	display: inline;
 	float : left;
-	width: 100%;
+	width: 97%;
 }
 .fullwidth{
 	width: 100%;

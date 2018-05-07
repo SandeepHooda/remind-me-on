@@ -23,5 +23,16 @@
 			 <i class="icon ion-plus"></i>
 		</button>
 	</div>
+	
+	<!-- Users reminder -->
+	<div class="topSpace"	>
+		<ion-item class="smallPadding" ng-repeat="reminder in reminders track by $index" on-swipe-left="deleteReminder({{$index}})">
+		  <div class="productDesc">
+		  		 {{reminder.reminderSubject}} - {{reminder.reminderText}}, Remind via Email 
+		  		 <span ng-show="reminder.makeACall">, Call </span> <span ng-show="reminder.sendText">, SMS </span> On 
+		  		 <span> {{reminder.displayTime}}</span>
+		   </div>
+		 </ion-item>
+	</div>
 </ion-content>
 </ion-view>

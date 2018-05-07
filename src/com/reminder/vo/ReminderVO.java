@@ -1,8 +1,9 @@
 package com.reminder.vo;
 
 public class ReminderVO {
-	
+	private String _id;
 	private String regID;
+	private String email;
 	private String date;
 	private String time;
 	private String reminderSubject;
@@ -10,6 +11,10 @@ public class ReminderVO {
 	private String repeatFrequency;
 	private boolean makeACall;
 	private boolean sendText;
+	private String frequencyWithDate; //Once , Monthly, yearly
+	private String dayRepeatFrequency;//First Monday
+	private String frequencyType = "Day";//Day or Date
+	private String displayTime ;
 	public String getRegID() {
 		return regID;
 	}
@@ -57,6 +62,42 @@ public class ReminderVO {
 	}
 	public void setSendText(boolean sendText) {
 		this.sendText = sendText;
+	}
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
+	public String getFrequencyWithDate() {
+		return frequencyWithDate;
+	}
+	public void setFrequencyWithDate(String frequencyWithDate) {
+		this.frequencyWithDate = frequencyWithDate;
+	}
+	public String getDayRepeatFrequency() {
+		return dayRepeatFrequency;
+	}
+	public void setDayRepeatFrequency(String dayRepeatFrequency) {
+		this.dayRepeatFrequency = dayRepeatFrequency;
+	}
+	public String getFrequencyType() {
+		return frequencyType;
+	}
+	public void setFrequencyType(String frequencyType) {
+		this.frequencyType = frequencyType;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getDisplayTime() {
+		return displayTime;
+	}
+	public void setDisplayTime(String displayTime) {
+		this.displayTime = displayTime;
 	}
 
 }

@@ -8,9 +8,14 @@ APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$
                 'Content-Type': 'application/json;'
             }
         }
-	
-	
-
+var monthNames =[
+		
+		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+	]
+	$scope.frequencyDays = ["Monday", "Tuesday", "Wednesday", "Thrusday","Friday", "Saturday", "Sunday"];
+	$scope.frequencyDaysRepeat = ["First", "Second", "Third", "Fourth"];
+	$scope.selectedDayRepeat = "First";
+	$scope.selectedDay = "Monday";
 	$scope.moveToMonth =function(){
 		if ( ($scope.reminder.year > 999 && $scope.reminder.year < 2018) || isNaN($scope.reminder.year) ){
 			$scope.reminder.year = "";
@@ -51,6 +56,16 @@ APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$
 		}
 		
 	}
+	$scope.moveToMinute_Day  =function(){
+		if ($scope.reminder.hour > 23 || isNaN($scope.reminder.hour) ){
+			$scope.reminder.hour = "";
+		}
+		if ($scope.reminder.hour.length ==2){
+			var minute_Day = $window.document.getElementById('minute_Day');
+			minute_Day.focus();
+		}
+		
+	}
 	$scope.moveToSubject = function(){
 		if ($scope.reminder.minute > 59 || isNaN($scope.reminder.minute) ){
 			$scope.reminder.minute = "";
@@ -74,18 +89,103 @@ APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$
 	$scope.toggleSMS = function (){
 		$scope.reminder.sendText = !$scope.reminder.sendText;
 	}
-	$scope.addReminder = function(){
-		var reminderObj = {};
-		reminderObj.regID = window.localStorage.getItem('regID');
-		reminderObj.date =$scope.reminder.year+"_"+$scope.reminder.month+"_"+$scope.reminder.day;
-		reminderObj.time = $scope.reminder.hour+"_"+$scope.reminder.minute;
-		reminderObj.reminderSubject = $scope.reminder.reminderSubject ;
-		reminderObj.reminderText = $scope.reminder.reminderText;
-		if(!$scope.reminder.year || !$scope.reminder.month || !$scope.reminder.day || !$scope.reminder.hour || !$scope.reminder.minute ||
-				!$scope.reminder.reminderSubject || !$scope.reminder.reminderText ){
-			$scope.popUp('Invalid entry', 'Please fill all the mandatory fields',null );
-			return;
+	$scope.frequencyWithDate = "Once";
+	$scope.changeFrequency = function(){
+		if ($scope.frequencyWithDate == "Once"){
+			$scope.frequencyWithDate = "Monthly";
+		}else if ($scope.frequencyWithDate == "Monthly"){
+			$scope.frequencyWithDate = "Yearly";
+		}else {
+			$scope.frequencyWithDate = "Once";
 		}
+	}
+	$scope.frequencyType = "Date";
+	$scope.changeFrequencyType = function(){
+		if ($scope.frequencyType == "Date"){
+			$scope.frequencyType = "Day";
+		}else {
+			$scope.frequencyType = "Date";
+		}
+	}
+	$scope.valudateRequiredfields = function(){
+		var reminderObj = {};
+		if (!$scope.reminder.reminderSubject || !$scope.reminder.reminderText){
+			  return null;
+		  }
+		var allRequiredFields = true;
+		if($scope.frequencyType =='Date'){
+			 if ($scope.frequencyWithDate== "Once" ){
+				 	if (!$scope.reminder.year  || !$scope.reminder.month || !$scope.reminder.day || !$scope.reminder.hour || !$scope.reminder.minute  ) {
+				 		allRequiredFields = false;
+				 	}else {
+				 		reminderObj.displayTime = $scope.reminder.day + " " +monthNames[$scope.reminder.month-1] +" "+$scope.reminder.year +" @ "+ $scope.reminder.hour +" : "+$scope.reminder.minute 
+				 	}
+			  }else  if ($scope.frequencyWithDate== "Monthly"){
+				  if (!$scope.reminder.day || !$scope.reminder.hour || !$scope.reminder.minute) {
+					  allRequiredFields = false;
+				  }else {
+					  reminderObj.displayTime = "Every month "+$scope.reminder.day +" @ "+ $scope.reminder.hour +" : "+$scope.reminder.minute;
+				  }
+			  }else {
+				  if (!$scope.reminder.month || !$scope.reminder.day || !$scope.reminder.hour || !$scope.reminder.minute) {
+					  allRequiredFields = false;
+				  }else {
+					  reminderObj.displayTime = "Every Year  "+$scope.reminder.day + " " +monthNames[$scope.reminder.month-1] +" @ "+ $scope.reminder.hour +" : "+$scope.reminder.minute;
+				  }
+			  }
+			  
+			  
+			 
+		}else {
+			if (!$scope.reminder.hour || !$scope.reminder.minute) {
+				  allRequiredFields = false;
+			  }else {
+				  reminderObj.displayTime = $scope.selectedDayRepeat +" "+$scope.selectedDay +" of every month @ "+ $scope.reminder.hour +" : "+$scope.reminder.minute;
+			  }
+			
+		}
+		if (allRequiredFields){
+			return reminderObj;
+		}else {
+			return null;
+		}
+	}
+	$scope.addReminder = function(){
+		
+		var reminderObj = $scope.valudateRequiredfields();
+		
+		 
+		  if(reminderObj == null){
+				$scope.popUp('Invalid entry', 'Please fill all the mandatory fields',null );
+				return;
+			}
+		  
+		  
+			reminderObj.regID = window.localStorage.getItem('regID');
+			
+			
+			reminderObj.reminderSubject = $scope.reminder.reminderSubject ;
+			reminderObj.reminderText = $scope.reminder.reminderText;
+			
+			reminderObj.makeACall = $scope.reminder.makeACall;
+			reminderObj.sendText = $scope.reminder.sendText;
+			
+			reminderObj.frequencyType = $scope.frequencyType;
+			
+		if($scope.frequencyType =='Date'){
+			reminderObj.frequencyWithDate = $scope.frequencyWithDate;//Once , Monthly, Yearly
+			reminderObj.date =$scope.reminder.year+"_"+$scope.reminder.month+"_"+$scope.reminder.day;
+			reminderObj.time = $scope.reminder.hour+"_"+$scope.reminder.minute;
+			reminderObj._id = new Date($scope.reminder.year,$scope.reminder.month -1, $scope.reminder.day, $scope.reminder.hour, $scope.reminder.minute).getTime() +Math.random();
+		
+			
+		}else {
+			reminderObj.time = $scope.reminder.hour+"_"+$scope.reminder.minute;
+			reminderObj._id = new Date().getTime()
+			reminderObj.dayRepeatFrequency = $scope.selectedDayRepeat +" "+$scope.selectedDay ;
+			
+		}
+		
 			
 		$scope.showBusy();
 		$http.post('/ws/reminder/',reminderObj , config)

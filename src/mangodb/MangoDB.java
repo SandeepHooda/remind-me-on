@@ -27,7 +27,7 @@ public class MangoDB {
 	private static FetchOptions lFetchOptions = FetchOptions.Builder.doNotValidateCertificate().setDeadline(300d);
 	private static URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
 	
-	public static String getDocumentWithQuery(String dbName, String collection,  String documentKey, boolean isKeyString, String mlabApiKey, String query){
+	public static String getDocumentWithQuery(String dbName, String collection,  String documentKey, String keyName, boolean isKeyString, String mlabApiKey, String query){
 		if (null == mlabApiKey) {
 			mlabApiKey = mlabKeyReminder;
 		}
@@ -36,7 +36,7 @@ public class MangoDB {
 			if (isKeyString){
 				httpsURL += "&q=%7B%22_id%22:%22"+documentKey+"%22%7D";
 			}else {
-				httpsURL += "&q=%7B%22_id%22:"+documentKey+"%7D";
+				httpsURL += "&q=%7B%22"+keyName+"%22:%22"+documentKey+"%22%7D";
 			}
 			
 		}
@@ -68,12 +68,12 @@ public class MangoDB {
 		
 		 return responseStr;
 	}
-	public static String getADocument(String dbName, String collection, String documentKey, boolean isKeyString, String mlabApiKey){
-		return getDocumentWithQuery(dbName,  collection,  documentKey, isKeyString, mlabApiKey, null);
+	public static String getADocument(String dbName, String collection, String documentKey,String keyName,  boolean isKeyString, String mlabApiKey){
+		return getDocumentWithQuery(dbName,  collection,  documentKey,keyName, isKeyString, mlabApiKey, null);
 	}
-	public static String getADocument(String dbName, String collection,  String documentKey,String mlabApiKey){
+	public static String getADocument(String dbName, String collection,  String documentKey, String keyName, String mlabApiKey){
 		
-		return getDocumentWithQuery(dbName,  collection,  documentKey, true, mlabApiKey, null);
+		return getDocumentWithQuery(dbName,  collection,  documentKey, keyName,true, mlabApiKey, null);
 		
 	}
 	public static String getData(String db, String collection,  String apiKey ){
@@ -81,7 +81,7 @@ public class MangoDB {
 			apiKey = mlabKeyReminder;
 		}
 		db = db.toLowerCase();
-		return getADocument(db,collection,null,apiKey);
+		return getADocument(db,collection,null,null,apiKey);
 	}
 	
 	

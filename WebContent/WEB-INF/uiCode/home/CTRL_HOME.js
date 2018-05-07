@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state',
-    function($scope,$state){
+APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicLoading','$http','$ionicPopup',
+    function($scope,$state,$rootScope,$ionicLoading,$http,$ionicPopup){
 	//https://github.com/apache/cordova-plugin-geolocation
 	//cordova plugin add phonegap-nfc 
 	//cordova plugin add cordova-plugin-vibration
@@ -21,6 +21,8 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state',
 	//cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications de.appplant.cordova.plugin.local-notification
 	
 	var theCtrl = this;
+	$scope.reminders =[];
+	
 	var name = window.localStorage.getItem('name');
 	if (name ){
 		$scope.userName = "Welcome "+name;
@@ -33,5 +35,63 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state',
 	theCtrl.logOut = function(){
 		$scope.$emit('logOut');
 	}
+	$scope.gettingUserReminderList = false;
+	$rootScope.$on('getMyRemindersList',function(event){
+		if ($scope.gettingUserReminderList){
+			return ;
+		}
+		$scope.showBusy();
+		
+		 $http.get('/ws/reminder')
+	  		.then(function(response){
+	  			 $scope.hideBusy();
+	  			$scope.reminders = response.data;
+	  			
+	  		},
+			function(response){
+	  			 $scope.hideBusy();
+				
+			});
+		});
+	
+	$scope.deleteReminder = function(deleteIndex){
+		$scope.deleteIndex  = deleteIndex;
+		 var confirmPopup = $ionicPopup.confirm({
+		     title: 'Confirmation',
+		     template: 'Do you want to delete this reminder. Please note that delte a reminder means that all future ocurances will also be cancled.'
+		   });
+
+		   confirmPopup.then(function(res) {
+			   if (res){
+				   for (var i=0; i <$scope.reminders.length;i++){
+					   if (i==$scope.deleteIndex){
+						 //splice is safe here as at a time only one item removed in whole iteration
+						   $scope.reminders.splice(i,1);
+						   //dataRestore.saveInCache('savedAddress', $scope.myData.savedAddress);
+					   }
+				   }
+				  
+			   }
+		     
+		   });
+	}
+	
+	//Busy icon
+	  $scope.showBusy = function() {
+		  $scope.gettingUserReminderList = true;
+		    $ionicLoading.show({
+		      template: 'Please Wait...',
+		      duration: 10000
+		    }).then(function(){
+		       console.log("The loading indicator is now displayed");
+		    });
+		  };
+		  $scope.hideBusy = function(){
+			  $scope.gettingUserReminderList = false;
+		    $ionicLoading.hide().then(function(){
+		       console.log("The loading indicator is now hidden");
+		    });
+		  };
+		  $scope.$emit('getMyRemindersList');
 	 
 }])

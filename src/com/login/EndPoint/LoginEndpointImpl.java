@@ -1,5 +1,7 @@
 package com.login.EndPoint;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
 
 import com.login.facade.LoginFacade;
@@ -15,9 +17,10 @@ public class LoginEndpointImpl implements LoginEndpoint {
 	}
 	
 	@Override
-	public Response validateRegID(String regID) {
+	public Response validateRegID(String regID, HttpServletRequest request) {
 		try{
-			
+			HttpSession session = request.getSession();
+			session.setAttribute("regID", regID);
 			return Response.ok().entity(loginFacade.validateRegID(regID)).build();
 		}catch(Exception e){
 			return Response.serverError().entity("Internal Server error").build();
