@@ -109,15 +109,15 @@ public static void createNewDocumentInCollection(String dbName,String collection
 	        }
 	}
 	
-	public static void insertOrUpdateData(String dbName,String collection, String data,  String apiKey, String documentKey){
+	public static void updateData(String dbName,String collection, String data,  String apiKey){
 		if (null == apiKey) {
 			apiKey = mlabKeyReminder;
 		}
 		String httpsURL = "https://api.mlab.com/api/1/databases/"+dbName+"/collections/"+collection+"?apiKey="+apiKey;
-		if (null != documentKey){
+		/*if (null != documentKey){
 			httpsURL += "&q=%7B%22_id%22:%22"+documentKey+"%22%7D";
 			
-		}
+		}*/
 		
 		 try {
 			

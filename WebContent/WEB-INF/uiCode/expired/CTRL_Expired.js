@@ -10,20 +10,15 @@ APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$
 	if (!regID){
 		$state.transitionTo('menu.login');
 	}else {
-		 $http.get('/ws/login/validate/'+regID)
+		 $http.get('/ws/login/validate/'+regID+'/timeZone/'+Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "@"))
 	  		.then(function(response){
-	  			if (!response.data){
-	  				window.localStorage.setItem('regID', 'invalid');
-	  				localStorage.removeItem('name');
-	  				document.cookie = 'regID' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-	  				document.cookie = 'name' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-	  				
-	  				$state.transitionTo('menu.login');
-	  			}else {
-	  				$scope.$emit('getMyRemindersList');
-	  			}
+	  			$scope.$emit('getMyRemindersList');
 	  		},
 			function(response){
+	  			window.localStorage.setItem('regID', 'invalid');
+  				localStorage.removeItem('name');
+  				document.cookie = 'regID' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  				document.cookie = 'name' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 				$state.transitionTo('menu.login');
 				
 			});

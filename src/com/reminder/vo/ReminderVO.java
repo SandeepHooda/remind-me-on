@@ -15,6 +15,8 @@ public class ReminderVO {
 	private String dayRepeatFrequency;//First Monday
 	private String frequencyType = "Day";//Day or Date
 	private String displayTime ;
+	private long nextExecutionTime;
+
 	public String getRegID() {
 		return regID;
 	}
@@ -98,6 +100,12 @@ public class ReminderVO {
 	}
 	public void setDisplayTime(String displayTime) {
 		this.displayTime = displayTime;
+	}
+	public long getNextExecutionTime() {
+		return nextExecutionTime;
+	}
+	public void setNextExecutionTime(long nextExecutionTime) {
+		this.nextExecutionTime = nextExecutionTime;
 	}
 
 }

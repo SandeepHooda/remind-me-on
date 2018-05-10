@@ -8,6 +8,9 @@ public class LoginVO {
 	private String regID ;
 	private String emailID;
 	private String name;
+    private String appTimeZone;
+	private String userSuppliedTimeZone;
+	private String errorMessage;
 	
 	public LoginVO() {
 		this.regID = UUID.randomUUID().toString();
@@ -36,6 +39,25 @@ public class LoginVO {
 	}
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+	
+	public String getUserSuppliedTimeZone() {
+		return userSuppliedTimeZone;
+	}
+	public void setUserSuppliedTimeZone(String userSuppliedTimeZone) {
+		this.userSuppliedTimeZone = userSuppliedTimeZone;
+	}
+	public String getAppTimeZone() {
+		return appTimeZone;
+	}
+	public void setAppTimeZone(String appTimeZone) {
+		this.appTimeZone = appTimeZone;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 
 }

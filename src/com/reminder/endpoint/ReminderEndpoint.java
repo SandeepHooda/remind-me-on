@@ -17,7 +17,7 @@ public interface ReminderEndpoint {
 	@Path("/reminder")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response addReminder( ReminderVO reminderVO);
+	public Response addReminder( ReminderVO reminderVO,  @Context HttpServletRequest request);
 	
 	@GET
 	@Path("/reminder")

@@ -2,23 +2,33 @@ package com.reminder.endpoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import com.login.vo.LoginVO;
 import com.reminder.facade.ReminderFacade;
 import com.reminder.vo.ReminderVO;
 
 public class ReminderEndpointImpl implements ReminderEndpoint{
 	
 	private ReminderFacade reminderFacade;
+	
 
 	@Override
-	public Response addReminder(ReminderVO reminderVO) {
+	public Response addReminder(ReminderVO reminderVO, HttpServletRequest request) {
 		try{
-			
-			return Response.ok().entity(reminderFacade.addReminder(reminderVO)).build();
+			String timeZone = (String)request.getSession().getAttribute("timeZoneSettings");
+			if(timeZone == null) {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+			return Response.ok().entity(reminderFacade.addReminder(reminderVO,timeZone )).build();
 		}catch(Exception e){
-			return Response.serverError().entity("Internal Server error").build();
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
 		}
 	}
 
@@ -32,11 +42,17 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 			if (null != regID) {
 				return Response.ok().entity(reminderFacade.getReminders(regID)).build();
 			}else {
-				return Response.status(Response.Status.UNAUTHORIZED).entity("Please log in to authenticate ").build();
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
 			}
 			
 		}catch(Exception e){
-			return Response.serverError().entity("Internal Server error").build();
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
 		}
 	}
 	

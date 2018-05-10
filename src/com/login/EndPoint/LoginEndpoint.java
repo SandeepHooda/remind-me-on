@@ -13,9 +13,9 @@ import javax.ws.rs.core.Response;
 public interface LoginEndpoint {
 	
 	@GET
-	@Path("/login/validate/{regID}")
+	@Path("/login/validate/{regID}/timeZone/{timeZone}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response validateRegID(@PathParam("regID") String regID, @Context HttpServletRequest request);
+	public Response validateRegID(@PathParam("regID") String regID, @Context HttpServletRequest request, @PathParam("timeZone") String timeZone);
 	
 	@GET
 	@Path("/logout/{regID}")

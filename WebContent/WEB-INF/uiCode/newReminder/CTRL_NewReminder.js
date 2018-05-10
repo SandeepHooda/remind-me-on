@@ -200,7 +200,14 @@ var monthNames =[
   		},
 		function(response){
   			 $scope.hideBusy();
-  			$scope.popUp('Failure', 'Please retry',null );
+  			
+  			 if (response.status == 401) {
+  				$scope.popUp('Failure', 'Please login back and then retry.',null );
+  			 }else {
+  				$scope.popUp('Failure', 'Please retry.',null );
+  			 }
+  			
+  			
 			
 		});
 	}

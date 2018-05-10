@@ -45,7 +45,14 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		 $http.get('/ws/reminder')
 	  		.then(function(response){
 	  			 $scope.hideBusy();
-	  			$scope.reminders = response.data;
+	  			 var userReminders = response.data;
+	  			 if (userReminders){
+	  				for (var i=0;i<userReminders.length;i++){
+	  					userReminders[i].nextExecutionDisplayTime =  new Date(userReminders[i].nextExecutionTime).toString("dd-MMM-yyyy HH:mm");  ;
+	  				}
+	  		  			$scope.reminders = userReminders;
+	  			 }
+	  			 
 	  			
 	  		},
 			function(response){
