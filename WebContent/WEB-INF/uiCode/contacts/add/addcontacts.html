@@ -1,0 +1,26 @@
+<ion-view title="Add Contact" class="backhroundcolor" cache-view="false" ng-controller="CTRL_ADDCONTACTS as $ctrl">
+<ion-header-bar class="bar-positive" >
+      <h1 class="title">Add Contact</h1>
+    </ion-header-bar>
+<ion-content class="padding">
+<span class="whitecolor">
+
+	
+	
+	<div class="textBoxSmall paddingCenter" >
+	<span>
+		<select class="countrySelect" ng-model="phone.countryCode" ng-options="x for x in countryCodes"></select>	&nbsp;&nbsp;&nbsp;
+	 	<input  type="text" class="phoneNo" style=" display: inline;" placeholder="Phone No *" ng-model="phone.number">
+	</span>
+	
+	</div>
+	
+	<div class="centerBtn addPhone">
+			<button class="button button-balanced order-button" ng-click="addContact()" > Add Contact
+				 <i class="icon ion-android-add-circle"></i>
+			</button>
+	 </div>
+	
+</span>
+</ion-content>
+</ion-view>

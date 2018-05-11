@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 
 import com.login.facade.LoginFacade;
 import com.login.vo.LoginVO;
+import com.login.vo.Phone;
 
 public class LoginEndpointImpl implements LoginEndpoint {
 	private LoginFacade loginFacade;
@@ -48,6 +49,20 @@ public class LoginEndpointImpl implements LoginEndpoint {
 	}
 
 	@Override
+	public Response addPhoneNo(Phone phone, HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String regID = (String)session.getAttribute("regID");
+			return Response.ok().entity(loginFacade.addPhoneNo(phone, regID)).build();
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+	@Override
 	public Response logout(String regID) {
 		try{
 			
@@ -60,5 +75,7 @@ public class LoginEndpointImpl implements LoginEndpoint {
 			return Response.serverError().entity(vo).build();
 		}
 	}
+
+	
 
 }

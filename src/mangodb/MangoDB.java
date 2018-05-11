@@ -1,15 +1,10 @@
 package mangodb;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
-
-
-
 
 import com.google.appengine.api.urlfetch.FetchOptions;
 import com.google.appengine.api.urlfetch.HTTPHeader;
@@ -86,11 +81,11 @@ public class MangoDB {
 	
 	
 	
-public static void createNewDocumentInCollection(String dbName,String collectionToCreate,  String data, String key){
+public static void createNewDocumentInCollection(String dbName,String collection,  String data, String key){
 	if (null == key) {
 		key = mlabKeyReminder;
 	}
-		String httpsURL = "https://api.mlab.com/api/1/databases/"+dbName+"/collections/"+collectionToCreate+"?apiKey="+key;
+		String httpsURL = "https://api.mlab.com/api/1/databases/"+dbName+"/collections/"+collection+"?apiKey="+key;
 		
 		 try {
 			

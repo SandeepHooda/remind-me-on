@@ -22,6 +22,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	
 	var theCtrl = this;
 	$scope.reminders =[];
+	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 	
 	var name = window.localStorage.getItem('name');
 	if (name ){
@@ -45,14 +46,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		 $http.get('/ws/reminder')
 	  		.then(function(response){
 	  			 $scope.hideBusy();
-	  			 var userReminders = response.data;
-	  			 if (userReminders){
-	  				for (var i=0;i<userReminders.length;i++){
-	  					userReminders[i].nextExecutionDisplayTime =  new Date(userReminders[i].nextExecutionTime).toString("dd-MMM-yyyy HH:mm");  ;
-	  				}
-	  		  			$scope.reminders = userReminders;
-	  			 }
-	  			 
+	  			$scope.formatReminderDisplay(response.data) ;
 	  			
 	  		},
 			function(response){
@@ -60,7 +54,15 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 				
 			});
 		});
-	
+	$scope.formatReminderDisplay = function(userReminders){
+		if (userReminders){
+				for (var i=0;i<userReminders.length;i++){
+					var date =  new Date(userReminders[i].nextExecutionTime);
+					userReminders[i].nextExecutionDisplayTime =  days[ date.getDay() ] +" "+ date.toString("dd-MMM-yyyy HH:mm");  ;
+				}
+		  			$scope.reminders = userReminders;
+			 }
+	}
 	$scope.deleteReminder = function(deleteIndex){
 		$scope.deleteIndex  = deleteIndex;
 		 var confirmPopup = $ionicPopup.confirm({
@@ -70,6 +72,20 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 
 		   confirmPopup.then(function(res) {
 			   if (res){
+				   
+				   $scope.showBusy();
+					
+					 $http.delete('/ws/reminder/reminderID/'+$scope.reminders[$scope.deleteIndex]._id)
+				  		.then(function(response){
+				  			 $scope.hideBusy();
+				  			$scope.formatReminderDisplay(response.data) ;
+				  		},
+						function(response){
+				  			 $scope.hideBusy();
+							
+						});
+				   
+				   ///////////////////
 				   for (var i=0; i <$scope.reminders.length;i++){
 					   if (i==$scope.deleteIndex){
 						 //splice is safe here as at a time only one item removed in whole iteration
@@ -77,7 +93,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 						   //dataRestore.saveInCache('savedAddress', $scope.myData.savedAddress);
 					   }
 				   }
-				  
+				  ////////////////////
 			   }
 		     
 		   });

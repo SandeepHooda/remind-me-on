@@ -56,6 +56,28 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 		}
 	}
 	
+	@Override
+	public Response deleteReminder(String reminderID, HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String regID = (String)session.getAttribute("regID");
+			if (null != regID) {
+				reminderFacade.deleteReminder(reminderID);
+				return Response.ok().entity(reminderFacade.getReminders(regID)).build();
+			}else {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
 	public ReminderFacade getReminderFacade() {
 		return reminderFacade;
 	}
@@ -63,5 +85,9 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 	public void setReminderFacade(ReminderFacade reminderFacade) {
 		this.reminderFacade = reminderFacade;
 	}
+
+
+
+	
 
 }
