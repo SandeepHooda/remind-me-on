@@ -115,19 +115,19 @@ public static void createNewDocumentInCollection(String dbName,String collection
 		}	
 		
 		 try {
-			 	URL url = new URL(httpsURL);
+			 	/*URL url = new URL(httpsURL);
 	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.PUT, lFetchOptions);
-	            HTTPResponse res = fetcher.fetch(req);
+	            HTTPResponse res = fetcher.fetch(req);*/
 	           
 			
-		       /* URL url = new URL(httpsURL);
+		       URL url = new URL(httpsURL);
 	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.PUT, lFetchOptions);
 	            HTTPHeader header = new HTTPHeader("Content-type", "application/json");
 	            
 	            req.setHeader(header);
 	           
 	            req.setPayload(data.getBytes());
-	            fetcher.fetch(req);*/
+	            fetcher.fetch(req);
 	            
 	           //log.info("Updated the DB  collection "+collection+data);
 	 

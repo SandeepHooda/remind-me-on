@@ -39,6 +39,11 @@ public interface LoginEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getUserPhones(  @Context HttpServletRequest request);
 	
+	@GET
+	@Path("/phone/verified/{status}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getPhoneViaStatus(@PathParam("status") boolean status , @Context HttpServletRequest request);
+	
 	@DELETE
 	@Path("/phone/phoneID/{phoneID}")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -53,6 +58,9 @@ public interface LoginEndpoint {
 	@Path("/phone/phoneID/{phoneID}/confirmOtp/{otp}")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response confirmOTP( @PathParam("phoneID") String phoneID, @PathParam("otp") String otp);
+	
+	
+	
 	
 	
 

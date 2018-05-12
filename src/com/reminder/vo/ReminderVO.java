@@ -16,6 +16,7 @@ public class ReminderVO {
 	private String frequencyType = "Day";//Day or Date
 	private String displayTime ;
 	private long nextExecutionTime;
+	private String selectedPhone;
 
 	public String getRegID() {
 		return regID;
@@ -106,6 +107,12 @@ public class ReminderVO {
 	}
 	public void setNextExecutionTime(long nextExecutionTime) {
 		this.nextExecutionTime = nextExecutionTime;
+	}
+	public String getSelectedPhone() {
+		return selectedPhone;
+	}
+	public void setSelectedPhone(String selectedPhone) {
+		this.selectedPhone = selectedPhone;
 	}
 
 }

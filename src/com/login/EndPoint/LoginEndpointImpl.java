@@ -33,7 +33,9 @@ public class LoginEndpointImpl implements LoginEndpoint {
 			if (null != loginVO) {
 				if (loginVO.getUserSuppliedTimeZone() != null) {
 					session.setAttribute("timeZoneSettings", loginVO.getUserSuppliedTimeZone());
+					
 				}
+				session.setAttribute("userName", loginVO.getName());
 				return Response.ok().entity(loginVO).build();
 			}else {
 				LoginVO vo = new LoginVO();
@@ -126,7 +128,11 @@ public class LoginEndpointImpl implements LoginEndpoint {
 			String regID = (String)session.getAttribute("regID");
 			String email = new ReminderFacade().getEmail(regID);
 			if (phoneID.endsWith(email)) {
-				loginFacade.sendOtp( phoneID);
+				String userName = (String)request.getSession().getAttribute("userName");
+				if (null == userName) {
+					userName = "";
+				}
+				loginFacade.sendOtp( phoneID, userName);
 				return Response.ok().entity(new LoginVO()).build(); 
 			}else {
 				LoginVO vo = new LoginVO();
@@ -148,6 +154,22 @@ public class LoginEndpointImpl implements LoginEndpoint {
 		try{
 			return Response.ok().entity(loginFacade.confirmOPT( phoneID,otp)).build(); 
 			
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+
+	@Override
+	public Response getPhoneViaStatus(boolean status, HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String regID = (String)session.getAttribute("regID");
+			String email = new ReminderFacade().getEmail(regID);
+			return Response.ok().entity(loginFacade.getPhoneViaStatus( email, status)).build(); 
 		}catch(Exception e){
 			e.printStackTrace();
 			LoginVO vo = new LoginVO();

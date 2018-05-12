@@ -15,8 +15,8 @@
 	<div class="topSpace">
 		<ion-item class="smallPadding" ng-repeat="phone in userPhonesNotVerified track by $index" >
 		  <div class="productDesc">
-		  		 <b> 	 <span >{{phone.countryCode}} - {{phone.number}} </span></b>
-		  		 <button class="button button-calm order-button buttonSmall" ng-click="deleteContacts(({{$index}}))">Delete </button>
+		  		 <b> 	 <span >{{phone.countryCode}} - {{phone.number}} </span></b><br/> &nbsp;&nbsp;&nbsp;
+		  		 <button class="button button-calm order-button buttonSmall" ng-click="deleteContacts(({{$index}}))">Delete </button>&nbsp;&nbsp;&nbsp;
 		  		 <button class="button button-balanced order-button buttonSmall" ng-click="verify(({{$index}}))">Verify </button>
 		  		 
 		  		 <!-- confirm otp -->

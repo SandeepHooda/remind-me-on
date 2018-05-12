@@ -2,14 +2,19 @@ package com.login.facade;
 
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.common.util.CollectionUtils;
 
+import com.communication.email.MailService;
+import com.communication.phone.text.Key;
+import com.communication.phone.text.SendSMS;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.login.vo.LoginVO;
@@ -21,8 +26,10 @@ import com.reminder.vo.ReminderVOComparator;
 import mangodb.MangoDB;
 
 public class LoginFacade {
+	private static final Logger log = Logger.getLogger(LoginFacade.class.getName());
 	
 	public LoginVO validateRegID(String regID, String appTimeZone) {
+		log.info("regID logged into system "+regID);
 		String data = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users", regID, null,true, null, null);
 		 Gson  json = new Gson();
 		 LoginVO result  = json.fromJson(data, new TypeToken<LoginVO>() {}.getType());
@@ -55,6 +62,18 @@ public class LoginFacade {
 		 }
 		 return existingPhones;
 	}
+	public List<String> getPhoneViaStatus(String email, boolean status){
+		List<Phone> allPhones = getUserPhones( email);
+		List<String> filteredList = new ArrayList<String>();
+		if (!CollectionUtils.isEmpty(allPhones)) {
+			for (Phone aPhone: allPhones) {
+				if(aPhone.isVerified() == status) {
+					filteredList.add(Key.countryCodeMap.get(aPhone.getCountryCode())+aPhone.getNumber());
+				}
+			}
+		}
+		return filteredList;
+	}
 	public void deletePhone(String phoneID ) {
 		String data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-phones", phoneID,null, true, null, null)+"]";
 		 Gson  json = new Gson();
@@ -82,7 +101,7 @@ public class LoginFacade {
 		 }
 		 return false;
 	}
-	public void sendOtp(String phoneID ) {
+	public void sendOtp(String phoneID ,String userName) {
 		String data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-phones", phoneID,null, true, null, null)+"]";
 		 Gson  json = new Gson();
 		 List<Phone> existingPhones  = json.fromJson(data, new TypeToken<List<Phone>>() {}.getType());
@@ -104,7 +123,23 @@ public class LoginFacade {
 			 if (!CollectionUtils.isEmpty(existingPhones)) {
 				 phone = existingPhones.get(0);
 				 phone.getOtpCode().equals(""+otpInt);
-				 System.out.println(" Opt sent");
+				 String destination = phone.getNumber();
+				 String countryCode = Key.countryCodeMap.get(phone.getCountryCode());
+				 if (null != countryCode) {
+					 destination = countryCode+destination;
+					
+					 try {
+						SendSMS.sendText(destination, userName+" OTP to verify your phone no is "+otpInt );
+						System.out.println(" Opt sent");
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					 
+				 }else {
+					 log.info(" countryCode not present for "+phone.getCountryCode());
+				 }
+				 
 			 }
 						
 		 }

@@ -83,11 +83,25 @@ var monthNames =[
 	}
 	$scope.reminder.makeACall = true;
 	$scope.reminder.sendText = true;
+	$scope.selectedPhone = "";
 	$scope.toggleCall = function (){
-		$scope.reminder.makeACall = !$scope.reminder.makeACall;
+		if($scope.verifiedPhones.length <= 0){
+				$scope.reminder.makeACall = false;
+				$scope.reminder.sendText = false;
+		}else {
+			$scope.reminder.makeACall = !$scope.reminder.makeACall;
+		}
+		
+		
 	}
 	$scope.toggleSMS = function (){
-		$scope.reminder.sendText = !$scope.reminder.sendText;
+		if($scope.verifiedPhones.length <= 0){
+			$scope.reminder.makeACall = false;
+			$scope.reminder.sendText = false;
+		}else {
+			$scope.reminder.sendText = !$scope.reminder.sendText;
+		}
+		
 	}
 	$scope.frequencyWithDate = "Once";
 	$scope.changeFrequency = function(){
@@ -171,7 +185,7 @@ var monthNames =[
 			reminderObj.sendText = $scope.reminder.sendText;
 			
 			reminderObj.frequencyType = $scope.frequencyType;
-			
+			reminderObj.selectedPhone = $scope.selectedPhone;
 		if($scope.frequencyType =='Date'){
 			reminderObj.frequencyWithDate = $scope.frequencyWithDate;//Once , Monthly, Yearly
 			reminderObj.date =$scope.reminder.year+"_"+$scope.reminder.month+"_"+$scope.reminder.day;
@@ -193,6 +207,41 @@ var monthNames =[
   			 $scope.hideBusy();
   			if (response.data){
   				$scope.popUp('Success', 'Reminder added Successfully','menu.tab.home' );
+  			}else {
+  				$scope.popUp('Failure', 'Please retry',null )
+  			}
+  			
+  		},
+		function(response){
+  			 $scope.hideBusy();
+  			
+  			 if (response.status == 401) {
+  				$scope.popUp('Failure', 'Please login back and then retry.',null );
+  			 }else {
+  				$scope.popUp('Failure', 'Please retry.',null );
+  			 }
+  			
+  			
+			
+		});
+	}
+	$scope.verifiedPhones  = [];
+	
+	$scope.getVerifiedPhones = function(){
+		$http.get('/ws/phone/verified/true')
+  		.then(function(response){
+  			 $scope.hideBusy();
+  			if (response.data){
+  				$scope.verifiedPhones = response.data;
+  				if($scope.verifiedPhones.length > 0){
+  					$scope.selectedPhone = $scope.verifiedPhones[0];
+  					
+  					$scope.reminder.makeACall = true;
+  					$scope.reminder.sendText = true;
+  				}else {
+  					$scope.reminder.makeACall = false;
+  					$scope.reminder.sendText = false;
+  				}
   			}else {
   				$scope.popUp('Failure', 'Please retry',null )
   			}
@@ -238,5 +287,7 @@ var monthNames =[
 		       console.log("The loading indicator is now hidden");
 		    });
 		  };
+		  
+		  $scope.getVerifiedPhones();
 	 
 }])
