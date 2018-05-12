@@ -21,8 +21,8 @@
 	 		<input id="minute_Day" class="verySmallInput" type="text" placeholder="Min *" ng-model="reminder.minute" ng-change="moveToSubject()">
 		</div>
 		<br/>
-		&nbsp;&nbsp;<select class="selectFrequency" ng-model="selectedDayRepeat" ng-options="x for x in frequencyDaysRepeat"></select>&nbsp;&nbsp;&nbsp;
-		<select class="selectFrequency" ng-model="selectedDay" ng-options="x for x in frequencyDays"></select>
+		&nbsp;&nbsp;<select class="selectFrequency" ng-model="reminder.selectedDayRepeat" ng-options="x for x in frequencyDaysRepeat"></select>&nbsp;&nbsp;&nbsp;
+		<select class="selectFrequency" ng-model="reminder.selectedDay" ng-options="x for x in frequencyDays"></select>
 	</span>
 	
 		

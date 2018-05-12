@@ -2,7 +2,6 @@ package com.login.EndPoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import com.login.facade.LoginFacade;
@@ -29,6 +28,7 @@ public class LoginEndpointImpl implements LoginEndpoint {
         	   appTimeZone = appTimeZone.replace("@", "/");
            }
 			session.setAttribute("timeZoneSettings", appTimeZone);
+			
 			LoginVO loginVO = loginFacade.validateRegID(regID,  appTimeZone);
 			if (null != loginVO) {
 				if (loginVO.getUserSuppliedTimeZone() != null) {

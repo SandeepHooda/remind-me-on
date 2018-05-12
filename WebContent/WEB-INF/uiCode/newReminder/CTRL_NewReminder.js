@@ -14,8 +14,8 @@ var monthNames =[
 	]
 	$scope.frequencyDays = ["Monday", "Tuesday", "Wednesday", "Thrusday","Friday", "Saturday", "Sunday"];
 	$scope.frequencyDaysRepeat = ["First", "Second", "Third", "Fourth"];
-	$scope.selectedDayRepeat = "First";
-	$scope.selectedDay = "Monday";
+	$scope.reminder.selectedDayRepeat = "First";
+	$scope.reminder.selectedDay = "Monday";
 	$scope.moveToMonth =function(){
 		if ( ($scope.reminder.year > 999 && $scope.reminder.year < 2018) || isNaN($scope.reminder.year) ){
 			$scope.reminder.year = "";
@@ -121,7 +121,7 @@ var monthNames =[
 			$scope.frequencyType = "Date";
 		}
 	}
-	$scope.valudateRequiredfields = function(){
+	$scope.validateRequiredfields = function(){
 		var reminderObj = {};
 		if (!$scope.reminder.reminderSubject || !$scope.reminder.reminderText){
 			  return null;
@@ -154,7 +154,7 @@ var monthNames =[
 			if (!$scope.reminder.hour || !$scope.reminder.minute) {
 				  allRequiredFields = false;
 			  }else {
-				  reminderObj.displayTime = $scope.selectedDayRepeat +" "+$scope.selectedDay +" of every month @ "+ $scope.reminder.hour +" : "+$scope.reminder.minute;
+				  reminderObj.displayTime = $scope.reminder.selectedDayRepeat +" "+$scope.reminder.selectedDay +" of every month @ "+ $scope.reminder.hour +" : "+$scope.reminder.minute;
 			  }
 			
 		}
@@ -166,7 +166,7 @@ var monthNames =[
 	}
 	$scope.addReminder = function(){
 		
-		var reminderObj = $scope.valudateRequiredfields();
+		var reminderObj = $scope.validateRequiredfields();
 		
 		 
 		  if(reminderObj == null){
@@ -196,7 +196,7 @@ var monthNames =[
 		}else {
 			reminderObj.time = $scope.reminder.hour+"_"+$scope.reminder.minute;
 			reminderObj._id = new Date().getTime()
-			reminderObj.dayRepeatFrequency = $scope.selectedDayRepeat +" "+$scope.selectedDay ;
+			reminderObj.dayRepeatFrequency = $scope.reminder.selectedDayRepeat +" "+$scope.reminder.selectedDay ;
 			
 		}
 		

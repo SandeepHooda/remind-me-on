@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.login.vo.LoginVO;
 import com.login.vo.Phone;
+import com.login.vo.Settings;
 import com.reminder.facade.ReminderFacade;
 import com.reminder.vo.ReminderVO;
 import com.reminder.vo.ReminderVOComparator;
@@ -33,11 +34,23 @@ public class LoginFacade {
 		String data = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users", regID, null,true, null, null);
 		 Gson  json = new Gson();
 		 LoginVO result  = json.fromJson(data, new TypeToken<LoginVO>() {}.getType());
-		 if (null != result && StringUtils.isNotBlank(result.getEmailID())) {
+		 String email = result.getEmailID();
+		 if (null != result && StringUtils.isNotBlank(email)) {
 			 result.setAppTimeZone(appTimeZone);
 			 result.setLoginTime(new Date().getTime());
 			 data = json.toJson(result, new TypeToken<LoginVO>() {}.getType());
-			 MangoDB.updateData("remind-me-on", "registered-users", data, result.get_id(),null);//Insert loging time stamp
+			 MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users", data,null);//Insert loging time stamp
+			 
+			 //Update settings 
+			 String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
+			 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
+			 if (null == settings ) {
+				 settings = new Settings();
+				 settings.set_id(email);
+			}
+			 settings.setAppTimeZone(appTimeZone);
+			 settingsJson = json.toJson(settings, new TypeToken<Settings>() {}.getType());
+			 MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users-settings", settingsJson, null);
 			 return result;
 		 }else {
 			 return null;
@@ -95,7 +108,7 @@ public class LoginFacade {
 			 if (phone.getOtpCode().equalsIgnoreCase(OPT) && ( new Date().getTime() -phone.getOtpSentTime() <3600000 )) {
 				 phone.setVerified(true);
 				 String newPhone = json.toJson(phone, new TypeToken<Phone>() {}.getType());
-				 MangoDB.updateData("remind-me-on", "registered-users-phones", newPhone,  phone.get_id(),null);
+				 MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users-phones", newPhone,  null);
 				 return true;
 			 }
 		 }
@@ -115,7 +128,7 @@ public class LoginFacade {
 				}
 			 phone.setOtpCode(""+otpInt);
 			 String newPhone = json.toJson(phone, new TypeToken<Phone>() {}.getType());
-			 MangoDB.updateData("remind-me-on", "registered-users-phones", newPhone,phone.get_id(),  null);
+			 MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users-phones", newPhone, null);
 			 
 			 data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-phones", phoneID,null, true, null, null)+"]";
 			 json = new Gson();
@@ -131,7 +144,7 @@ public class LoginFacade {
 					 try {
 						SendSMS.sendText(destination, userName+" OTP to verify your phone no is "+otpInt );
 						System.out.println(" Opt sent");
-					} catch (UnsupportedEncodingException e) {
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

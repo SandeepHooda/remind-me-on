@@ -46,7 +46,7 @@ public class MailService {
 	private static URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
 	
 	
-	public boolean sendSimpleMail(EmailVO emailVO ) {
+	public static boolean sendSimpleMail(EmailVO emailVO ) {
 		
 		
 		String httpsURL  = "https://post-master.herokuapp.com/SendEmail";

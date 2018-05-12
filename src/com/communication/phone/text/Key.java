@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Key {
 
-	
+	public static final String email = "jkaamdweeagveabn";
 	
 	public static Map<String, String> countryCodeMap = new HashMap<String, String>();
 	static {

@@ -2,8 +2,10 @@ package mangodb;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.urlfetch.FetchOptions;
@@ -37,7 +39,8 @@ public class MangoDB {
 		}
 		
 		if (null != query ){
-			httpsURL +=  query;
+			httpsURL += query;
+			
 		}
 		//System.out.println("This is the url "+httpsURL);
 		String responseStr = "";
@@ -80,7 +83,7 @@ public class MangoDB {
 	}
 	
 	
-	
+	//Create or update 
 public static void createNewDocumentInCollection(String dbName,String collection,  String data, String key){
 	if (null == key) {
 		key = mlabKeyReminder;
@@ -104,40 +107,7 @@ public static void createNewDocumentInCollection(String dbName,String collection
 	        }
 	}
 	
-	public static void updateData(String dbName,String collection, String data, String documentKey,  String apiKey){
-		if (null == apiKey) {
-			apiKey = mlabKeyReminder;
-		}
-		String httpsURL = "https://api.mlab.com/api/1/databases/"+dbName+"/collections/"+collection+"?apiKey="+apiKey;
-		if (null != documentKey){
-			httpsURL += "&q=%7B%22_id%22:%22"+documentKey+"%22%7D";
-			
-		}	
-		
-		 try {
-			 	/*URL url = new URL(httpsURL);
-	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.PUT, lFetchOptions);
-	            HTTPResponse res = fetcher.fetch(req);*/
-	           
-			
-		       URL url = new URL(httpsURL);
-	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.PUT, lFetchOptions);
-	            HTTPHeader header = new HTTPHeader("Content-type", "application/json");
-	            
-	            req.setHeader(header);
-	           
-	            req.setPayload(data.getBytes());
-	            fetcher.fetch(req);
-	            
-	           //log.info("Updated the DB  collection "+collection+data);
-	 
-	        } catch (IOException e) {
-	        	 log.info("Error while  upfdating DB  collection "+collection+" Message "+e.getMessage());
-	        	e.printStackTrace();
-	        	
-	        }
-		
-	}
+	
 	
 public static void deleteDocument(String dbName,String collection,  String dataKeyTobeDeleted, String key){
 	if (null == key) {

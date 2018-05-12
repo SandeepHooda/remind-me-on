@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -16,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.login.vo.LoginVO;
 import com.reminder.vo.ReminderVO;
-import com.reminder.vo.ReminderVOComparator;
 
 import mangodb.MangoDB;
 
@@ -45,11 +43,8 @@ public class ReminderFacade {
          String email = getEmail(reminderVO.getRegID());
          if (null != email) {
         	 reminderVO.setEmail(email);
-        	 SimpleDateFormat sdf = new SimpleDateFormat(timeFormat);
-        	 TimeZone userTimeZone	=	TimeZone.getTimeZone(timeZone);
-        	 System.out.println(" User timezone "+timeZone);
-     		sdf.setTimeZone(userTimeZone);
-     		Date reminderDate = sdf.parse(nextReminder(reminderVO));
+        	 
+     		Date reminderDate = nextReminder(reminderVO, timeZone);
      		reminderVO.setNextExecutionTime(reminderDate.getTime());
      		if (reminderVO.get_id() == null) {
      			reminderVO.set_id(""+reminderVO.getNextExecutionTime()+Math.random());
@@ -65,7 +60,11 @@ public class ReminderFacade {
 	}
 	
 	
-	private String nextReminder(ReminderVO reminderVO) {
+	public static Date nextReminder(ReminderVO reminderVO, String timeZone) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(timeFormat);
+	   	 TimeZone userTimeZone	=	TimeZone.getTimeZone(timeZone);
+	   	 System.out.println(" User timezone "+timeZone);
+		sdf.setTimeZone(userTimeZone);
 		if ("Day".equalsIgnoreCase(reminderVO.getFrequencyType())) {
 			String[] split = reminderVO.getDayRepeatFrequency().split(" ");
 			Calendar cal = new GregorianCalendar();
@@ -77,7 +76,7 @@ public class ReminderFacade {
 				cal.set(Calendar.DAY_OF_WEEK, dayToCalDay.get(split[1]));
 				cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, wordsToMath.get(split[0]));
 			}
-			return ""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime();
+			return sdf.parse(""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime());
 		}else if ("Monthly".equalsIgnoreCase(reminderVO.getFrequencyWithDate())) {
 			String[] dateSplit = reminderVO.getDate().split("_");
 			Calendar cal = new GregorianCalendar();
@@ -88,7 +87,7 @@ public class ReminderFacade {
 			if (cal.getTime().getTime() < new Date().getTime()){//Reminder date has past in this month
 				cal.add(Calendar.MONTH, 1);
 			}
-			return ""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime();
+			return sdf.parse(""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime());
 		}else if ("Yearly".equalsIgnoreCase(reminderVO.getFrequencyWithDate())) {
 			String[] dateSplit = reminderVO.getDate().split("_");
 			Calendar cal = new GregorianCalendar();
@@ -98,17 +97,18 @@ public class ReminderFacade {
 			if (cal.getTime().getTime() < new Date().getTime()){//Reminder date has past in this month
 				cal.add(Calendar.YEAR, 1);
 			}
-			return ""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime();
+			return sdf.parse(""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime());
 		}
-		return reminderVO.getDate()+" "+reminderVO.getTime();
+		return sdf.parse(reminderVO.getDate()+" "+reminderVO.getTime());
 	}
 	public List<ReminderVO> getReminders(String regID) {
 		 String email = getEmail(regID);
 		 if (null != email) {
-			 String data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "reminders", email,"email", false, null, null)+"]";
+			 String sortByExecutionTimeAsc =  "&s=%7B%22nextExecutionTime%22%3A%201%7D";
+			 String data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "reminders", email,"email", false, null,sortByExecutionTimeAsc)+"]";
 			 Gson  json = new Gson();
 			 List<ReminderVO> result  = json.fromJson(data, new TypeToken<List<ReminderVO>>() {}.getType());
-			 Collections.sort(result, new ReminderVOComparator());
+			 //Collections.sort(result, new ReminderVOComparator());
 			 return result;
 		 }else {
 			 return new ArrayList<ReminderVO>();
