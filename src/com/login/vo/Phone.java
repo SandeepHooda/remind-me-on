@@ -7,6 +7,7 @@ public class Phone {
 	private String email;
 	private String otpCode;
 	private boolean verified;
+	private long otpSentTime;
 	public String get_id() {
 		return _id;
 	}
@@ -43,6 +44,12 @@ public class Phone {
 	}
 	public void setCountryCode(String countryCode) {
 		this.countryCode = countryCode;
+	}
+	public long getOtpSentTime() {
+		return otpSentTime;
+	}
+	public void setOtpSentTime(long otpSentTime) {
+		this.otpSentTime = otpSentTime;
 	}
 
 }

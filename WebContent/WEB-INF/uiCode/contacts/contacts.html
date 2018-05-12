@@ -5,9 +5,38 @@
 <ion-content class="padding">
 <span class="whitecolor">
 
-<button ng-click="newContact()" id="floatingBtn" name="add new contact" title="add new contact" >
-	<i class="icon ion-plus"></i>
-</button>
+	<!-- Add new button -->
+	<div>
+		<button ng-click="newContact()" class="floatingBtn" name="add new contact" title="add new contact" >
+		<i class="icon ion-plus"></i>
+		</button>
+	</div>
+	<!-- Users Phones Not verified -->
+	<div class="topSpace">
+		<ion-item class="smallPadding" ng-repeat="phone in userPhonesNotVerified track by $index" >
+		  <div class="productDesc">
+		  		 <b> 	 <span >{{phone.countryCode}} - {{phone.number}} </span></b>
+		  		 <button class="button button-calm order-button buttonSmall" ng-click="deleteContacts(({{$index}}))">Delete </button>
+		  		 <button class="button button-balanced order-button buttonSmall" ng-click="verify(({{$index}}))">Verify </button>
+		  		 
+		  		 <!-- confirm otp -->
+		  		 <div class="textBoxSmall paddingCenter paddingTop" ng-show="{{$index}} == verifyOptInpt" >
+					<span>
+						<input  type="text" class="phoneNo" style=" display: inline;border: 2px solid red;" placeholder="Phone No *" ng-model="data.otpValue"> &nbsp;&nbsp;&nbsp;
+					 	<button class="button button-assertive order-button buttonSmall" ng-click="confirmOtp(({{$index}}))">Confirm </button>
+					</span>
+				</div>
+		   </div>
+		 </ion-item>
+	</div>
+	<!-- Users Phones verified -->
+	<div class="topSpace"	>
+		<ion-item class="smallPadding" ng-repeat="phone in userPhonesVerified track by $index" >
+		  <div class="productDesc">
+		  		 <b> 	 <span class="italicBlueRegular">{{phone.countryCode}} - {{phone.number}} </span></b>
+		   </div>
+		 </ion-item>
+	</div>
 </span>
 </ion-content>
 </ion-view>

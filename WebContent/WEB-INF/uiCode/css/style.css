@@ -25,6 +25,7 @@
 }
 
 
+
 .buttonAnimation:hover {background-color: #3e8e41}
 
 .buttonAnimationOffState {background-color: #c0c0c0}
@@ -63,6 +64,20 @@
 	padding-left: 40%;
 }
 .movefocus4 {  margin: 5px;  }
+.buttonSmall {
+  	max-width: 100px !important;
+    max-height: 25px !important;
+    min-height: 25px !important;
+    line-height: 0px !important;
+	 text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  
+}
 .white{
 	background-color: white;
 }
@@ -73,6 +88,11 @@
 }
 .italicBlue {
 	font: italic bold 12px/5px Georgia, serif;
+	margin-right: 15px;
+	color :blue;
+}
+.italicBlueRegular {
+	font: italic bold 15px/5px Georgia, serif;
 	margin-right: 15px;
 	color :blue;
 }
@@ -128,11 +148,11 @@
   background: #E74B37;
 }
 
-#floatingBtn {
+.floatingBtn {
   display: block;
   position: fixed;
   right: 30px;
-  top: 50px;
+ 
   z-index: 99;
   font-size: 18px;
   border: none;
@@ -146,6 +166,9 @@
   
 }
 
+.top50{
+	 top: 50px;
+}
 
   
 .admin {
@@ -519,8 +542,12 @@ div.textBoxSmall {
 	float : left;
 	
 }
+
 div.paddingCenter{
 	padding-left:40%;
+}
+div.paddingTop{
+	padding-top:10px;
 }
 .centerBtn {
 	padding-left: 45%;
@@ -536,7 +563,7 @@ div.paddingCenter{
 	padding-left: 25%;
 }
 div.width90 {width: 82%;}
-#floatingBtn {
+.floatingBtn {
   right: 10px;
 }
 div.textBoxMedium {

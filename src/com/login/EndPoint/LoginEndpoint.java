@@ -2,6 +2,7 @@ package com.login.EndPoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -32,5 +33,27 @@ public interface LoginEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response addPhoneNo( Phone phone,  @Context HttpServletRequest request);
+	
+	@GET
+	@Path("/phone")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getUserPhones(  @Context HttpServletRequest request);
+	
+	@DELETE
+	@Path("/phone/phoneID/{phoneID}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response deletePhone( @PathParam("phoneID") String phoneID, @Context HttpServletRequest request);
+	
+	@GET
+	@Path("/phone/verify/ID/{phoneID}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response sendOtp( @PathParam("phoneID") String phoneID, @Context HttpServletRequest request);
+	
+	@GET
+	@Path("/phone/phoneID/{phoneID}/confirmOtp/{otp}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response confirmOTP( @PathParam("phoneID") String phoneID, @PathParam("otp") String otp);
+	
+	
 
 }

@@ -104,26 +104,30 @@ public static void createNewDocumentInCollection(String dbName,String collection
 	        }
 	}
 	
-	public static void updateData(String dbName,String collection, String data,  String apiKey){
+	public static void updateData(String dbName,String collection, String data, String documentKey,  String apiKey){
 		if (null == apiKey) {
 			apiKey = mlabKeyReminder;
 		}
 		String httpsURL = "https://api.mlab.com/api/1/databases/"+dbName+"/collections/"+collection+"?apiKey="+apiKey;
-		/*if (null != documentKey){
+		if (null != documentKey){
 			httpsURL += "&q=%7B%22_id%22:%22"+documentKey+"%22%7D";
 			
-		}*/
+		}	
 		
 		 try {
+			 	URL url = new URL(httpsURL);
+	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.PUT, lFetchOptions);
+	            HTTPResponse res = fetcher.fetch(req);
+	           
 			
-		        URL url = new URL(httpsURL);
+		       /* URL url = new URL(httpsURL);
 	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.PUT, lFetchOptions);
 	            HTTPHeader header = new HTTPHeader("Content-type", "application/json");
 	            
 	            req.setHeader(header);
 	           
 	            req.setPayload(data.getBytes());
-	            fetcher.fetch(req);
+	            fetcher.fetch(req);*/
 	            
 	           //log.info("Updated the DB  collection "+collection+data);
 	 
