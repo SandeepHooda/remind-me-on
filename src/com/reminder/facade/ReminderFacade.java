@@ -67,11 +67,18 @@ public class ReminderFacade {
 		sdf.setTimeZone(userTimeZone);
 		if ("Day".equalsIgnoreCase(reminderVO.getFrequencyType())) {
 			String[] split = reminderVO.getDayRepeatFrequency().split(" ");
+			String[] timeSplit = reminderVO.getTime().split("_");
 			Calendar cal = new GregorianCalendar();
+			Calendar today = new GregorianCalendar();
+			today.setTimeZone(userTimeZone);
+			cal.setTimeZone(userTimeZone);
+			
 			cal.set(Calendar.DAY_OF_WEEK, dayToCalDay.get(split[1]));
 			cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, wordsToMath.get(split[0]));
 		
-			if (cal.getTime().getTime() < new Date().getTime()){//Reminder date has past in this month
+			cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeSplit[0]));
+			cal.set(Calendar.MINUTE, Integer.parseInt(timeSplit[1]));
+			if (cal.before(today)){//Reminder date has past in this month
 				cal.add(Calendar.MONTH, 1);
 				cal.set(Calendar.DAY_OF_WEEK, dayToCalDay.get(split[1]));
 				cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, wordsToMath.get(split[0]));
@@ -79,22 +86,37 @@ public class ReminderFacade {
 			return sdf.parse(""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime());
 		}else if ("Monthly".equalsIgnoreCase(reminderVO.getFrequencyWithDate())) {
 			String[] dateSplit = reminderVO.getDate().split("_");
+			String[] timeSplit = reminderVO.getTime().split("_");
 			Calendar cal = new GregorianCalendar();
+			Calendar today = new GregorianCalendar();
+			today.setTimeZone(userTimeZone);
+			cal.setTimeZone(userTimeZone);
 			cal.set(Calendar.DATE, Integer.parseInt(dateSplit[2]));
 			{//If date is 31 then and this month don't have 31 then cals months needs to be adjusted
 				cal.set(Calendar.MONTH, cal.get(Calendar.MONTH));// This actually sets correct next month 
 			}
-			if (cal.getTime().getTime() < new Date().getTime()){//Reminder date has past in this month
+			cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeSplit[0]));
+			cal.set(Calendar.MINUTE, Integer.parseInt(timeSplit[1]));
+			System.out.println(cal.getTime()+" #= "+cal.get(Calendar.MONTH));
+			cal.get(Calendar.MONTH);
+			if (cal.before(today)){//Reminder date has past in this month
 				cal.add(Calendar.MONTH, 1);
+				System.out.println(" adding a month");
 			}
+			System.out.println(cal.getTime()+" #= "+cal.get(Calendar.MONTH));
 			return sdf.parse(""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime());
 		}else if ("Yearly".equalsIgnoreCase(reminderVO.getFrequencyWithDate())) {
 			String[] dateSplit = reminderVO.getDate().split("_");
+			String[] timeSplit = reminderVO.getTime().split("_");
 			Calendar cal = new GregorianCalendar();
+			Calendar today = new GregorianCalendar();
+			today.setTimeZone(userTimeZone);
+			cal.setTimeZone(userTimeZone);
 			cal.set(Calendar.MONTH, (Integer.parseInt(dateSplit[1])) -1);
 			cal.set(Calendar.DATE, Integer.parseInt(dateSplit[2]));
-			
-			if (cal.getTime().getTime() < new Date().getTime()){//Reminder date has past in this month
+			cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeSplit[0]));
+			cal.set(Calendar.MINUTE, Integer.parseInt(timeSplit[1]));
+			if (cal.before(today)){//Reminder date has past in this month
 				cal.add(Calendar.YEAR, 1);
 			}
 			return sdf.parse(""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime());
