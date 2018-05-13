@@ -39,8 +39,8 @@ public class LoginFacade {
 			 result.setAppTimeZone(appTimeZone);
 			 result.setLoginTime(new Date().getTime());
 			 data = json.toJson(result, new TypeToken<LoginVO>() {}.getType());
-			 MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users", data,null);//Insert loging time stamp
-			 
+			 //MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users", data,null);//Insert loging time stamp
+			 MangoDB.updateData("remind-me-on", "registered-users", data, result.get_id(),null);//Insert loging time stamp
 			 //Update settings 
 			 String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
 			 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
@@ -108,7 +108,8 @@ public class LoginFacade {
 			 if (phone.getOtpCode().equalsIgnoreCase(OPT) && ( new Date().getTime() -phone.getOtpSentTime() <3600000 )) {
 				 phone.setVerified(true);
 				 String newPhone = json.toJson(phone, new TypeToken<Phone>() {}.getType());
-				 MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users-phones", newPhone,  null);
+				 //MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users-phones", newPhone,  null);
+				 MangoDB.updateData("remind-me-on", "registered-users-phones", newPhone,  phone.get_id(),null);
 				 return true;
 			 }
 		 }
@@ -128,8 +129,8 @@ public class LoginFacade {
 				}
 			 phone.setOtpCode(""+otpInt);
 			 String newPhone = json.toJson(phone, new TypeToken<Phone>() {}.getType());
-			 MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users-phones", newPhone, null);
-			 
+			 //MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users-phones", newPhone, null);
+			 MangoDB.updateData("remind-me-on", "registered-users-phones", newPhone,phone.get_id(),  null);
 			 data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-phones", phoneID,null, true, null, null)+"]";
 			 json = new Gson();
 			 existingPhones  = json.fromJson(data, new TypeToken<List<Phone>>() {}.getType());

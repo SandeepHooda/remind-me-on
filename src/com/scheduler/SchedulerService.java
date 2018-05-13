@@ -67,8 +67,8 @@ public class SchedulerService {
 					reminderVO.setNextExecutionTime(ReminderFacade.nextReminder(reminderVO, timeZone).getTime());
 					Gson  json = new Gson();
 					String data = json.toJson(reminderVO, new TypeToken<ReminderVO>() {}.getType());
-					MangoDB.createNewDocumentInCollection("remind-me-on", "reminders", data, null);
 					//MangoDB.createNewDocumentInCollection("remind-me-on", "reminders", data, null);
+					MangoDB.updateData("remind-me-on", "reminders", data,reminderVO.get_id(), null);
 				} catch (Exception e) {
 					
 					e.printStackTrace();
