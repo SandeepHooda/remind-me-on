@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.common.util.CollectionUtils;
 
@@ -36,6 +38,7 @@ public class LoginFacade {
 		 LoginVO result  = json.fromJson(data, new TypeToken<LoginVO>() {}.getType());
 		 String email = result.getEmailID();
 		 if (null != result && StringUtils.isNotBlank(email)) {
+			 result.setEmailID(email);
 			 result.setAppTimeZone(appTimeZone);
 			 result.setLoginTime(new Date().getTime());
 			 data = json.toJson(result, new TypeToken<LoginVO>() {}.getType());
@@ -49,6 +52,7 @@ public class LoginFacade {
 				 settings.set_id(email);
 			}
 			 settings.setAppTimeZone(appTimeZone);
+			 result.setUserSettings(settings);
 			 settingsJson = json.toJson(settings, new TypeToken<Settings>() {}.getType());
 			 MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users-settings", settingsJson, null);
 			 return result;
@@ -58,8 +62,9 @@ public class LoginFacade {
 		
 	}
 	
-	public LoginVO logout(String regID) {
+	public LoginVO logout(String regID, HttpSession session) {
 		MangoDB.deleteDocument("remind-me-on", "registered-users", regID,  null);
+		session.invalidate();
 		return validateRegID(regID, null);
 	}
 	
@@ -87,6 +92,7 @@ public class LoginFacade {
 		}
 		return filteredList;
 	}
+	
 	public void deletePhone(String phoneID ) {
 		String data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-phones", phoneID,null, true, null, null)+"]";
 		 Gson  json = new Gson();

@@ -6,20 +6,20 @@
 
 <ion-content class="padding">
 	<div>
-	<span class="userName">{{userName}}</span> <span class="userName" ng-click="$ctrl.logOut()">, Log Out &nbsp;<i class="icon ion-log-out"></i></span>
+	<span class="userName blockDisplay">{{userName}}</span> <span class="userName" ng-click="$ctrl.logOut()">, Log Out &nbsp;<i class="icon ion-log-out"></i></span>
 	</div>
 	<div>
-		<span class="whitecolor">
+		<span class="whitecolor ">
 		 <!-- Search bar -->
-		    <div class="list list-inset width90">
-			  <label class="item item-input">
+		    <div class="list list-inset searchbox">
+			  <label class="item item-input searchboxInput">
 			    <i class="icon ion-search placeholder-icon"></i>
 			    <input type="text" placeholder="Search" ng-change="$ctrl.filterProduts()" ng-model="$ctrl.searchInput">
 			  </label>
 			</div>
 		</span>
 		
-		<button ng-click="$ctrl.addNewReminder()" id="floatingBtn" class="floatingBtn top50" name="add new" title="add new reminder" ng-click="newReminder()">
+		<button ng-click="$ctrl.addNewReminder()" id="floatingBtn" class="floatingBtn top0" name="add new" title="add new reminder" ng-click="newReminder()">
 			 <i class="icon ion-plus"></i>
 		</button>
 	</div>

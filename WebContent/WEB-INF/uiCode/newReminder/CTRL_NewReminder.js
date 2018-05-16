@@ -13,8 +13,8 @@ var monthNames =[
 		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 	]
 	$scope.frequencyDays = ["Monday", "Tuesday", "Wednesday", "Thrusday","Friday", "Saturday", "Sunday"];
-	$scope.frequencyDaysRepeat = ["First", "Second", "Third", "Fourth"];
-	$scope.reminder.selectedDayRepeat = "First";
+	$scope.frequencyDaysRepeat = ["Every", "First", "Second", "Third", "Fourth"];
+	$scope.reminder.selectedDayRepeat = "Every";
 	$scope.reminder.selectedDay = "Monday";
 	$scope.moveToMonth =function(){
 		if ( ($scope.reminder.year > 999 && $scope.reminder.year < 2018) || isNaN($scope.reminder.year) ){

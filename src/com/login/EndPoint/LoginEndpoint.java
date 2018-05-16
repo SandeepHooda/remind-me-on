@@ -24,9 +24,14 @@ public interface LoginEndpoint {
 	public Response validateRegID(@PathParam("regID") String regID, @Context HttpServletRequest request, @PathParam("timeZone") String timeZone);
 	
 	@GET
+	@Path("/callcredits/regid/{regID}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getCallCredits(@PathParam("regID") String regID, @Context HttpServletRequest request);
+	
+	@GET
 	@Path("/logout/{regID}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response logout(@PathParam("regID") String regID);
+	public Response logout(@PathParam("regID") String regID,  @Context HttpServletRequest request);
 	
 	@POST
 	@Path("/phone")

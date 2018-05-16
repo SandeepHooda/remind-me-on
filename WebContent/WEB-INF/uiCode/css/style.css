@@ -1,3 +1,6 @@
+.blockDisplay{
+	    display: block;
+}
 .topSpace {
 	padding-top: 10px;
 }
@@ -147,7 +150,13 @@
 .loginBtn--google:focus {
   background: #E74B37;
 }
-
+.floatingRight {
+display: block;
+  position: fixed;
+  right: 30px;
+  color: white;
+ 
+}
 .floatingBtn {
   display: block;
   position: fixed;
@@ -168,6 +177,9 @@
 
 .top50{
 	 top: 50px;
+}
+.top0{
+	 top: 0px;
 }
 
   
@@ -479,6 +491,17 @@ button.accordion.active:after {
 .whitecolor{
 	color:white;
 }
+
+
+.searchbox{
+	
+	margin: 0px;
+}
+
+.searchboxInput{
+	height: 30px;
+}
+    
 
 .custom {
   background-color: #3f4041 !important; /* This sets the background color*/

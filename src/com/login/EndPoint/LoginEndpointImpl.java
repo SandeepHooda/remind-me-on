@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 import com.login.facade.LoginFacade;
 import com.login.vo.LoginVO;
 import com.login.vo.Phone;
+import com.login.vo.Settings;
 import com.reminder.facade.ReminderFacade;
 
 public class LoginEndpointImpl implements LoginEndpoint {
@@ -35,7 +36,9 @@ public class LoginEndpointImpl implements LoginEndpoint {
 					session.setAttribute("timeZoneSettings", loginVO.getUserSuppliedTimeZone());
 					
 				}
+				session.setAttribute("email", loginVO.getEmailID());
 				session.setAttribute("userName", loginVO.getName());
+				session.setAttribute("settings", loginVO.getUserSettings());
 				return Response.ok().entity(loginVO).build();
 			}else {
 				LoginVO vo = new LoginVO();
@@ -67,10 +70,10 @@ public class LoginEndpointImpl implements LoginEndpoint {
 		}
 	}
 	@Override
-	public Response logout(String regID) {
+	public Response logout(String regID, HttpServletRequest request) {
 		try{
-			
-			return Response.ok().entity(loginFacade.logout(regID)).build();
+			HttpSession session = request.getSession();
+			return Response.ok().entity(loginFacade.logout(regID, session)).build();
 		}catch(Exception e){
 			e.printStackTrace();
 			LoginVO vo = new LoginVO();
@@ -170,6 +173,24 @@ public class LoginEndpointImpl implements LoginEndpoint {
 			String regID = (String)session.getAttribute("regID");
 			String email = new ReminderFacade().getEmail(regID);
 			return Response.ok().entity(loginFacade.getPhoneViaStatus( email, status)).build(); 
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+
+	@Override
+	public Response getCallCredits(String regID, HttpServletRequest request) {
+		
+		
+		
+		try{
+			HttpSession session = request.getSession();
+			Settings usrSettings = (Settings) session.getAttribute("settings");
+			return Response.ok().entity(usrSettings.getCurrentCallCredits()).build(); 
 		}catch(Exception e){
 			e.printStackTrace();
 			LoginVO vo = new LoginVO();

@@ -12,6 +12,7 @@ public class LoginVO {
 	private String userSuppliedTimeZone;
 	private String errorMessage;
 	private long loginTime;
+	private Settings userSettings;
 	
 	public LoginVO() {
 		this.regID = UUID.randomUUID().toString();
@@ -65,6 +66,12 @@ public class LoginVO {
 	}
 	public void setLoginTime(long loginTime) {
 		this.loginTime = loginTime;
+	}
+	public Settings getUserSettings() {
+		return userSettings;
+	}
+	public void setUserSettings(Settings userSettings) {
+		this.userSettings = userSettings;
 	}
 
 }

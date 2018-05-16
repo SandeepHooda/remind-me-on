@@ -2,6 +2,7 @@ APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$
     function($scope, $ionicSideMenuDelegate,$state,$http,$rootScope){
 	var theCtrl = this;
 	var regID = window.localStorage.getItem('regID');
+	$scope.currentCallCredits = 0;
 	if (document.URL.indexOf('localhost')>=0){
 		regID = "0457b82f-a156-4946-93cc-c73fae5b9e8a";
 		 window.localStorage.setItem('regID', regID);
@@ -12,7 +13,8 @@ APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$
 	}else {
 		 $http.get('/ws/login/validate/'+regID+'/timeZone/'+Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "@"))
 	  		.then(function(response){
-	  			$scope.$emit('getMyRemindersList');
+	  			$scope.getCallCredits();
+	  			
 	  		},
 			function(response){
 	  			window.localStorage.setItem('regID', 'invalid');
@@ -22,6 +24,24 @@ APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$
 				$state.transitionTo('menu.login');
 				
 			});
+	}
+	
+	
+	
+	$scope.getCallCredits = function(){
+		$http.get('/ws/callcredits/regid/'+regID)
+  		.then(function(response){
+  			$scope.currentCallCredits = response.data;
+  			$scope.$emit('getMyRemindersList');
+  		},
+		function(response){
+  			window.localStorage.setItem('regID', 'invalid');
+				localStorage.removeItem('name');
+				document.cookie = 'regID' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+				document.cookie = 'name' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+			$state.transitionTo('menu.login');
+			
+		});
 	}
 	
 	$rootScope.$on('logOut',function(event){
@@ -42,7 +62,9 @@ APP.CONTROLLERS.controller ('CTRL_Expired',['$scope','$ionicSideMenuDelegate','$
 			});
 		});
 	
-	
+	$scope.addCash = function(){
+		$state.transitionTo('menu.addcash');
+	}
 	var name = window.localStorage.getItem('name');
 	if (name ){
 		$scope.userName = "Welcome "+name;

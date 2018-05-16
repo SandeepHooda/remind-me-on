@@ -1,9 +1,12 @@
 package com.login.vo;
 
-public class Settings {
+import java.io.Serializable;
+
+public class Settings implements Serializable {
 	private String _id;
 	private String appTimeZone;
 	private String userSuppliedTimeZone;
+	private int currentCallCredits ;
 
 	public String getAppTimeZone() {
 		return appTimeZone;
@@ -27,6 +30,14 @@ public class Settings {
 
 	public void setUserSuppliedTimeZone(String userSuppliedTimeZone) {
 		this.userSuppliedTimeZone = userSuppliedTimeZone;
+	}
+
+	public int getCurrentCallCredits() {
+		return currentCallCredits;
+	}
+
+	public void setCurrentCallCredits(int currentCallCredits) {
+		this.currentCallCredits = currentCallCredits;
 	}
 
 }

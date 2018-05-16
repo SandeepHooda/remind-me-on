@@ -65,6 +65,10 @@ angular.module('starter', APP.DEPENDENCIES.concat(APP.OTHERDEPENDENCIES))
 					url:'/addcontact',
 					templateUrl: 'contacts/add/addcontacts.html',
 					controller: 'CTRL_ADDCONTACTS'
+				}).state('menu.addcash',{
+					url:'/addcash',
+					templateUrl: 'cash/cash.html',
+					controller: 'CTRL_CASH'
 				})
 				$urlRouterProvider.otherwise('/menu/tab/home');
 			}

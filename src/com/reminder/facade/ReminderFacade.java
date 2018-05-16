@@ -2,6 +2,10 @@ package com.reminder.facade;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +25,7 @@ import mangodb.MangoDB;
 public class ReminderFacade {
 	public static String timeFormat = "yyyy_M_d HH_mm";
 	private static Map<String, Integer> dayToCalDay = new HashMap<String, Integer>();
+	private static Map<String, DayOfWeek> dayToLocal = new HashMap<String, DayOfWeek>();
 	private static Map<String, Integer> wordsToMath = new HashMap<String, Integer>();
 	static {
 		dayToCalDay.put("Monday", Calendar.MONDAY);
@@ -30,6 +35,14 @@ public class ReminderFacade {
 		dayToCalDay.put("Friday", Calendar.FRIDAY);
 		dayToCalDay.put("Saturday", Calendar.SATURDAY);
 		dayToCalDay.put("Sunday", Calendar.SUNDAY);
+		
+		dayToLocal.put("Monday", DayOfWeek.MONDAY);
+		dayToLocal.put("Tuesday", DayOfWeek.TUESDAY);
+		dayToLocal.put("Wednesday", DayOfWeek.WEDNESDAY);
+		dayToLocal.put("Thrusday", DayOfWeek.THURSDAY);
+		dayToLocal.put("Friday", DayOfWeek.FRIDAY);
+		dayToLocal.put("Saturday", DayOfWeek.SATURDAY);
+		dayToLocal.put("Sunday", DayOfWeek.SUNDAY);
 		
 		wordsToMath.put("First", 1);
 		wordsToMath.put("Second", 2);
@@ -68,21 +81,45 @@ public class ReminderFacade {
 		if ("Day".equalsIgnoreCase(reminderVO.getFrequencyType())) {
 			String[] split = reminderVO.getDayRepeatFrequency().split(" ");
 			String[] timeSplit = reminderVO.getTime().split("_");
+			
 			Calendar cal = new GregorianCalendar();
 			Calendar today = new GregorianCalendar();
 			today.setTimeZone(userTimeZone);
 			cal.setTimeZone(userTimeZone);
 			
-			cal.set(Calendar.DAY_OF_WEEK, dayToCalDay.get(split[1]));
-			cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, wordsToMath.get(split[0]));
-		
 			cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeSplit[0]));
 			cal.set(Calendar.MINUTE, Integer.parseInt(timeSplit[1]));
-			if (cal.before(today)){//Reminder date has past in this month
-				cal.add(Calendar.MONTH, 1);
+			if ("Every".equals(split[0])){//Every sunday/monday
+				LocalDate ld =  LocalDate.now();
+				ld = ld.with(TemporalAdjusters.nextOrSame(dayToLocal.get(split[1])));
+				cal.set(Calendar.YEAR, ld.getYear());
+				cal.set(Calendar.MONTH, ld.getMonthValue()-1);
+				cal.set(Calendar.DATE, ld.getDayOfMonth());
+				
+				if (cal.before(today)){//Reminder date has past in this month
+					ld = ld.with(TemporalAdjusters.next(dayToLocal.get(split[1])));
+					cal.set(Calendar.YEAR, ld.getYear());
+					cal.set(Calendar.MONTH, ld.getMonthValue()-1);
+					cal.set(Calendar.DATE, ld.getDayOfMonth());
+				}
+				
+			}else { //first, second sunday
 				cal.set(Calendar.DAY_OF_WEEK, dayToCalDay.get(split[1]));
 				cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, wordsToMath.get(split[0]));
+				
+				if (cal.before(today)){//Reminder date has past in this month
+					cal.add(Calendar.MONTH, 1);
+					cal.set(Calendar.DAY_OF_WEEK, dayToCalDay.get(split[1]));
+					cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, wordsToMath.get(split[0]));
+				}
+				
 			}
+			
+			
+			
+		
+			
+			
 			return sdf.parse(""+cal.get(Calendar.YEAR)+"_"+(cal.get(Calendar.MONTH)+1)+"_"+cal.get(Calendar.DATE)+" "+reminderVO.getTime());
 		}else if ("Monthly".equalsIgnoreCase(reminderVO.getFrequencyWithDate())) {
 			String[] dateSplit = reminderVO.getDate().split("_");
