@@ -14,7 +14,12 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 		$scope.$emit('logOut');
 	}
 	
-	theCtrl.addNewTodo  = function(){
+	$scope.checkEnter = function(){
+		if(event.keyCode == 13){
+			$scope.addNewTodo();
+		}
+	}
+	$scope.addNewTodo  = function(){
 		if (!theCtrl.newTodo) return;
 		var toDo = {};
 		toDo.order = $scope.todos.length +1;

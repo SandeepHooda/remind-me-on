@@ -14,12 +14,12 @@
 		    <div class="list list-inset searchbox">
 			  <label class="item item-input searchboxInput">
 			    <i class="icon ion-search placeholder-icon"></i>
-			    <input type="text" placeholder="Add new Todo"  ng-model="$ctrl.newTodo">
+			    <input type="text" placeholder="Add new Todo"  ng-model="$ctrl.newTodo" ng-keyup="checkEnter()"> 
 			  </label>
 			</div>
 		</span>
 		
-		<button ng-click="$ctrl.addNewTodo()" id="floatingBtn" class="floatingBtn top0" name="add new" title="add new todo" >
+		<button ng-click="addNewTodo()" id="floatingBtn" class="floatingBtn top0" name="add new" title="add new todo" >
 			 <i class="icon ion-plus"></i>
 		</button>
 	</div>
