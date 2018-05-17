@@ -1,0 +1,36 @@
+<ion-view title="ToDo" cache-view="false"  class="backhroundcolor " ng-init="getToDos()" ng-controller="CTRL_TODO as $ctrl">
+
+<ion-header-bar class="bar-positive">
+      <h1 class="title">ToDO</h1>   
+</ion-header-bar>
+
+<ion-content class="padding">
+	<div>
+	<span class="userName blockDisplay">{{userName}}</span> <span class="userName" ng-click="$ctrl.logOut()">Log Out &nbsp;<i class="icon ion-log-out"></i></span>
+	</div>
+	<div>
+		<span class="whitecolor ">
+		 <!-- Search bar -->
+		    <div class="list list-inset searchbox">
+			  <label class="item item-input searchboxInput">
+			    <i class="icon ion-search placeholder-icon"></i>
+			    <input type="text" placeholder="Add new Todo"  ng-model="$ctrl.newTodo">
+			  </label>
+			</div>
+		</span>
+		
+		<button ng-click="$ctrl.addNewTodo()" id="floatingBtn" class="floatingBtn top0" name="add new" title="add new todo" >
+			 <i class="icon ion-plus"></i>
+		</button>
+	</div>
+	
+	<!-- Users todos -->
+	<div class="topSpace"	>
+		<ion-item class="smallPadding" ng-repeat="todo in todos track by $index" on-swipe-left="markComplete({{$index}})">
+		  <div class="productDesc">
+		  		 <b>{{todo.taskDesc}} </b> 
+		   </div>
+		 </ion-item>
+	</div>
+</ion-content>
+</ion-view>

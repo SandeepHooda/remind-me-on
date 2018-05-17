@@ -53,6 +53,15 @@ angular.module('starter', APP.DEPENDENCIES.concat(APP.OTHERDEPENDENCIES))
 						 }
 					}	
 					
+				}).state('menu.tab.todo',{
+					url:'/todo',
+					views: {
+						 'tab-todo': {
+						 templateUrl: 'home/todo/todo.html',
+						 controller: 'CTRL_TODO'
+						 }
+					}	
+					
 				}).state('menu.newReminder',{
 					url:'/newReminder',
 					templateUrl: 'newReminder/newReminder.html',

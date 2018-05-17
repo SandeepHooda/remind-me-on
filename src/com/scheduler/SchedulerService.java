@@ -11,6 +11,7 @@ import com.communication.email.EmailVO;
 import com.communication.email.MailService;
 import com.communication.phone.call.MakeACall;
 import com.communication.phone.text.Key;
+import com.communication.phone.text.SendSMS;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.login.vo.Settings;
@@ -156,7 +157,7 @@ public class SchedulerService {
 		try {
 			
 			 if (reminderVO.isSendText() && settings.getCurrentCallCredits() >=1) {
-				 
+				 SendSMS.sendText(callLog.getTo(),callLog.getMessage());
 				//Send above the comment and then update settings
 				 settings.setCurrentCallCredits(settings.getCurrentCallCredits() -1);
 			 }

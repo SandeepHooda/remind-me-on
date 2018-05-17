@@ -1,12 +1,24 @@
 package com.reminder.endpoint;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.login.vo.LoginVO;
 import com.reminder.facade.ReminderFacade;
 import com.reminder.vo.ReminderVO;
+import com.reminder.vo.ToDO;
 
 public class ReminderEndpointImpl implements ReminderEndpoint{
 	
@@ -78,6 +90,58 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 			return Response.serverError().entity(vo).build();
 		}
 	}
+	
+	@Override
+	public Response addToDo( ToDO todo,  HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String email = (String)session.getAttribute("email");
+			if (null != email) {
+				todo.setDateCreated(new Date().getTime());
+				todo.set_id(""+todo.getDateCreated()+"_"+email);
+				todo.setEmail(email);
+				return Response.ok().entity(reminderFacade.addToDo(todo)).build();
+			}else {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+	
+	@Override
+	public Response getToDos( HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String email = (String)session.getAttribute("email");
+			if (null != email) {
+				return Response.ok().entity(reminderFacade.getToDos(email)).build();
+			}else {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+	
+	@Override
+	public Response markComplete( String toDoID, HttpServletRequest request) {
+		return null;
+	}
+	
 	public ReminderFacade getReminderFacade() {
 		return reminderFacade;
 	}

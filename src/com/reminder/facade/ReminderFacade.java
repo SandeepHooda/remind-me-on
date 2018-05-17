@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.login.vo.LoginVO;
 import com.reminder.vo.ReminderVO;
+import com.reminder.vo.ToDO;
 
 import mangodb.MangoDB;
 
@@ -70,6 +71,16 @@ public class ReminderFacade {
         	 return false;
          }
          
+	}
+	public boolean addToDo(ToDO toDO) throws ParseException {
+		
+		 Gson  json = new Gson();
+        
+       	 String data = json.toJson(toDO, new TypeToken<ToDO>() {}.getType());
+       	 MangoDB.createNewDocumentInCollection("remind-me-on", "to-dos", data, null);
+    		return true;
+        
+        
 	}
 	
 	
@@ -174,6 +185,22 @@ public class ReminderFacade {
 		 }
 		
         
+	}
+	
+	public List<ToDO> getToDos(String email) {
+		 
+		 if (null != email) {
+			 String order =  "&s=%7B%22order%22%3A%201%7D";
+			 String data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "to-dos", email,"email", false, null,order)+"]";
+			 Gson  json = new Gson();
+			 List<ToDO> result  = json.fromJson(data, new TypeToken<List<ToDO>>() {}.getType());
+			 //Collections.sort(result, new ReminderVOComparator());
+			 return result;
+		 }else {
+			 return new ArrayList<ToDO>();
+		 }
+		
+       
 	}
 	public void deleteReminder(String reminderID ) {
 		MangoDB.deleteDocument("remind-me-on", "reminders", reminderID, null);
