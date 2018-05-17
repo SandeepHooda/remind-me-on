@@ -38,7 +38,7 @@ public class CallLog extends HttpServlet {
 		String logJson = MangoDB.getDocumentWithQuery("remind-me-on", "call-logs", id, null,true, null, null);
 		Gson  json = new Gson();
 		CallLogs log = json.fromJson(logJson, new TypeToken<CallLogs>() {}.getType());
-		String message = "<Response><Speak>"+log.getMessage()+"</Speak></Response>";
+		String message = "<Response><Speak>"+log.getMessage()+". I repeat. "+log.getMessage()+".</Speak></Response>";
 		response.getWriter().print(message);
 	}
 

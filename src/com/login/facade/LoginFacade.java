@@ -2,9 +2,7 @@ package com.login.facade;
 
 
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.common.util.CollectionUtils;
 
-import com.communication.email.MailService;
 import com.communication.phone.text.Key;
 import com.communication.phone.text.SendSMS;
 import com.google.gson.Gson;
@@ -23,8 +20,6 @@ import com.login.vo.LoginVO;
 import com.login.vo.Phone;
 import com.login.vo.Settings;
 import com.reminder.facade.ReminderFacade;
-import com.reminder.vo.ReminderVO;
-import com.reminder.vo.ReminderVOComparator;
 
 import mangodb.MangoDB;
 

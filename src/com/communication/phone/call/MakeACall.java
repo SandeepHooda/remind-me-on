@@ -1,8 +1,6 @@
 package com.communication.phone.call;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.urlfetch.FetchOptions;
@@ -19,9 +17,9 @@ public class MakeACall {
 
 	private static FetchOptions lFetchOptions = FetchOptions.Builder.doNotValidateCertificate().setDeadline(300d);
 	private static URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
-	public static void sendText(String phoneNo, String messageID) {
+	public static void call(String phoneNo, String messageID) {
 		log.info("Hero making a call sms");
-		String httpsURL  = "https://post-master.herokuapp.com/SendSMS?phone="+phoneNo+"&messageID="+messageID;
+		String httpsURL  = "https://post-master.herokuapp.com/MakeACall?phone="+phoneNo+"&messageID="+messageID;
 		
 		String responseStr = "";
 		 try {
@@ -30,9 +28,9 @@ public class MakeACall {
 	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.GET, lFetchOptions);
 	            HTTPResponse res = fetcher.fetch(req);
 	            responseStr =(new String(res.getContent()));
-	            log.info("SMS sent ");
+	            log.info("Call scheduled ");
 	        } catch (Exception e) {
-	        	log.info("SMS error "+e.getLocalizedMessage());
+	        	log.info("Call schedule error "+e.getLocalizedMessage());
 	        	e.printStackTrace();
 	        	
 	        }

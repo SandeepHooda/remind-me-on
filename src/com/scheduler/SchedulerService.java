@@ -10,6 +10,7 @@ import java.util.Map;
 import com.communication.email.EmailAddess;
 import com.communication.email.EmailVO;
 import com.communication.email.MailService;
+import com.communication.phone.call.MakeACall;
 import com.communication.phone.text.Key;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -127,23 +128,23 @@ public class SchedulerService {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+		CallLogs callLog = null;
 		//Make a log of this call
 		if ((reminderVO.isMakeACall() || reminderVO.isSendText()) &&  settings.getCurrentCallCredits() >=1) {
-			CallLogs logs = new CallLogs();
-			logs.set_id(""+new Date().getTime());
-			logs.setFrom(reminderVO.getEmail());
-			logs.setTo(reminderVO.getSelectedPhone());
-			logs.setFromUserName("Initiator name "+reminderVO.getEmail());
-			logs.setMessage(reminderVO.getReminderSubject() +" "+reminderVO.getReminderText());
-			String logsJson = json.toJson(logs, new TypeToken<CallLogs>() {}.getType());
+			callLog = new CallLogs();
+			callLog.set_id(""+new Date().getTime());
+			callLog.setFrom(reminderVO.getEmail());
+			callLog.setTo(reminderVO.getSelectedPhone());
+			
+			callLog.setMessage(reminderVO.getReminderSubject() +" "+reminderVO.getReminderText());
+			String logsJson = json.toJson(callLog, new TypeToken<CallLogs>() {}.getType());
 			 MangoDB.createNewDocumentInCollection("remind-me-on", "call-logs", logsJson, null);
 		}
 		
 		//Make a call
 		try {
 			if (reminderVO.isMakeACall() && settings.getCurrentCallCredits() >=5) {
-				 
+				MakeACall.call(callLog.getTo(), callLog.get_id());
 				//Make a call above the comment and then update settings
 				 settings.setCurrentCallCredits(settings.getCurrentCallCredits() -5);
 			 }

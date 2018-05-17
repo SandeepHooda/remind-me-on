@@ -6,7 +6,7 @@ public class CallLogs {
 	private String from;
 	private String to;
 	private String message;
-	private String fromUserName;
+
 	public String get_id() {
 		return _id;
 	}
@@ -31,11 +31,5 @@ public class CallLogs {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getFromUserName() {
-		return fromUserName;
-	}
-	public void setFromUserName(String fromUserName) {
-		this.fromUserName = fromUserName;
-	}
-
+	
 }
