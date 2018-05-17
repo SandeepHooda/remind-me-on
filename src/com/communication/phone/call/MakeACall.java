@@ -18,7 +18,7 @@ public class MakeACall {
 	private static FetchOptions lFetchOptions = FetchOptions.Builder.doNotValidateCertificate().setDeadline(300d);
 	private static URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
 	public static void call(String phoneNo, String messageID) {
-		log.info("Hero making a call sms");
+		log.info("Hero making a call sms to "+phoneNo);
 		String httpsURL  = "https://post-master.herokuapp.com/MakeACall?phone="+phoneNo+"&messageID="+messageID;
 		
 		String responseStr = "";
