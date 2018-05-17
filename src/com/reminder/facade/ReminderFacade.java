@@ -176,12 +176,8 @@ public class ReminderFacade {
         
 	}
 	public void deleteReminder(String reminderID ) {
-		
 		MangoDB.deleteDocument("remind-me-on", "reminders", reminderID, null);
-			
-		
-       
-	}
+    }
 	
 	public String getEmail(String regID) {
 		String email = null;

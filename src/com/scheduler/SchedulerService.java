@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.login.vo.Settings;
 import com.reminder.facade.ReminderFacade;
+import com.reminder.vo.CallLogs;
 import com.reminder.vo.ReminderVO;
 
 import mangodb.MangoDB;
@@ -107,6 +108,69 @@ public class SchedulerService {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		Settings settings =  new Settings();
+		Gson  json = new Gson();
+		
+		//Get settings
+		try {
+			String email = reminderVO.getEmail();
+			 
+			 String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
+			 settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
+			 if (null == settings ) {
+				 settings = new Settings();
+				 settings.set_id(email);
+			 }
+			
+		  
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		//Make a log of this call
+		if ((reminderVO.isMakeACall() || reminderVO.isSendText()) &&  settings.getCurrentCallCredits() >=1) {
+			CallLogs logs = new CallLogs();
+			logs.set_id(""+new Date().getTime());
+			logs.setFrom(reminderVO.getEmail());
+			logs.setTo(reminderVO.getSelectedPhone());
+			logs.setFromUserName("Initiator name "+reminderVO.getEmail());
+			logs.setMessage(reminderVO.getReminderSubject() +" "+reminderVO.getReminderText());
+			String logsJson = json.toJson(logs, new TypeToken<CallLogs>() {}.getType());
+			 MangoDB.createNewDocumentInCollection("remind-me-on", "call-logs", logsJson, null);
+		}
+		
+		//Make a call
+		try {
+			if (reminderVO.isMakeACall() && settings.getCurrentCallCredits() >=5) {
+				 
+				//Make a call above the comment and then update settings
+				 settings.setCurrentCallCredits(settings.getCurrentCallCredits() -5);
+			 }
+		  
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		//Send SMS
+		try {
+			
+			 if (reminderVO.isSendText() && settings.getCurrentCallCredits() >=1) {
+				 
+				//Send above the comment and then update settings
+				 settings.setCurrentCallCredits(settings.getCurrentCallCredits() -1);
+			 }
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			String settingsJson = json.toJson(settings, new TypeToken<Settings>() {}.getType());
+			 MangoDB.updateData("remind-me-on", "registered-users-settings", settingsJson, reminderVO.getEmail(), null);
+			 
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 	
