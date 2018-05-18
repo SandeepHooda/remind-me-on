@@ -13,8 +13,8 @@
 		 <!-- Search bar -->
 		    <div class="list list-inset searchbox">
 			  <label class="item item-input searchboxInput">
-			    <i class="icon ion-search placeholder-icon"></i>
-			    <input type="text" placeholder="Add new Todo"  ng-model="$ctrl.newTodo" ng-keyup="checkEnter()"> 
+			    <i class="icon ion-android-add"></i>
+			    <input type="text" placeholder="Add new To Do item and press return/enter"  ng-model="$ctrl.newTodo" ng-keyup="checkEnter()"> 
 			  </label>
 			</div>
 		</span>
@@ -25,10 +25,22 @@
 	</div>
 	
 	<!-- Users todos -->
-	<div class="topSpace"	>
-		<ion-item class="smallPadding" ng-repeat="todo in todos track by $index" on-swipe-left="markComplete({{$index}})">
-		  <div class="productDesc">
-		  		 <b>{{todo.taskDesc}} </b> 
+	<div class="topSpace">
+		<ion-item class="smallPadding" ng-repeat="todo in todos track by $index" on-swipe-left="markeComplete({{$index}})">
+		  <div class="productDesc" >
+		  	<button ng-click="moveDown($index)" class="greenRoundBtn"><i class="icon ion-arrow-graph-down-left" ></i></button>
+		  	<span class="floatingLeftToDo"><b>{{todo.taskDesc}}</b> </span> 
+		  
+		  	<button ng-click="moveUp($index)" class="floatingRightToDo greenRoundBtn"><i class="icon ion-arrow-graph-up-right"></i></button>
+		   </div>
+		 </ion-item>
+	</div>
+	
+	<!-- Users todos -->
+	<div class="topSpace">
+		<ion-item class="smallPadding" ng-repeat="todo in completedTodos track by $index" on-swipe-left="markePending({{$index}})">
+		  <div class="productDesc" style=" color: darkgrey;">
+		  		 <b><strike>{{todo.taskDesc}} </strike></b> 
 		   </div>
 		 </ion-item>
 	</div>

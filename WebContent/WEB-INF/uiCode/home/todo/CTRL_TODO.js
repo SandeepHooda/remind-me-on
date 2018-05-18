@@ -10,6 +10,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
             }
         }
 	$scope.todos = [];
+	$scope.completedTodos = [];
 	theCtrl.logOut = function(){
 		$scope.$emit('logOut');
 	}
@@ -29,7 +30,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response.data){
-  				$scope.popUp('Success', 'Reminder added Successfully',null );
+  				
   				$scope.getToDos();
   			}else {
   				$scope.popUp('Failure', 'Please retry',null )
@@ -56,7 +57,8 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 		 $http.get('/ws/todo')
 	  		.then(function(response){
 	  			 $scope.hideBusy();
-	  			$scope.todos = response.data ;
+	  			//$scope.todos = response.data ;
+	  			$scope.showToDos(response.data);
 	  			
 	  		},
 			function(response){
@@ -64,42 +66,84 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 				
 			});
 		}
-		
-		$scope.markComplete = function(deleteIndex){
-			$scope.deleteIndex  = deleteIndex;
-			 var confirmPopup = $ionicPopup.confirm({
-			     title: 'Confirmation',
-			     template: 'Do you want to delete this reminder. Please note that delte a reminder means that all future ocurances will also be cancled.'
-			   });
-
-			   confirmPopup.then(function(res) {
-				   if (res){
-					   
-					   $scope.showBusy();
-						
-						 $http.delete('/ws/reminder/reminderID/'+$scope.reminders[$scope.deleteIndex]._id)
-					  		.then(function(response){
-					  			 $scope.hideBusy();
-					  			$scope.formatReminderDisplay(response.data) ;
-					  		},
-							function(response){
-					  			 $scope.hideBusy();
-								
-							});
-					   
-					   ///////////////////
-					   for (var i=0; i <$scope.reminders.length;i++){
-						   if (i==$scope.deleteIndex){
-							 //splice is safe here as at a time only one item removed in whole iteration
-							   $scope.reminders.splice(i,1);
-							   //dataRestore.saveInCache('savedAddress', $scope.myData.savedAddress);
-						   }
-					   }
-					  ////////////////////
-				   }
-			     
-			   });
+	$scope.showToDos = function(data){
+		$scope.todos = []
+		$scope.completedTodos = [];
+		var todos = [];
+		var completedTodos = [];
+		for (var i=0;i<data.length;i++){
+			if (data[i].complete){
+				completedTodos.push(data[i]);
+			}else {
+				todos.push(data[i]);
+			}
 		}
+		$scope.todos = todos;
+		completedTodos.sort($scope.compareToDos)
+		$scope.completedTodos = completedTodos;
+	}
+	
+	$scope.toggleComplete = function(todo){
+		 $scope.showBusy();
+		 $http.delete('/ws/todo/id/'+todo._id)
+	  		.then(function(response){
+	  			 $scope.hideBusy();
+	  			$scope.showToDos(response.data);
+	  		},
+			function(response){
+	  			 $scope.hideBusy();
+				
+			});
+	}
+	
+	$scope.compareToDos = function(a, b) {
+		  return  b.dateCompleted - a.dateCompleted;
+	}
+	$scope.compareToDosPending = function(a, b) {
+		  return   a.order - b.order;
+	}
+	$scope.updateToDoOrderInDB = function(toDo){
+		$http.post('/ws/todo/update',toDo , config)
+  		.then(function(response){
+  			
+  		},
+		function(response){
+  			});
+	}
+	$scope.moveDown = function(index){
+		
+		if (index < ($scope.todos.length -1)){
+			var todos = $scope.todos;
+			var order = todos[index].order;
+			todos[index].order = todos[index+1].order;
+			todos[index+1].order = order;
+			$scope.todos = [];
+			todos.sort($scope.compareToDosPending);
+			$scope.todos = todos;
+			$scope.updateToDoOrderInDB(todos[index]);
+			$scope.updateToDoOrderInDB(todos[index+1]);
+		}
+		
+	}
+	$scope.moveUp = function(index){
+		if (index >0){
+			var todos = $scope.todos;
+			var order = todos[index].order;
+			todos[index].order = todos[index-1].order;
+			todos[index-1].order = order;
+			$scope.todos = [];
+			todos.sort($scope.compareToDosPending);
+			$scope.todos = todos;
+			$scope.updateToDoOrderInDB(todos[index]);
+			$scope.updateToDoOrderInDB(todos[index-1]);
+		}
+	}
+	$scope.markeComplete = function(index){
+		$scope.toggleComplete($scope.todos[index]);
+	}
+	$scope.markePending = function(index){
+		$scope.toggleComplete($scope.completedTodos[index]);
+	}
 		
 		
 		$scope.popUp = function(subject, body, nextStep){

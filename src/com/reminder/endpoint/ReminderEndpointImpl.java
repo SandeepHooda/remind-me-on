@@ -20,6 +20,8 @@ import com.reminder.facade.ReminderFacade;
 import com.reminder.vo.ReminderVO;
 import com.reminder.vo.ToDO;
 
+import mangodb.MangoDB;
+
 public class ReminderEndpointImpl implements ReminderEndpoint{
 	
 	private ReminderFacade reminderFacade;
@@ -114,6 +116,26 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 			return Response.serverError().entity(vo).build();
 		}
 	}
+	@Override
+	public Response updateToDo( ToDO todo,  HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String email = (String)session.getAttribute("email");
+			if (null != email) {
+				return Response.ok().entity(reminderFacade.updateToDo(todo)).build();
+			}else {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
 	
 	@Override
 	public Response getToDos( HttpServletRequest request) {
@@ -139,7 +161,25 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 	
 	@Override
 	public Response markComplete( String toDoID, HttpServletRequest request) {
-		return null;
+		try{
+			HttpSession session = request.getSession();
+			String regID = (String)session.getAttribute("regID");
+			if (null != regID) {
+				reminderFacade.markComplete(toDoID);
+				return getToDos(request);
+			}else {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
 	}
 	
 	public ReminderFacade getReminderFacade() {

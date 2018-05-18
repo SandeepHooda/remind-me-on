@@ -81,8 +81,7 @@ var monthNames =[
 			//$scope.addReminder();
 		}
 	}
-	$scope.reminder.makeACall = true;
-	$scope.reminder.sendText = true;
+	
 	$scope.selectedPhone = "";
 	$scope.toggleCall = function (){
 		if($scope.verifiedPhones.length <= 0){
@@ -92,7 +91,8 @@ var monthNames =[
 			$scope.reminder.makeACall = !$scope.reminder.makeACall;
 		}
 		
-		
+		window.localStorage.setItem('makeACall', ""+$scope.reminder.makeACall);
+		window.localStorage.setItem('sendText', ""+$scope.reminder.sendText);
 	}
 	$scope.toggleSMS = function (){
 		if($scope.verifiedPhones.length <= 0){
@@ -101,7 +101,8 @@ var monthNames =[
 		}else {
 			$scope.reminder.sendText = !$scope.reminder.sendText;
 		}
-		
+		window.localStorage.setItem('makeACall', ""+$scope.reminder.makeACall);
+		window.localStorage.setItem('sendText', ""+$scope.reminder.sendText);
 	}
 	$scope.frequencyWithDate = "Once";
 	$scope.changeFrequency = function(){
@@ -226,7 +227,16 @@ var monthNames =[
 		});
 	}
 	$scope.verifiedPhones  = [];
-	
+	$scope.setCallAndTextSettings = function(){
+		$scope.reminder.makeACall = true;
+		$scope.reminder.sendText = true;
+		if (window.localStorage.getItem('makeACall') && window.localStorage.getItem('makeACall') == "false"){
+			$scope.reminder.makeACall = false;
+		}
+		if (window.localStorage.getItem('sendText') && window.localStorage.getItem('sendText') == "false"){
+			$scope.reminder.sendText = false;
+		}
+	}
 	$scope.getVerifiedPhones = function(){
 		$http.get('/ws/phone/verified/true')
   		.then(function(response){
@@ -236,11 +246,13 @@ var monthNames =[
   				if($scope.verifiedPhones.length > 0){
   					$scope.selectedPhone = $scope.verifiedPhones[0];
   					
-  					$scope.reminder.makeACall = true;
-  					$scope.reminder.sendText = true;
+  					$scope.setCallAndTextSettings();
   				}else {
   					$scope.reminder.makeACall = false;
   					$scope.reminder.sendText = false;
+  					window.localStorage.setItem('makeACall', ""+$scope.reminder.makeACall);
+  					window.localStorage.setItem('sendText', ""+$scope.reminder.sendText);
+  					
   				}
   			}else {
   				$scope.popUp('Failure', 'Please retry',null )

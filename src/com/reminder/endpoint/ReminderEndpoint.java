@@ -38,6 +38,12 @@ public interface ReminderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response addToDo( ToDO todo,  @Context HttpServletRequest request);
 	
+	@POST
+	@Path("/todo/update")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response updateToDo( ToDO todo,  @Context HttpServletRequest request);
+	
 	@GET
 	@Path("/todo")
 	@Produces({ MediaType.APPLICATION_JSON })

@@ -157,6 +157,26 @@ display: block;
   color: white;
  
 }
+.floatingRightToDo {
+ position: fixed;
+  right: 10px;
+
+}
+.greenRoundBtn {
+	border: none;
+  outline: none;
+  background-color: green;
+  color: white;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+.floatingLeftToDo{
+  position: fixed;
+  left: 35px;
+  
+}
 .floatingBtn {
   display: block;
   position: fixed;
