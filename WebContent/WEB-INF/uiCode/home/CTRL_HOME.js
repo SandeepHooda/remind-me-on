@@ -105,7 +105,20 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		if (userReminders){
 				for (var i=0;i<userReminders.length;i++){
 					var date =  new Date(userReminders[i].nextExecutionTime);
-					userReminders[i].nextExecutionDisplayTime =  days[ date.getDay() ] +" "+ date.toString("dd-MMM-yyyy HH:mm");  ;
+					var today = new Date();
+					var tomorrow = new Date();
+					tomorrow.setDate(today.getDate()+1);
+					var dayAfterTomorrow = new Date();
+					dayAfterTomorrow.setDate(today.getDate()+2);
+					userReminders[i].nextExecutionDisplayTime = ": "+ days[ date.getDay() ] +" "+date.toString("dd-MMM-yyyy HH:mm");
+					if (date.toString("dd-MMM-yyyy") == today.toString("dd-MMM-yyyy")) {
+						userReminders[i].nextExecutionDisplayTime = ": Today at "+date.toString("HH:mm");
+					}else if (date.toString("dd-MMM-yyyy") == tomorrow.toString("dd-MMM-yyyy"))  {
+						userReminders[i].nextExecutionDisplayTime = ": Tomorrow at "+date.toString("HH:mm");
+					}else if (date.toString("dd-MMM-yyyy") == dayAfterTomorrow.toString("dd-MMM-yyyy"))  {
+						userReminders[i].nextExecutionDisplayTime = ": Day after Tomorrow at "+date.toString("HH:mm");
+					}
+					
 				}
 		  			$scope.reminders = userReminders;
 		  			$scope.remindersInDB = userReminders;
