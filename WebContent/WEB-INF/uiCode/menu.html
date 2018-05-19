@@ -14,7 +14,7 @@
 			<ion-nav-buttons side="right" >
 				<button class="button button-icon button-clear icon " ng-click="addCash()">
 	              	<ion-badge ng-if="currentCallCredits >=0">{{currentCallCredits}} &nbsp;</ion-badge>
-	              	<i class="icon icon ion-cash"></i>
+	              	<i class="icon ion-cash"></i>
 	            </button>
             </ion-nav-buttons>
           
@@ -38,6 +38,10 @@
             	
             	<ion-item nav-clear menu-close href="#menu/snoozed">
             	<i class="icon ion-android-stopwatch"></i> Snoozed reminders <i class ="ion-ios-arrow-forward pull-right"></i>
+            	</ion-item>
+            	
+            	<ion-item nav-clear menu-close href="#menu/addcash">
+            	<i class="icon ion-cash"></i> Add Cash <i class ="ion-ios-arrow-forward pull-right"></i>
             	</ion-item>
             	
             	

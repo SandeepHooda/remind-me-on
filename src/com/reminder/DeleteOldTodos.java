@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.Constants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.reminder.vo.ToDO;
@@ -40,7 +41,7 @@ public class DeleteOldTodos extends HttpServlet {
 		 Gson  json = new Gson();
 		 List<ToDO> toDos  = json.fromJson(data, new TypeToken<List<ToDO>>() {}.getType());
 		 for (ToDO todo: toDos) {
-			 if (todo.getDateCompleted() > 0 && ( (new Date().getTime() -todo.getDateCompleted())) > 1000 * 60*60*24*7) {
+			 if (todo.getDateCompleted() > 0 && ( (new Date().getTime() -todo.getDateCompleted())) > Constants.aDay*7) {
 				 System.out.println(" deleting this todo : "+todo.getTaskDesc());
 				 MangoDB.deleteDocument("remind-me-on", "to-dos", todo.get_id(), null);
 			 }

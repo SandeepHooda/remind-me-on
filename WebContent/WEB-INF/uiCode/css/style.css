@@ -100,6 +100,11 @@
 	margin-right: 15px;
 	color :blue;
 }
+.italicGray {
+	font: italic bold 12px/5px Georgia, serif;
+	margin-right: 15px;
+	color :gray;
+}
 .italicBlueRegular {
 	font: italic bold 15px/5px Georgia, serif;
 	margin-right: 15px;
