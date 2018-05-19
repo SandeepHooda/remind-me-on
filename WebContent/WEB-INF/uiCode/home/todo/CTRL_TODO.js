@@ -59,7 +59,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 	  			 $scope.hideBusy();
 	  			//$scope.todos = response.data ;
 	  			$scope.showToDos(response.data);
-	  			
+	  			theCtrl.newTodo = "";
 	  		},
 			function(response){
 	  			 $scope.hideBusy();

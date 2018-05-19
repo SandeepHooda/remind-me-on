@@ -1,0 +1,20 @@
+<ion-view title="Snoozed"  class="backhroundcolor" ng-init="getSnoozedReminders();" ng-controller="CTRL_SNOOZED as $ctrl" cache-view="false">
+<ion-header-bar class="bar-positive">
+      <h1 class="title">Snoozed</h1>
+    </ion-header-bar>
+<ion-content class="padding">
+	<!-- Users reminder -->
+	<div class="topSpace"	>
+	<div ng-if="snoozedReminders.length <= 0"><span class="userName">Great you have acted on all you reminders so far! </span></div>
+	<div ng-if="snoozedReminders.length > 0"><span class="userName">Swipe left to delete an item. </span></div>
+		<ion-item class="smallPadding" ng-repeat="reminder in snoozedReminders track by $index" on-swipe-left="deleteReminder({{$index}})">
+		  <div class="productDesc">
+		  		 <b>{{reminder.reminderSubject}} - {{reminder.reminderText}}</b> <br/>
+		  		 <span class="italicBlue">Remind via Email, <span ng-show="reminder.makeACall">, Call </span> <span ng-show="reminder.sendText">, SMS </span>  
+		  		 <span ng-show="reminder.makeACall || reminder.sendText">On {{reminder.selectedPhone}}</span> Time: <span> {{reminder.displayTime}}</span></span><br/>
+		  		  
+		   </div>
+		 </ion-item>
+	</div>
+</ion-content>
+</ion-view>

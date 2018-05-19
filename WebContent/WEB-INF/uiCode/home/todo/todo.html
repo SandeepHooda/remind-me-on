@@ -10,11 +10,12 @@
 	</div>
 	<div>
 		<span class="whitecolor ">
+		<div><span class="userName">Swipe left to complete/undo an item</span></div>
 		 <!-- Search bar -->
 		    <div class="list list-inset searchbox">
 			  <label class="item item-input searchboxInput">
 			    <i class="icon ion-android-add"></i>
-			    <input type="text" placeholder="Add new To Do item and press return/enter"  ng-model="$ctrl.newTodo" ng-keyup="checkEnter()"> 
+			    <input type="text" placeholder="Add new To Do item"  ng-model="$ctrl.newTodo" ng-keyup="checkEnter()"> 
 			  </label>
 			</div>
 		</span>
@@ -38,6 +39,7 @@
 	
 	<!-- Users todos -->
 	<div class="topSpace">
+	<div ng-if="completedTodos.length > 0"><span class="userName">Completed items will be deleted after 7 days</span></div>
 		<ion-item class="smallPadding" ng-repeat="todo in completedTodos track by $index" on-swipe-left="markePending({{$index}})">
 		  <div class="productDesc" style=" color: darkgrey;">
 		  		 <b><strike>{{todo.taskDesc}} </strike></b> 

@@ -88,13 +88,21 @@
 	   </div>
 	  
 	   <div class="inline">
-			<button class="button button-balanced order-button buttonAnimation" ng-click="toggleCall()"> 
-				 <i class="icon ion-android-call"></i> <i  ng-show="reminder.makeACall" class="icon ion-android-done"></i> <i  ng-show="!reminder.makeACall" class="icon ion-android-close"></i>
+	 
+			<button ng-if="!reminder.makeACall" class="button button-balanced order-button buttonAnimation" style="background-color:gray;" ng-click="toggleCall()"> 
+				 <i class="icon ion-android-call"></i> <i class="icon ion-android-close"></i>
+			</button>
+			<button ng-if="reminder.makeACall"  class="button button-balanced order-button buttonAnimation"  ng-click="toggleCall()"> 
+				 <i class="icon ion-android-call"></i> <i  class="icon ion-android-done"></i>
 			</button>
 	   </div>
 	    <div class="inline" >
-			<button class="button button-balanced order-button buttonAnimation" ng-click="toggleSMS()" > 
-				 <i class="icon ion-android-textsms"></i> <i ng-show="reminder.sendText" class="icon ion-android-done"></i> <i ng-show="!reminder.sendText" class="icon ion-android-close"></i>
+	    	
+			<button ng-show="!reminder.sendText" class="button button-balanced order-button buttonAnimation" style="background-color:gray;"  ng-click="toggleSMS()" > 
+				 <i class="icon ion-android-textsms"></i>  <i  class="icon ion-android-close"></i>
+			</button>
+			<button ng-show="reminder.sendText" class="button button-balanced order-button buttonAnimation" ng-click="toggleSMS()" > 
+				 <i class="icon ion-android-textsms"></i> <i  class="icon ion-android-done"></i> 
 			</button>
 	   </div>
   </div> 

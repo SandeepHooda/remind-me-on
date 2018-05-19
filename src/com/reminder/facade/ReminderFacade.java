@@ -205,8 +205,23 @@ public class ReminderFacade {
 		
        
 	}
+	public List<ReminderVO> getSnoozedReminders(String email) {
+		
+			 String sortByExecutionTimeAsc =  "&s=%7B%22nextExecutionTime%22%3A%201%7D";
+			 String data ="["+ MangoDB.getDocumentWithQuery("remind-me-on", "reminders-snooz", email,"email", false, null,sortByExecutionTimeAsc)+"]";
+			 Gson  json = new Gson();
+			 List<ReminderVO> result  = json.fromJson(data, new TypeToken<List<ReminderVO>>() {}.getType());
+			 //Collections.sort(result, new ReminderVOComparator());
+			 return result;
+		 
+       
+	}
 	public void deleteReminder(String reminderID ) {
 		MangoDB.deleteDocument("remind-me-on", "reminders", reminderID, null);
+    }
+	
+	public void deleteSnoozedReminder(String reminderID ) {
+		MangoDB.deleteDocument("remind-me-on", "reminders-snooz", reminderID, null);
     }
 	
 	public void markComplete(String todoID ) {
@@ -216,6 +231,8 @@ public class ReminderFacade {
 		 toDo.setComplete(!toDo.isComplete());
 		 if(toDo.isComplete()) {
 			 toDo.setDateCompleted(new Date().getTime());
+		 }else {
+			 toDo.setDateCompleted(0);
 		 }
 		 data = json.toJson(toDo, new TypeToken<ToDO>() {}.getType());
 		 MangoDB.updateData("remind-me-on", "to-dos", data, toDo.get_id(),null);

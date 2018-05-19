@@ -29,7 +29,7 @@ module.exports = function (grunt) {
 					separator:';'
 				},
 				js:{
-					src:[ '<%= js_src_path %>/js/app.js','<%= js_src_path %>/expired/**/*.js','<%= js_src_path %>/login/**/*.js',
+					src:[ '<%= js_src_path %>/js/app.js','<%= js_src_path %>/snoozed/**/*.js','<%= js_src_path %>/login/**/*.js',
 						'<%= js_src_path %>/newReminder/**/*.js','<%= js_src_path %>/contacts/**/*.js','<%= js_src_path %>/cash/**/*.js','<%= js_src_path %>/home/**/*.js','<%= js_src_path %>/util/**/*.js' ],
 					dest:'<%= js_build_path %>/js/prod-debug<%= curretDate %>.js'
 				}
@@ -157,7 +157,7 @@ module.exports = function (grunt) {
 				},
 				 cwd:     '<%= js_src_path %>',
 				 //src: "<%= js_src_path %>",
-				 src: ["tabs.html","menu.html","contacts/**/*.html","cash/**/*.html", "expired/**/*.html","login/**/*.html" , "newReminder/**/*.html" ,"home/**/*.html","util/**/*.html"],
+				 src: ["tabs.html","menu.html","contacts/**/*.html","cash/**/*.html", "snoozed/**/*.html","login/**/*.html" , "newReminder/**/*.html" ,"home/**/*.html","util/**/*.html"],
 				
 				dest:'<%= js_build_path %>/js/<%= curretDate %>templates.js'
 				}

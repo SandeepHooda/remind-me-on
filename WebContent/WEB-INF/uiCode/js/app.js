@@ -44,15 +44,10 @@ angular.module('starter', APP.DEPENDENCIES.concat(APP.OTHERDEPENDENCIES))
 						 }
 					}	
 					
-				}).state('menu.tab.expired',{
-					url:'/expired',
-					views: {
-						 'tab-expired': {
-						 templateUrl: 'expired/expired.html',
-						 controller: 'CTRL_Expired'
-						 }
-					}	
-					
+				}).state('menu.snoozed',{
+					url:'/snoozed',
+					templateUrl: 'snoozed/snoozed.html',
+					controller: 'CTRL_SNOOZED'
 				}).state('menu.tab.todo',{
 					url:'/todo',
 					views: {

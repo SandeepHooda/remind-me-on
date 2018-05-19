@@ -6,10 +6,37 @@
 
 <ion-content class="padding">
 	<div>
-	<span class="userName blockDisplay">{{userName}}</span> <span class="userName" ng-click="$ctrl.logOut()">Log Out &nbsp;<i class="icon ion-log-out"></i></span>
+	<span class="userName blockDisplay">{{userName}}</span> <span class="userName" ng-click="$ctrl.logOut()">
+	
+	Log Out &nbsp;<i class="icon ion-log-out"></i></span>
+	<div id="filterDiv1" >
+	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter(null,null)">
+					"All"
+	</button>
+	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Date', 'Once')">
+					"Once"
+	</button>
+	
+	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Date', 'Yearly')">
+					"Yearly"
+	</button> 
+	
+	</div>
+	
+	<div id="filterDiv2" style="padding-top: 10px;" >
+	
+	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Date', 'Monthly')">
+					"Monthly"
+	</button>
+	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Day', null)">
+					"Weekly"
+	</button>
+	</div>
+	
 	</div>
 	<div>
 		<span class="whitecolor ">
+		<div><span class="userName">Swipe left to delete an item.</span></div>
 		 <!-- Search bar -->
 		    <div class="list list-inset searchbox">
 			  <label class="item item-input searchboxInput">

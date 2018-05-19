@@ -54,6 +54,14 @@ public interface ReminderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response markComplete( @PathParam("toDoID") String toDoID, @Context HttpServletRequest request);
 	
+	@GET
+	@Path("/snoozed/reminder")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getSnoozedReminders( @Context HttpServletRequest request);
 	
+	@DELETE
+	@Path("/snoozed/reminder/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response deleteSnoozedReminder( @PathParam("id") String id, @Context HttpServletRequest request);
 
 }

@@ -94,6 +94,29 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 	}
 	
 	@Override
+	public Response deleteSnoozedReminder(String reminderID, HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String email = (String)session.getAttribute("email");
+			if (null != email) {
+				reminderFacade.deleteSnoozedReminder(reminderID);
+				return getSnoozedReminders(request);
+			}else {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+	
+	@Override
 	public Response addToDo( ToDO todo,  HttpServletRequest request) {
 		try{
 			HttpSession session = request.getSession();
@@ -188,6 +211,30 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 
 	public void setReminderFacade(ReminderFacade reminderFacade) {
 		this.reminderFacade = reminderFacade;
+	}
+
+
+
+	@Override
+	public Response getSnoozedReminders(HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String email = (String)session.getAttribute("email");
+			if (null != email) {
+				return Response.ok().entity(reminderFacade.getSnoozedReminders(email)).build();
+			}else {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
 	}
 
 

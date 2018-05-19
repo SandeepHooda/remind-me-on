@@ -1,7 +1,7 @@
 <ion-view   >
 <ion-side-menus>
         
-        <ion-side-menu-content ng-controller="CTRL_Expired">
+        <ion-side-menu-content ng-controller="CTRL_SNOOZED">
           <ion-nav-bar class="bar-positive">
             <ion-nav-back-button class="button-icon ion-arrow-left-c">
             </ion-nav-back-button>
@@ -34,6 +34,10 @@
             	
             	<ion-item nav-clear menu-close href="#menu/contacts">
             	<i class="icon ion-android-contacts"></i> Contacts <i class ="ion-ios-arrow-forward pull-right"></i>
+            	</ion-item>
+            	
+            	<ion-item nav-clear menu-close href="#menu/snoozed">
+            	<i class="icon ion-android-stopwatch"></i> Snoozed reminders <i class ="ion-ios-arrow-forward pull-right"></i>
             	</ion-item>
             	
             	

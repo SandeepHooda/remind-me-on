@@ -1,3 +1,9 @@
+.grayButton{
+	background-color:gray;
+}
+.greenButton{
+	background-color:#33cd5f;
+}
 .blockDisplay{
 	    display: block;
 }

@@ -22,6 +22,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	
 	var theCtrl = this;
 	$scope.reminders =[];
+	$scope.remindersInDB =[];
 	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 	
 	var name = window.localStorage.getItem('name');
@@ -35,6 +36,16 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	}
 	theCtrl.logOut = function(){
 		$scope.$emit('logOut');
+	}
+	$scope.filter = function(frequencyType, frequencyWithDate){
+		$scope.reminders =[];
+		var filteredReminders = [];
+		for (var i=0;i<$scope.remindersInDB.length;i++){
+			if (frequencyType == null || ($scope.remindersInDB[i].frequencyType == frequencyType &&  $scope.remindersInDB[i].frequencyWithDate == frequencyWithDate)){
+				filteredReminders.push($scope.remindersInDB[i]);
+			}
+		}
+		$scope.reminders = filteredReminders;
 	}
 	$scope.gettingUserReminderList = false;
 	$rootScope.$on('getMyRemindersList',function(event){
@@ -61,6 +72,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 					userReminders[i].nextExecutionDisplayTime =  days[ date.getDay() ] +" "+ date.toString("dd-MMM-yyyy HH:mm");  ;
 				}
 		  			$scope.reminders = userReminders;
+		  			$scope.remindersInDB = userReminders;
 			 }
 	}
 	$scope.deleteReminder = function(deleteIndex){
