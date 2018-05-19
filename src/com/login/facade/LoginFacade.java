@@ -152,7 +152,7 @@ public class LoginFacade {
 			 //2. Check user quote max # OPT per user
 			 if(hasOptQuotaForDayExceeded(phone.getEmail())) {
 				 System.out.println("Exceeded max 3 quota OTP per user by user " +phone.getEmail());
-				 Constants.reportIssue("Too many OTP request ", "Only 3 OTP allowed per user By "+phone.getEmail()+" "+phone.getCountryCode()+" "+phone.getNumber());
+				 Constants.sendEmail("sonu.hooda@gmail.com","Too many OTP request ", "Only 3 OTP allowed per user By "+phone.getEmail()+" "+phone.getCountryCode()+" "+phone.getNumber());
 				 return;//Exceeded max 3 quota OTP per user
 			 }
 			 //3. MAx 1 OPT on a phone in a day
@@ -206,7 +206,7 @@ public class LoginFacade {
 					 
 				 }
 			 }else {
-				 Constants.reportIssue("Too many OTP request ", "Only 1 OTP allowed per user on a given phone User details "+phone.getEmail()+" "+phone.getCountryCode()+" "+phone.getNumber());
+				 Constants.sendEmail("sonu.hooda@gmail.com","Too many OTP request ", "Only 1 OTP allowed per user on a given phone User details "+phone.getEmail()+" "+phone.getCountryCode()+" "+phone.getNumber());
 			 }
 			 
 						
