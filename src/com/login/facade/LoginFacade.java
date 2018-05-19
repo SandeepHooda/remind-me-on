@@ -183,7 +183,7 @@ public class LoginFacade {
 							
 							 try {
 								 //5. Call SMS API
-								//SendSMS.sendText(destination, userName+" OTP to verify your phone no is "+otpInt );
+								SendSMS.sendText(destination, userName+" OTP to verify your phone no is "+otpInt );
 								OtpCounter otpCounter = new OtpCounter();
 								otpCounter.set_id(new Date().getTime());
 								otpCounter.setEmail(phone.getEmail());
