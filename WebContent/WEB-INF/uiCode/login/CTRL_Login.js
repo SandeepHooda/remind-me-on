@@ -32,7 +32,13 @@ APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state','$http',
 		}
 	
 	if (regIDStorege && regIDStorege != 'invalid' ){
-		$state.transitionTo('menu.tab.home');
+		if (window.localStorage.getItem('postlogin-moveto')){
+			$state.transitionTo(window.localStorage.getItem('postlogin-moveto'));
+			
+		}else {
+			$state.transitionTo('menu.tab.home');
+		}
+		
 	}else if (regIDStorege == 'invalid'){
 		localStorage.removeItem('regID');
 	}

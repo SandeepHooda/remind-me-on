@@ -3,7 +3,12 @@ APP.CONTROLLERS.controller ('CTRL_CASH',['$scope','$ionicLoading','$http','$ioni
 	var theCtrl = this;
 	$scope.paymentGateway = "Payment gateway"
 	$scope.goToHome = function(){
-		$state.transitionTo('menu.tab.home');
+		if (window.localStorage.getItem('postlogin-moveto')){
+			$state.transitionTo(window.localStorage.getItem('postlogin-moveto'));
+			
+		}else {
+			$state.transitionTo('menu.tab.home');
+		}
 	}
 	$scope.popUp = function(subject, body, nextStep){
 		var confirmPopup = $ionicPopup.confirm({

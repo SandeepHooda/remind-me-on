@@ -21,10 +21,11 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	//cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications de.appplant.cordova.plugin.local-notification
 	
 	var theCtrl = this;
+	theCtrl.searchInput = "";
 	$scope.reminders =[];
 	$scope.remindersInDB =[];
 	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-	
+	window.localStorage.setItem('postlogin-moveto','menu.tab.home');
 	var name = window.localStorage.getItem('name');
 	if (name ){
 		$scope.userName = "Welcome "+name;
@@ -36,6 +37,41 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	}
 	theCtrl.logOut = function(){
 		$scope.$emit('logOut');
+	}
+	$scope.filterByText = function(){
+		$scope.reminders =[];
+		var filteredReminders = [];
+		
+		//Nothing to filter
+		if (theCtrl.searchInput == ""){
+			for (var i=0;i<$scope.remindersInDB.length;i++){
+				filteredReminders.push($scope.remindersInDB[i]);
+				
+			}
+			$scope.reminders = filteredReminders;
+			  return;
+		  }
+		
+		
+		  var searchArray = theCtrl.searchInput.toLowerCase().split(" ");//split the input by space
+		  
+		  filteredReminders = 
+				  	  _.filter($scope.remindersInDB, function(o) {//Search in all reminders in DB
+				  		        var matchingProduct = true;
+				  		      _.forEach(searchArray, function(search){ // look for all words in search string in any order and  case insensitive
+				  		    	if ( (o.reminderSubject.toLowerCase().indexOf(search) < 0 ) && (o.reminderText.toLowerCase().indexOf(search) < 0 )){
+				  		    		matchingProduct = false;
+				  				}
+				  		      });
+						  		
+				  		      if (matchingProduct) return o;
+						  });
+			 
+		 
+		  filteredReminders = _.without(filteredReminders, undefined);
+		  filteredReminders = _.without(filteredReminders, null);
+		  
+		$scope.reminders = filteredReminders;
 	}
 	$scope.filter = function(frequencyType, frequencyWithDate){
 		$scope.reminders =[];
