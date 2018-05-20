@@ -231,7 +231,7 @@ public class Oauth extends HttpServlet {
 		emailVO.setPassword( "gizmtcibqjnqhqtz");
 		EmailAddess fromAddress = new EmailAddess();
 		fromAddress.setAddress(emailVO.getUserName());
-		fromAddress.setLabel("Sign in to iot index.html");
+		fromAddress.setLabel("Reminder App");
 		emailVO.setFromAddress( fromAddress);
 		
 		
