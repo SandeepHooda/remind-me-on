@@ -1,0 +1,21 @@
+<ion-view title="Help" class="backhroundcolor" cache-view="false" ng-controller="CTRL_help as $ctrl">
+<ion-header-bar class="bar-positive" >
+      <h1 class="title">Help</h1>
+    </ion-header-bar>
+<ion-content class="padding">
+<span class="whitecolor">
+	<textarea style="width: 100%" rows="8" ng-model="feedback.text" placeholder="Feedback">
+	</textarea>
+	<div class="centerBtn">
+	<div class="textBoxSmall paddingCenter inline topSpace" >
+	 	
+	 	
+			<button class="button button-balanced order-button" ng-click="sendFeedback()" > Send Feedback
+				<i class="icon ion-email"></i>
+			</button>
+	</div>
+	
+</div>
+</span>
+</ion-content>
+</ion-view>

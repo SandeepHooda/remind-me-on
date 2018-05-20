@@ -29,6 +29,10 @@ angular.module('starter', APP.DEPENDENCIES.concat(APP.OTHERDEPENDENCIES))
 					url:'/contacts',
 					templateUrl: 'contacts/contacts.html',
 					controller: 'CTRL_CONTACTS'
+				}).state('menu.help',{
+					url:'/help',
+					templateUrl: 'help/help.html',
+					controller: 'CTRL_help'
 				}).state('menu.tab',{
 					url:'/tab',
 					abstract: true,
@@ -48,6 +52,10 @@ angular.module('starter', APP.DEPENDENCIES.concat(APP.OTHERDEPENDENCIES))
 					url:'/snoozed',
 					templateUrl: 'snoozed/snoozed.html',
 					controller: 'CTRL_SNOOZED'
+				}).state('menu.feedback',{
+					url:'/feedback',
+					templateUrl: 'help/feedback/feedback.html',
+					controller: 'CTRL_feedback'
 				}).state('menu.tab.todo',{
 					url:'/todo',
 					views: {

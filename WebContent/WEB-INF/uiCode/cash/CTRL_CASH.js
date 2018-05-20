@@ -1,6 +1,8 @@
 APP.CONTROLLERS.controller ('CTRL_CASH',['$scope','$ionicLoading','$http','$ionicPopup','$state',
     function($scope,$ionicLoading,$http,$ionicPopup, $state){
 	var theCtrl = this;
+	$scope.recharge = {}
+	$scope.recharge.amount = 100;
 	$scope.paymentGateway = "Payment gateway"
 	$scope.goToHome = function(){
 		if (window.localStorage.getItem('postlogin-moveto')){
@@ -8,6 +10,11 @@ APP.CONTROLLERS.controller ('CTRL_CASH',['$scope','$ionicLoading','$http','$ioni
 			
 		}else {
 			$state.transitionTo('menu.tab.home');
+		}
+	}
+	$scope.validateAmount = function(){
+		if (isNaN($scope.recharge.amount)){
+			$scope.recharge.amount = 100;
 		}
 	}
 	$scope.popUp = function(subject, body, nextStep){

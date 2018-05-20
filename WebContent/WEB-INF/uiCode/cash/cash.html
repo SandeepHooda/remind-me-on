@@ -4,15 +4,18 @@
     </ion-header-bar>
 <ion-content class="padding">
 <span class="whitecolor">
-
-	
-	Add cash - {{paymentGateway}}
-	
-	<div class="centerBtn addPhone">
-			<button class="button button-balanced order-button" ng-click="goToHome()" > Cancel
+<!--  Recharhe component -->
+<div class="centerBtn">
+	<div class="textBoxSmall paddingCenter inline" >
+	 	<input id="rechargeAmount" class="fluidInput " type="text" placeholder="Recharge Amount" ng-model="recharge.amount" ng-change="validateAmount()">
+	 	&nbsp;<button class="button button-calm order-button" ng-click="goToHome()">Cancel </button>&nbsp;&nbsp;&nbsp;
+			<button class="button button-balanced order-button" ng-click="goToHome()" > Recharge
 				<!--   <i class="icon ion-android-add-circle"></i>-->
 			</button>
-	 </div>
+	</div>
+	
+</div>	
+
 	
 </span>
 </ion-content>

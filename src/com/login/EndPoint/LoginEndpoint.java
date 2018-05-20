@@ -65,7 +65,11 @@ public interface LoginEndpoint {
 	public Response confirmOTP( @PathParam("phoneID") String phoneID, @PathParam("otp") String otp);
 	
 	
-	
+	@POST
+	@Path("/feedback")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response feedback( String feedback,  @Context HttpServletRequest request);
 	
 	
 

@@ -157,6 +157,13 @@ public class SchedulerService {
 		try {
 			
 			 if (reminderVO.isSendText() && settings.getCurrentCallCredits() >=1) {
+				 String message = callLog.getMessage();
+				 if (null == message) {
+					 message = "Reminder for your.";
+				 }
+				 if (message.length() > 160) {
+					 message = message.substring(0, 160);
+				 }
 				 SendSMS.sendText(callLog.getTo(),callLog.getMessage());
 				//Send above the comment and then update settings
 				 settings.setCurrentCallCredits(settings.getCurrentCallCredits() -1);

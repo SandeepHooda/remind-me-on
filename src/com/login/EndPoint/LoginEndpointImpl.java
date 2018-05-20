@@ -1,9 +1,13 @@
 package com.login.EndPoint;
 
+import java.lang.invoke.ConstantCallSite;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import com.Constants;
 import com.login.facade.LoginFacade;
 import com.login.vo.LoginVO;
 import com.login.vo.Phone;
@@ -184,9 +188,6 @@ public class LoginEndpointImpl implements LoginEndpoint {
 
 	@Override
 	public Response getCallCredits(String regID, HttpServletRequest request) {
-		
-		
-		
 		try{
 			HttpSession session = request.getSession();
 			Settings usrSettings = (Settings) session.getAttribute("settings");
@@ -199,7 +200,27 @@ public class LoginEndpointImpl implements LoginEndpoint {
 			return Response.serverError().entity(vo).build();
 		}
 	}
-
+	@Override
+	public Response feedback( String feedback,   HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String email = (String) session.getAttribute("email");
+			String userName = (String)request.getSession().getAttribute("userName");
+			if (null == userName) {
+				userName = "";
+			}
+			Constants.sendEmail("sonu.hooda@gmail.com", "Feebkack from Reminder app ", userName+" - "+email+" has profided feedback: <br/><br/> "+feedback);
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Feedback received ");
+			return Response.ok().entity(vo).build(); 
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
 	
 
 }
