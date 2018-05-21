@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_CONTACTS',['$scope','$ionicLoading','$http','$ionicPopup','$state',
-    function($scope,$ionicLoading,$http,$ionicPopup, $state){
+APP.CONTROLLERS.controller ('CTRL_CONTACTS',['$scope','$ionicLoading','$http','$ionicPopup','$state','appData',
+    function($scope,$ionicLoading,$http,$ionicPopup, $state,appData){
 	var theCtrl = this;
 	$scope.data = {};
 	$scope.data.otpValue = "";
@@ -17,7 +17,7 @@ APP.CONTROLLERS.controller ('CTRL_CONTACTS',['$scope','$ionicLoading','$http','$
 	$scope.getContacts = function(){
 		$scope.showBusy();
 		
-		$http.get('/ws/phone/')
+		$http.get(appData.getHost()+'/ws/phone/')
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response.data){
@@ -67,7 +67,7 @@ APP.CONTROLLERS.controller ('CTRL_CONTACTS',['$scope','$ionicLoading','$http','$
 				   
 				   $scope.showBusy();
 					
-					$http.delete('/ws/phone/phoneID/'+$scope.userPhonesNotVerified[index]._id)
+					$http.delete(appData.getHost()+'/ws/phone/phoneID/'+$scope.userPhonesNotVerified[index]._id)
 			  		.then(function(response){
 			  			 $scope.hideBusy();
 			  			if (response.data){
@@ -98,7 +98,7 @@ APP.CONTROLLERS.controller ('CTRL_CONTACTS',['$scope','$ionicLoading','$http','$
 	$scope.confirmOtp = function(index){
 		$scope.showBusy();
 		
-		$http.get('/ws/phone/phoneID/'+$scope.userPhonesNotVerified[index]._id+'/confirmOtp/'+$scope.data.otpValue)
+		$http.get(appData.getHost()+'/ws/phone/phoneID/'+$scope.userPhonesNotVerified[index]._id+'/confirmOtp/'+$scope.data.otpValue)
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response.data){
@@ -129,7 +129,7 @@ APP.CONTROLLERS.controller ('CTRL_CONTACTS',['$scope','$ionicLoading','$http','$
 	$scope.verify = function(index){
 		$scope.showBusy();
 		
-		$http.get('/ws/phone/verify/ID/'+$scope.userPhonesNotVerified[index]._id)
+		$http.get(appData.getHost()+'/ws/phone/verify/ID/'+$scope.userPhonesNotVerified[index]._id)
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response.data){

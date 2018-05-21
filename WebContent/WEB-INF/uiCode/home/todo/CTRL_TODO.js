@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicLoading','$http','$ionicPopup',
-    function($scope,$state,$rootScope,$ionicLoading,$http,$ionicPopup){
+APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicLoading','$http','$ionicPopup','appData',
+    function($scope,$state,$rootScope,$ionicLoading,$http,$ionicPopup, appData){
 	
 	
 	var theCtrl = this;
@@ -26,7 +26,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 		toDo.order = $scope.todos.length +1;
 		toDo.taskDesc = theCtrl.newTodo;
 		$scope.showBusy();
-		$http.post('/ws/todo/',toDo , config)
+		$http.post(appData.getHost()+'/ws/todo/',toDo , config)
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response.data){
@@ -54,7 +54,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 		
 		$scope.showBusy();
 		
-		 $http.get('/ws/todo')
+		 $http.get(appData.getHost()+'/ws/todo')
 	  		.then(function(response){
 	  			 $scope.hideBusy();
 	  			//$scope.todos = response.data ;
@@ -85,7 +85,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 	
 	$scope.toggleComplete = function(todo){
 		 $scope.showBusy();
-		 $http.delete('/ws/todo/id/'+todo._id)
+		 $http.delete(appData.getHost()+'/ws/todo/id/'+todo._id)
 	  		.then(function(response){
 	  			 $scope.hideBusy();
 	  			$scope.showToDos(response.data);
@@ -103,7 +103,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 		  return   a.order - b.order;
 	}
 	$scope.updateToDoOrderInDB = function(toDo){
-		$http.post('/ws/todo/update',toDo , config)
+		$http.post(appData.getHost()+'/ws/todo/update',toDo , config)
   		.then(function(response){
   			
   		},

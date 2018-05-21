@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_feedback',['$scope','$ionicLoading','$http','$ionicPopup','$state',
-    function($scope,$ionicLoading,$http,$ionicPopup, $state){
+APP.CONTROLLERS.controller ('CTRL_feedback',['$scope','$ionicLoading','$http','$ionicPopup','$state','appData',
+    function($scope,$ionicLoading,$http,$ionicPopup, $state,appData){
 	var theCtrl = this;
 	$scope.feedback = {};
 	var config = {
@@ -9,7 +9,7 @@ APP.CONTROLLERS.controller ('CTRL_feedback',['$scope','$ionicLoading','$http','$
         }
 	$scope.sendFeedback = function(){
 		$scope.showBusy();
-		$http.post('/ws/feedback/',$scope.feedback.text , config)
+		$http.post(appData.getHost()+'/ws/feedback/',$scope.feedback.text , config)
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response){

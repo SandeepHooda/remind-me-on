@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicLoading','$http','$ionicPopup',
-    function($scope,$state,$rootScope,$ionicLoading,$http,$ionicPopup){
+APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicLoading','$http','$ionicPopup','appData',
+    function($scope,$state,$rootScope,$ionicLoading,$http,$ionicPopup, appData){
 	//https://github.com/apache/cordova-plugin-geolocation
 	//cordova plugin add phonegap-nfc 
 	//cordova plugin add cordova-plugin-vibration
@@ -44,7 +44,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	}
 	
 	$scope.updateReminder = function(reminder){
-		$http.put('/ws/reminder/', reminder, config)
+		$http.put(appData.getHost()+'/ws/reminder/', reminder, config)
   		.then(function(response){
   			
   		},
@@ -115,7 +115,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		}
 		$scope.showBusy();
 		
-		 $http.get('/ws/reminder')
+		 $http.get(appData.getHost()+'/ws/reminder')
 	  		.then(function(response){
 	  			 $scope.hideBusy();
 	  			$scope.formatReminderDisplay(response.data) ;
@@ -161,7 +161,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 				   
 				   $scope.showBusy();
 					
-					 $http.delete('/ws/reminder/reminderID/'+$scope.reminders[$scope.deleteIndex]._id)
+					 $http.delete(appData.getHost()+'/ws/reminder/reminderID/'+$scope.reminders[$scope.deleteIndex]._id)
 				  		.then(function(response){
 				  			 $scope.hideBusy();
 				  			$scope.formatReminderDisplay(response.data) ;

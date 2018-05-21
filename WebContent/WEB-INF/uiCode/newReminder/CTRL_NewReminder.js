@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$ionicPopup','$state','$ionicLoading','$window',
-    function($scope, $http, $rootScope ,$ionicPopup,$state,$ionicLoading,$window){
+APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$ionicPopup','$state','$ionicLoading','$window','appData',
+    function($scope, $http, $rootScope ,$ionicPopup,$state,$ionicLoading,$window,appData){
 
 	var theCtrl = this;
 	$scope.reminder = {}
@@ -203,7 +203,7 @@ var monthNames =[
 		
 			
 		$scope.showBusy();
-		$http.post('/ws/reminder/',reminderObj , config)
+		$http.post(appData.getHost()+'/ws/reminder/',reminderObj , config)
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response.data){
@@ -238,7 +238,7 @@ var monthNames =[
 		}
 	}
 	$scope.getVerifiedPhones = function(){
-		$http.get('/ws/phone/verified/true')
+		$http.get(appData.getHost()+'/ws/phone/verified/true')
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response.data){

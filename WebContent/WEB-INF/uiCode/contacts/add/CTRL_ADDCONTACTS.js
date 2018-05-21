@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_ADDCONTACTS',['$scope','$ionicLoading','$http','$ionicPopup','$state',
-    function($scope,$ionicLoading,$http,$ionicPopup, $state){
+APP.CONTROLLERS.controller ('CTRL_ADDCONTACTS',['$scope','$ionicLoading','$http','$ionicPopup','$state','appData',
+    function($scope,$ionicLoading,$http,$ionicPopup, $state,appData){
 	var theCtrl = this;
 	$scope.countryCodes = ["India", "USA"];
 	$scope.phone = {};
@@ -13,7 +13,7 @@ APP.CONTROLLERS.controller ('CTRL_ADDCONTACTS',['$scope','$ionicLoading','$http'
 	$scope.addContact = function(){
 		$scope.showBusy();
 		
-		$http.post('/ws/phone/',$scope.phone , config)
+		$http.post(appData.getHost()+'/ws/phone/',$scope.phone , config)
   		.then(function(response){
   			 $scope.hideBusy();
   			if (response.data){

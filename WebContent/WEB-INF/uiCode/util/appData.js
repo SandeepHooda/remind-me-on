@@ -6,13 +6,14 @@ APP.SERVICES.service ('appData',['$window','dataRestore','$ionicPopup',
 		return "1519981368108";
 	}
 	this.getHost = function () {
-		var host = "https://deliveratmydoor.appspot.com";
+		var host = "https://remind-me-on.appspot.com";
 		/*if ($window.location.host == ""){
 			host = "phone";
 			host = "https://deliveratmydoor.appspot.com";
 		}else*/ if ($window.location.host.indexOf("localhost:8080") >=0 ){
 			host = "";
 		}
+		alert (host)
 		return host;
 	}
 	
@@ -44,39 +45,7 @@ APP.SERVICES.service ('appData',['$window','dataRestore','$ionicPopup',
 	this.getCartItems = function(){
 		return this.cartItems;
 	}
-	this.addToCart = function (product, qty){
-		var newItem = true;
-		for (var i=0;i<this.cartItems.length;i++){
-			if (this.cartItems[i]._id == product._id){
-				this.cartItems[i].qty += qty;
-				newItem = false;
-			}
-		}
-		if (newItem){
-			product.qty = qty;
-			this.cartItems.push(product);
-		}
-		 window.localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
-	}
 	
-	this.updateCart = function (product, qty){
-		
-		for (var i=0;i<this.cartItems.length;i++){
-			if (this.cartItems[i]._id == product._id){
-				this.cartItems[i].qty = qty;
-				if (qty <=0){
-					//splice is safe here as at a time only one item removed in whole iteration 
-					this.cartItems.splice(i,1);
-				}
-			}
-		}
-		
-		 window.localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
-	}
-	
-	if ($window.localStorage.getItem("cartItems")){
-		this.cartItems = dataRestore.getFromCache('cartItems','obj')
-	}
 	
 }
 

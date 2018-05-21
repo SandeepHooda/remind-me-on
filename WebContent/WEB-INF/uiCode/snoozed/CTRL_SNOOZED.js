@@ -1,5 +1,5 @@
-APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$state','$http','$rootScope','$ionicPopup','$ionicLoading',
-    function($scope, $ionicSideMenuDelegate,$state,$http,$rootScope,$ionicPopup,$ionicLoading){
+APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$state','$http','$rootScope','$ionicPopup','$ionicLoading','appData',
+    function($scope, $ionicSideMenuDelegate,$state,$http,$rootScope,$ionicPopup,$ionicLoading,appData){
 	var theCtrl = this;
 	var regID = window.localStorage.getItem('regID');
 	$scope.snoozedReminders = [];
@@ -12,7 +12,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 	if (!regID){
 		$state.transitionTo('menu.login');
 	}else {
-		 $http.get('/ws/login/validate/'+regID+'/timeZone/'+Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "@"))
+		 $http.get(appData.getHost()+'/ws/login/validate/'+regID+'/timeZone/'+Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "@"))
 	  		.then(function(response){
 	  			$scope.getCallCredits();
 	  			
@@ -28,7 +28,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 	}
 	
 	$scope.getSnoozedReminders = function(){
-		$http.get('/ws/snoozed/reminder')
+		$http.get(appData.getHost()+'/ws/snoozed/reminder')
   		.then(function(response){
   			$scope.snoozedReminders = response.data;
   		
@@ -54,7 +54,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 				   
 				   $scope.showBusy();
 					
-					 $http.delete('/ws/snoozed/reminder/'+$scope.snoozedReminders[$scope.deleteIndex]._id)
+					 $http.delete(appData.getHost()+'/ws/snoozed/reminder/'+$scope.snoozedReminders[$scope.deleteIndex]._id)
 				  		.then(function(response){
 				  			 $scope.hideBusy();
 				  			$scope.snoozedReminders = response.data;
@@ -71,7 +71,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 	}
 	
 	$scope.getCallCredits = function(){
-		$http.get('/ws/callcredits/regid/'+regID)
+		$http.get(appData.getHost()+'/ws/callcredits/regid/'+regID)
   		.then(function(response){
   			$scope.currentCallCredits = response.data;
   			$scope.$emit('getMyRemindersList');
@@ -88,7 +88,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 	
 	$rootScope.$on('logOut',function(event){
 		 regIDStorege = window.localStorage.getItem('regID');
-		 $http.get('/ws/logout/'+regIDStorege)
+		 $http.get(appData.getHost()+'/ws/logout/'+regIDStorege)
 	  		.then(function(response){
 	  			if (!response.data){//Reg id don't exist in DB - after delete 
 	  				window.localStorage.setItem('regID', 'invalid');
