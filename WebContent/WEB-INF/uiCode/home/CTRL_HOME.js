@@ -152,7 +152,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	$scope.deleteReminder = function(deleteIndex){
 		$scope.deleteIndex  = deleteIndex;
 		 var confirmPopup = $ionicPopup.confirm({
-		     title: 'Confirmation',
+		     title: ''+$scope.reminders[$scope.deleteIndex].reminderSubject+" "+$scope.reminders[$scope.deleteIndex].reminderText,
 		     template: 'Do you want to delete this reminder. Please note that delte a reminder means that all future ocurances will also be cancled.'
 		   });
 

@@ -45,7 +45,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 	$scope.deleteReminder = function(deleteIndex){
 		$scope.deleteIndex  = deleteIndex;
 		 var confirmPopup = $ionicPopup.confirm({
-		     title: 'Confirmation',
+		     title: ''+$scope.snoozedReminders[$scope.deleteIndex].reminderSubject+" "+$scope.snoozedReminders[$scope.deleteIndex].reminderText,
 		     template: 'Do you want to delete this reminder.'
 		   });
 

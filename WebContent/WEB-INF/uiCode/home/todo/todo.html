@@ -28,11 +28,11 @@
 	<!-- Users todos -->
 	<div class="topSpace">
 		<ion-item class="smallPadding" ng-repeat="todo in todos track by $index" on-swipe-left="markeComplete({{$index}})">
-		  <div class="productDesc" style=" height: 35px;">
-		  	<button ng-click="moveDown($index)" class="greenRoundBtn"><i class="icon ion-arrow-graph-down-left" ></i></button>
+		  <div class="productDesc" style=" height: 55px;">
+		  	<button ng-click="moveDown($index)" class="greenRoundBtn"><i class="icon ion-arrow-down-a" ></i></button>
 		  	<span class="floatingLeftToDo italicBlue" style=" line-height: 1.5;"><b>{{todo.taskDesc}}</b> </span> 
 		  
-		  	<button ng-click="moveUp($index)" class="floatingRightToDo greenRoundBtn"><i class="icon ion-arrow-graph-up-right"></i></button>
+		  	<button ng-click="moveUp($index)" class="floatingRightToDo greenRoundBtn"><i class="icon ion-arrow-up-a"></i></button>
 		   </div>
 		 </ion-item>
 	</div>
