@@ -19,7 +19,11 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	//cordova plugin add cordova-plugin-contacts-phonenumbers
 	//cordova plugin add https://github.com/boltex/cordova-plugin-powermanagement
 	//cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications de.appplant.cordova.plugin.local-notification
-	
+	 var config = {
+	            headers : {
+	                'Content-Type': 'application/json;'
+	            }
+	        }
 	var theCtrl = this;
 	theCtrl.searchInput = "";
 	$scope.reminders =[];
@@ -37,6 +41,27 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	}
 	theCtrl.logOut = function(){
 		$scope.$emit('logOut');
+	}
+	
+	$scope.updateReminder = function(reminder){
+		$http.put('/ws/reminder/', reminder, config)
+  		.then(function(response){
+  			
+  		},
+		function(response){
+  			 
+		});
+	}
+	$scope.toggleCall = function(index){
+		$scope.reminders[index].makeACall = !$scope.reminders[index].makeACall;
+		$scope.updateReminder($scope.reminders[index]);
+		
+	}
+	
+	$scope.toggleSMS = function(index){
+		$scope.reminders[index].sendText = !$scope.reminders[index].sendText;
+		$scope.updateReminder($scope.reminders[index]);
+		
 	}
 	$scope.filterByText = function(){
 		$scope.reminders =[];

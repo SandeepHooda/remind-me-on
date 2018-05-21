@@ -56,7 +56,23 @@
 		<ion-item class="smallPadding" ng-repeat="reminder in reminders track by $index" on-swipe-left="deleteReminder({{$index}})">
 		  <div class="productDesc">
 		  		 <b>{{reminder.reminderSubject}} - {{reminder.reminderText}}</b> <br/>
-		  		 <span class="italicBlue">Remind via Email, <span ng-show="reminder.makeACall">, Call </span> <span ng-show="reminder.sendText">, SMS </span>  
+		  		 <span class="italicBlue">Remind via Email, 
+		  		 
+		  		 
+		  		 <button ng-if="!reminder.makeACall" class="button button-balanced order-button buttonAnimationTiny" style="background-color:gray;" ng-click="toggleCall($index)"> 
+				 No Call
+				</button>
+				<button ng-if="reminder.makeACall"  class="button button-balanced order-button buttonAnimationTiny"  ng-click="toggleCall($index)"> 
+					Call
+				</button>
+				
+				<button ng-if="!reminder.sendText" class="button button-balanced order-button buttonAnimationTiny" style="background-color:gray;" ng-click="toggleSMS($index)"> 
+				 No SMS
+				</button>
+				<button ng-if="reminder.sendText"  class="button button-balanced order-button buttonAnimationTiny"  ng-click="toggleSMS($index)"> 
+					SMS
+				</button>
+		  		
 		  		 <span ng-show="reminder.makeACall || reminder.sendText">On {{reminder.selectedPhone}}</span> Time: <span> {{reminder.displayTime}}</span></span><br/>
 		  		  <span class="italicGreen"> Next due time <span> {{reminder.nextExecutionDisplayTime}}</span></span> 
 		   </div>

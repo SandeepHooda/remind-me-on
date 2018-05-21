@@ -65,6 +65,27 @@
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
+
+.buttonAnimationTiny {
+  	max-width: 100px !important;
+    max-height: 15px !important;
+    min-height: 15px !important;
+    line-height: 0px !important;
+	 text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 5px #999;
+}
+
+.buttonAnimationTiny:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
 .inline {
 	display: inline !important;
 	padding-left: 10px;

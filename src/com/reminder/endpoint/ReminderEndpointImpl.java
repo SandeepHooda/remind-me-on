@@ -45,6 +45,26 @@ public class ReminderEndpointImpl implements ReminderEndpoint{
 			return Response.serverError().entity(vo).build();
 		}
 	}
+	
+	@Override
+	public Response updateReminder(ReminderVO reminderVO, HttpServletRequest request) {
+		try{
+			HttpSession session = request.getSession();
+			String email = (String)session.getAttribute("email");
+			if (!reminderVO.getEmail().equalsIgnoreCase(email)) {
+				LoginVO vo = new LoginVO();
+				vo.setErrorMessage("Please log in to authenticate ");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(vo).build();
+			}
+			return Response.ok().entity(reminderFacade.updateReminder(reminderVO )).build();
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
 
 	
 

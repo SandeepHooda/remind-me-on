@@ -73,8 +73,8 @@ public class DeleteOldTodosAndRemindSnoozed extends HttpServlet {
 			Set<String> emailIds = soozedRemindersMap.keySet();
 			if (!CollectionUtils.isEmpty(emailIds)){
 				for (String email: emailIds) {
-					Constants.sendEmail(email,"Did you complete the below task? ", "You will get one consolidated email daily to remind you about your pending tasks that you might not have completed. "
-							+ "If you have completed them please delete them from \"Snoozed\" section of the \"Reminder app\".   "+soozedRemindersMap.get(email)+" <br/><br/> Regards");
+					Constants.sendEmail(email,"Pending task", soozedRemindersMap.get(email)+" <br/><br/> You will get one consolidated email daily to remind you about your pending tasks that you might not have completed. "
+							+ "If you have completed them please delete them from \"Snoozed\" section of the \"Reminder app\".  <br/></br/>Regards");
 				}
 			}
 			
