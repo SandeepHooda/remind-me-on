@@ -33,7 +33,11 @@ public class LoginFacade {
 		String data = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users", regID, null,true, null, null);
 		 Gson  json = new Gson();
 		 LoginVO result  = json.fromJson(data, new TypeToken<LoginVO>() {}.getType());
-		 String email = result.getEmailID();
+		 String email = null;
+		 if (null != result) {
+			 email =  result.getEmailID();
+		 }
+		
 		 if (null != result && StringUtils.isNotBlank(email)) {
 			 result.setEmailID(email);
 			 result.setAppTimeZone(appTimeZone);

@@ -8,7 +8,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 		regID = "0457b82f-a156-4946-93cc-c73fae5b9e8a";
 		 window.localStorage.setItem('regID', regID);
 	}
-	window.localStorage.setItem('postlogin-moveto','menu.snoozed');
+	
 	if (!regID){
 		$state.transitionTo('menu.login');
 	}else {

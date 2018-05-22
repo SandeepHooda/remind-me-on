@@ -4,6 +4,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 	
 	var theCtrl = this;
 	theCtrl.newTodo = "";
+	window.localStorage.setItem('postlogin-moveto','menu.tab.todo');
 	var config = {
             headers : {
                 'Content-Type': 'application/json;'

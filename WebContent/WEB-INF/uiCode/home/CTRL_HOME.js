@@ -1,5 +1,7 @@
 APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicLoading','$http','$ionicPopup','appData',
     function($scope,$state,$rootScope,$ionicLoading,$http,$ionicPopup, appData){
+	//cordova plugin add cordova-plugin-googleplus --variable REVERSED_CLIENT_ID=myreversedclientid
+	//cordova plugin add cordova-plugin-keyboard
 	//https://github.com/apache/cordova-plugin-geolocation
 	//cordova plugin add phonegap-nfc 
 	//cordova plugin add cordova-plugin-vibration

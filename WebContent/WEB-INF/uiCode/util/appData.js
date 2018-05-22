@@ -7,13 +7,13 @@ APP.SERVICES.service ('appData',['$window','dataRestore','$ionicPopup',
 	}
 	this.getHost = function () {
 		var host = "https://remind-me-on.appspot.com";
-		/*if ($window.location.host == ""){
+		if ($window.location.host == ""){
 			host = "phone";
-			host = "https://deliveratmydoor.appspot.com";
-		}else*/ if ($window.location.host.indexOf("localhost:8080") >=0 ){
+			//host = "https://deliveratmydoor.appspot.com";
+		}else if ($window.location.host.indexOf("localhost:8080") >=0 ){
 			host = "";
 		}
-		alert (host)
+		
 		return host;
 	}
 	
