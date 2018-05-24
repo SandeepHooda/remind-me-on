@@ -1,4 +1,4 @@
-<ion-view title="Reminders" cache-view="false"  class="backhroundcolor " ng-init="" ng-controller="CTRL_HOME as $ctrl">
+<ion-view title="Reminders" cache-view="false"  class="backhroundcolor " ng-init="getReminders()" ng-controller="CTRL_HOME as $ctrl">
 
 <ion-header-bar class="bar-positive">
       <h1 class="title">Reminders</h1>   
@@ -52,6 +52,7 @@
 	</div>
 	
 	<!-- Users reminder -->
+	
 	<div class="topSpace"	>
 		<ion-item class="smallPadding" ng-repeat="reminder in reminders track by $index" on-swipe-left="deleteReminder({{$index}})">
 		  <div class="productDesc">

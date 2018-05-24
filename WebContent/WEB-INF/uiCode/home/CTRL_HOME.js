@@ -110,49 +110,63 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		}
 		$scope.reminders = filteredReminders;
 	}
-	$scope.gettingUserReminderList = false;
-	if (!$rootScope.refresh){
-		$rootScope.refresh = $rootScope.$on('getMyRemindersList',function(event){
-			if ($scope.gettingUserReminderList){
-				return ;
-			}
-			$scope.showBusy();
-			
-			 $http.get(appData.getHost()+'/ws/reminder')
-		  		.then(function(response){
-		  			 $scope.hideBusy();
-		  			$scope.formatReminderDisplay(response.data) ;
-		  			
-		  			
-		  		},
-				function(response){
-		  			 $scope.hideBusy();
-		  			$scope.popUp('Sorry '+response, 'Could not fectch data. Do you want to retry now?','menu.login' );
-				});
+	
+	
+	$scope.getReminders = function(){
+		
+		if ($scope.gettingUserReminderList){
+			return ;
+		}
+		$scope.gettingUserReminderList = false;
+		
+		$scope.showBusy();
+		
+		 $http.get(appData.getHost()+'/ws/reminder')
+	  		.then(function(response){
+	  			 $scope.hideBusy();
+	  			$scope.formatReminderDisplay(response.data) ;
+	  			
+	  			
+	  		},
+			function(response){
+	  			 $scope.hideBusy();
+	  			$scope.popUp('Sorry '+response, 'Could not fectch data. Do you want to retry now?','menu.login' );
 			});
 	}
 	
-	$scope.formatReminderDisplay = function(userReminders){
-		if (userReminders){
-				for (var i=0;i<userReminders.length;i++){
-					var date =  new Date(userReminders[i].nextExecutionTime);
+	if (!$rootScope.refresh){
+		$rootScope.refresh = $rootScope.$on('getMyRemindersList',function(event){
+			$scope.getReminders();
+			
+			});
+	}
+	
+	$scope.formatReminderDisplay = function(dbResponse){
+		var formattedReminders = [];
+		if (dbResponse){
+				for (var i=0;i<dbResponse.length;i++){
+					var date =  new Date(dbResponse[i].nextExecutionTime);
 					var today = new Date();
 					var tomorrow = new Date();
 					tomorrow.setDate(today.getDate()+1);
 					var dayAfterTomorrow = new Date();
 					dayAfterTomorrow.setDate(today.getDate()+2);
-					userReminders[i].nextExecutionDisplayTime = ": "+ days[ date.getDay() ] +" "+date.toString("dd-MMM-yyyy HH:mm");
+					dbResponse[i].nextExecutionDisplayTime = ": "+ days[ date.getDay() ] +" "+date.toString("dd-MMM-yyyy HH:mm");
 					if (date.toString("dd-MMM-yyyy") == today.toString("dd-MMM-yyyy")) {
-						userReminders[i].nextExecutionDisplayTime = ": Today at "+date.toString("HH:mm");
+						dbResponse[i].nextExecutionDisplayTime = ": Today at "+date.toString("HH:mm");
 					}else if (date.toString("dd-MMM-yyyy") == tomorrow.toString("dd-MMM-yyyy"))  {
-						userReminders[i].nextExecutionDisplayTime = ": Tomorrow at "+date.toString("HH:mm");
+						dbResponse[i].nextExecutionDisplayTime = ": Tomorrow at "+date.toString("HH:mm");
 					}else if (date.toString("dd-MMM-yyyy") == dayAfterTomorrow.toString("dd-MMM-yyyy"))  {
-						userReminders[i].nextExecutionDisplayTime = ": Day after Tomorrow at "+date.toString("HH:mm");
+						dbResponse[i].nextExecutionDisplayTime = ": Day after Tomorrow at "+date.toString("HH:mm");
 					}
 					
+					formattedReminders.push(dbResponse[i]);
+					
 				}
-		  			$scope.reminders = userReminders;
-		  			$scope.remindersInDB = userReminders;
+				$scope.reminders =[];
+				$scope.remindersInDB = [];
+		  			$scope.reminders = formattedReminders;
+		  			$scope.remindersInDB = formattedReminders;
 			 }
 	}
 	$scope.deleteReminder = function(deleteIndex){
@@ -218,6 +232,6 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		       console.log("The loading indicator is now hidden");
 		    });
 		  };
-		  $scope.$emit('getMyRemindersList');
+		  
 	 
 }])
