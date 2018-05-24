@@ -2,7 +2,10 @@ APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state','$http','$ionicLoadi
     function($scope,$state,$http,$ionicLoading,appData){
 	var theCtrl = this;
 	$scope.host = appData.getHost();
-	
+	$scope.conditionAgree = false;
+	$scope.iAgree = function(){
+		$scope.conditionAgree = true;
+	}
 	// This method is executed when the user press the "Sign in with Google" button
 	  $scope.googleSignIn = function() {
 	    $ionicLoading.show({

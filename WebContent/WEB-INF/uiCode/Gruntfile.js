@@ -136,6 +136,7 @@ module.exports = function (grunt) {
                     {expand: true,  cwd: '<%= js_src_path %>',src: "img/red.gif", dest: '<%= js_build_path %>/', filter: 'isFile'},
                     {expand: true,  cwd: '<%= js_src_path %>',src: "lib/ionic/css/ionic.css", dest: '<%= js_build_path %>/', filter: 'isFile'},
 					{expand: true,  cwd: '<%= js_src_path %>',src: "css/style.css", dest: '<%= js_build_path %>/', filter: 'isFile'}
+					
                     
                 ]
             }

@@ -61,10 +61,11 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 	  			//$scope.todos = response.data ;
 	  			$scope.showToDos(response.data);
 	  			theCtrl.newTodo = "";
+	  			
 	  		},
 			function(response){
 	  			 $scope.hideBusy();
-				
+	  			$scope.popUp('Sorry '+response, 'Could not fectch data. Do you want to retry now?','menu.login' );
 			});
 		}
 	$scope.showToDos = function(data){
@@ -153,7 +154,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 			     template: body
 			   });
 			 confirmPopup.then(function(res) {
-				 if (nextStep){
+				 if (res && nextStep){
 					 $state.transitionTo(nextStep);
 				 }
 			  });

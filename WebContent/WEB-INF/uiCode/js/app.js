@@ -56,6 +56,10 @@ angular.module('starter', APP.DEPENDENCIES.concat(APP.OTHERDEPENDENCIES))
 					url:'/feedback',
 					templateUrl: 'help/feedback/feedback.html',
 					controller: 'CTRL_feedback'
+				}).state('menu.anexture',{
+					url:'/anexture',
+					templateUrl: 'help/annexure/annexure.html',
+					controller: 'CTRL_help'
 				}).state('menu.tab.todo',{
 					url:'/todo',
 					views: {

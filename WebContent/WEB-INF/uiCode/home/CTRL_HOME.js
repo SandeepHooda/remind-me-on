@@ -111,23 +111,27 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		$scope.reminders = filteredReminders;
 	}
 	$scope.gettingUserReminderList = false;
-	$rootScope.$on('getMyRemindersList',function(event){
-		if ($scope.gettingUserReminderList){
-			return ;
-		}
-		$scope.showBusy();
-		
-		 $http.get(appData.getHost()+'/ws/reminder')
-	  		.then(function(response){
-	  			 $scope.hideBusy();
-	  			$scope.formatReminderDisplay(response.data) ;
-	  			
-	  		},
-			function(response){
-	  			 $scope.hideBusy();
-				
+	if (!$rootScope.refresh){
+		$rootScope.refresh = $rootScope.$on('getMyRemindersList',function(event){
+			if ($scope.gettingUserReminderList){
+				return ;
+			}
+			$scope.showBusy();
+			
+			 $http.get(appData.getHost()+'/ws/reminder')
+		  		.then(function(response){
+		  			 $scope.hideBusy();
+		  			$scope.formatReminderDisplay(response.data) ;
+		  			
+		  			
+		  		},
+				function(response){
+		  			 $scope.hideBusy();
+		  			$scope.popUp('Sorry '+response, 'Could not fectch data. Do you want to retry now?','menu.login' );
+				});
 			});
-		});
+	}
+	
 	$scope.formatReminderDisplay = function(userReminders){
 		if (userReminders){
 				for (var i=0;i<userReminders.length;i++){
@@ -187,6 +191,17 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		   });
 	}
 	
+	$scope.popUp = function(subject, body, nextStep){
+		var confirmPopup = $ionicPopup.confirm({
+		     title: subject,
+		     template: body
+		   });
+		 confirmPopup.then(function(res) {
+			 if (res && nextStep){
+				 $state.transitionTo(nextStep);
+			 }
+		  });
+	}
 	//Busy icon
 	  $scope.showBusy = function() {
 		  $scope.gettingUserReminderList = true;
