@@ -1,5 +1,6 @@
 package com.scheduler;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,49 +43,60 @@ public class SchedulerService {
 	public static void executeReminderAndReschedule(List<ReminderVO> currentReminders) {
 		Map<String, Settings> settingsMap = new HashMap<>();
 		for(ReminderVO reminderVO : currentReminders) {
-			boolean oneTimeReminder = "Once".equalsIgnoreCase(reminderVO.getFrequencyWithDate());
-			//Notify user
-			notifyUser(reminderVO, oneTimeReminder);
-			
-			if (!oneTimeReminder) {
+			try {
 				
-				//Get settings 
-				Settings settings = settingsMap.get(reminderVO.getEmail());
-				if (null == settings) {
-					Gson  json = new Gson();
-					 String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", reminderVO.getEmail(), null,true, null, null);
-					 settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
-					 settingsMap.put(reminderVO.getEmail(), settings);
-				}
+				boolean oneTimeReminder = "Once".equalsIgnoreCase(reminderVO.getFrequencyWithDate());
+				//Notify user
 				
-				try {
+				notifyUser(reminderVO);
+				
+				//Only if notification was success then only reschedule / update that reminder
+				
+				if (!oneTimeReminder) {
 					
-					
-					String timeZone = settings.getUserSuppliedTimeZone();
-					if (null == timeZone) {
-						timeZone = settings.getAppTimeZone();
+					//Get settings 
+					Settings settings = settingsMap.get(reminderVO.getEmail());
+					if (null == settings) {
+						Gson  json = new Gson();
+						 String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", reminderVO.getEmail(), null,true, null, null);
+						 settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
+						 settingsMap.put(reminderVO.getEmail(), settings);
 					}
 					
-					//Update reminder next execution time in DB
-					reminderVO.setNextExecutionTime(ReminderFacade.nextReminder(reminderVO, timeZone).getTime());
-					Gson  json = new Gson();
-					String data = json.toJson(reminderVO, new TypeToken<ReminderVO>() {}.getType());
-					//MangoDB.createNewDocumentInCollection("remind-me-on", "reminders", data, null);
-					MangoDB.updateData("remind-me-on", "reminders", data,reminderVO.get_id(), null);
-				} catch (Exception e) {
+					try {
+						
+						
+						String timeZone = settings.getUserSuppliedTimeZone();
+						if (null == timeZone) {
+							timeZone = settings.getAppTimeZone();
+						}
+						
+						//Update reminder next execution time in DB
+						reminderVO.setNextExecutionTime(ReminderFacade.nextReminder(reminderVO, timeZone).getTime());
+						Gson  json = new Gson();
+						String data = json.toJson(reminderVO, new TypeToken<ReminderVO>() {}.getType());
+						//MangoDB.createNewDocumentInCollection("remind-me-on", "reminders", data, null);
+						MangoDB.updateData("remind-me-on", "reminders", data,reminderVO.get_id(), null);
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+					}
 					
-					e.printStackTrace();
+				}else {
+					MangoDB.deleteDocument("remind-me-on", "reminders", reminderVO.get_id(), null);
 				}
 				
+			}catch(Exception e) {
+				e.printStackTrace();
 			}
+			
 		}
 		
 	}
 	
-	private static void notifyUser(ReminderVO reminderVO, boolean oneTimeReminder) {
+	private static void notifyUser(ReminderVO reminderVO) throws Exception {
 		//Send email
-		try {
-			//After notification delete the reminder
+		
 			EmailVO emalVO = new EmailVO();
 			emalVO.setUserName("personal.reminder.notification@gmail.com");
 			emalVO.setPassword(Key.email);
@@ -99,37 +111,30 @@ public class SchedulerService {
 			emalVO.setFromAddress(from);
 			receipients.add(to);
 			emalVO.setToAddress(receipients);
-			MailService.sendSimpleMail(emalVO);
-			if (oneTimeReminder) {
-				MangoDB.deleteDocument("remind-me-on", "reminders", reminderVO.get_id(), null);
+			if (!MailService.sendSimpleMail(emalVO)) {
+				throw new Exception("Couln't not notify user via email");
 			}
+			
+			
 				
 		
 			
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
 		
+		//Get user balance to check if he has funds or not
 		Settings settings =  new Settings();
 		Gson  json = new Gson();
-		
-		//Get settings
-		try {
-			String email = reminderVO.getEmail();
-			 
-			 String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
-			 settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
-			 if (null == settings ) {
-				 settings = new Settings();
-				 settings.set_id(email);
-			 }
+		String email = reminderVO.getEmail();
+		String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
+		settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
+		if (null == settings ) {
+			 settings = new Settings();
+			 settings.set_id(email);
+		 }
 			
 		  
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		
 		CallLogs callLog = null;
-		//Make a log of this call
+		//Prepare a log of this call
 		if ((reminderVO.isMakeACall() || reminderVO.isSendText()) &&  settings.getCurrentCallCredits() >=1) {
 			callLog = new CallLogs();
 			callLog.set_id(""+new Date().getTime());
@@ -141,20 +146,20 @@ public class SchedulerService {
 			 MangoDB.createNewDocumentInCollection("remind-me-on", "call-logs", logsJson, null);
 		}
 		
-		//Make a call
-		try {
-			if (reminderVO.isMakeACall() && settings.getCurrentCallCredits() >=5) {
-				MakeACall.call(callLog.getTo(), callLog.get_id());
-				//Make a call above the comment and then update settings
-				 settings.setCurrentCallCredits(settings.getCurrentCallCredits() -5);
-			 }
-		  
-		}catch(Exception e) {
-			e.printStackTrace();
+		//Place a call
+		if (reminderVO.isMakeACall() && settings.getCurrentCallCredits() >=5) {
+			if (!MakeACall.call(callLog.getTo(), callLog.get_id())) {
+				throw new Exception("Couln't not notify user via Phone");
+			}
+			
+			//Make a call above the comment and then update settings
+			 settings.setCurrentCallCredits(settings.getCurrentCallCredits() -5);
 		}
+		  
+		
 		
 		//Send SMS
-		try {
+		
 			
 			 if (reminderVO.isSendText() && settings.getCurrentCallCredits() >=1) {
 				 String message = callLog.getMessage();
@@ -164,20 +169,19 @@ public class SchedulerService {
 				 if (message.length() > 160) {
 					 message = message.substring(0, 160);
 				 }
-				 SendSMS.sendText(callLog.getTo(),callLog.getMessage());
+				 if (!SendSMS.sendText(callLog.getTo(),callLog.getMessage())) {
+						throw new Exception("Couln't not notify user via Phone");
+					}
+				 
 				//Send above the comment and then update settings
 				 settings.setCurrentCallCredits(settings.getCurrentCallCredits() -1);
 			 }
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			String settingsJson = json.toJson(settings, new TypeToken<Settings>() {}.getType());
+		
+		
+			 settingsJson = json.toJson(settings, new TypeToken<Settings>() {}.getType());
 			 MangoDB.updateData("remind-me-on", "registered-users-settings", settingsJson, reminderVO.getEmail(), null);
 			 
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		
 		
 		
 	}

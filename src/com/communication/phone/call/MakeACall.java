@@ -1,5 +1,7 @@
 package com.communication.phone.call;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -17,23 +19,25 @@ public class MakeACall {
 
 	private static FetchOptions lFetchOptions = FetchOptions.Builder.doNotValidateCertificate().setDeadline(300d);
 	private static URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
-	public static void call(String phoneNo, String messageID) {
+	public static boolean call(String phoneNo, String messageID) throws IOException {
 		log.info("Hero making a call sms to "+phoneNo);
 		String httpsURL  = "https://post-master.herokuapp.com/MakeACall?phone="+phoneNo+"&messageID="+messageID;
 		
 		String responseStr = "";
-		 try {
+		
 			
 		        URL url = new URL(httpsURL);
 	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.GET, lFetchOptions);
 	            HTTPResponse res = fetcher.fetch(req);
-	            responseStr =(new String(res.getContent()));
-	            log.info("Call scheduled ");
-	        } catch (Exception e) {
-	        	log.info("Call schedule error "+e.getLocalizedMessage());
-	        	e.printStackTrace();
-	        	
-	        }
+	            if (res.getResponseCode() == 200) {
+	            	responseStr =(new String(res.getContent()));
+		            log.info("Call scheduled "+responseStr);
+	            	return true;
+	            }else {
+	            	return false;
+	            }
+	            
+	       
 		
 	}
 

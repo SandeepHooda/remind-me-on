@@ -1,6 +1,8 @@
 package com.communication.phone.text;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.logging.Logger;
@@ -21,23 +23,24 @@ public class SendSMS {
 
 	private static FetchOptions lFetchOptions = FetchOptions.Builder.doNotValidateCertificate().setDeadline(300d);
 	private static URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
-	public static void sendText(String phoneNo, String text) throws UnsupportedEncodingException {
+	public static boolean sendText(String phoneNo, String text) throws IOException {
 		log.info("Hero sending sms");
 		String httpsURL  = "https://post-master.herokuapp.com/SendSMS?phone="+phoneNo+"&text="+URLEncoder.encode(text, "UTF-8");
 		
 		String responseStr = "";
-		 try {
+		
 			
 		        URL url = new URL(httpsURL);
 	            HTTPRequest req = new HTTPRequest(url, HTTPMethod.GET, lFetchOptions);
 	            HTTPResponse res = fetcher.fetch(req);
-	            responseStr =(new String(res.getContent()));
-	            log.info("SMS sent ");
-	        } catch (Exception e) {
-	        	log.info("SMS error "+e.getLocalizedMessage());
-	        	e.printStackTrace();
-	        	
-	        }
+	            if (res.getResponseCode() == 200) {
+	            	responseStr =(new String(res.getContent()));
+		            log.info("Call scheduled "+responseStr);
+	            	return true;
+	            }else {
+	            	return false;
+	            }
+	        
 		
 	}
 
