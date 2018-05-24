@@ -6,6 +6,11 @@ APP.CONTROLLERS.controller ('CTRL_Login',['$scope','$state','$http','$ionicLoadi
 	$scope.iAgree = function(){
 		$scope.conditionAgree = true;
 	}
+	$scope.iAgreeAndGoToTop = function() {
+		$scope.iAgree();
+	    document.body.scrollTop = 0;
+	    document.documentElement.scrollTop = 0;
+	}
 	// This method is executed when the user press the "Sign in with Google" button
 	  $scope.googleSignIn = function() {
 	    $ionicLoading.show({
