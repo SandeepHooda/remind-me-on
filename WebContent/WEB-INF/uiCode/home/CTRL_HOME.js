@@ -26,6 +26,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	                'Content-Type': 'application/json;'
 	            }
 	        }
+	 dataLayer.push({'pageTitle': 'Home'});    // Better
 	var theCtrl = this;
 	theCtrl.searchInput = "";
 	$scope.reminders =[];

@@ -99,7 +99,9 @@ module.exports = function (grunt) {
                            // retunStr = '' ;
                         //}
 						
-						if( matchedWord.indexOf("shake.js") == -1 && matchedWord.indexOf('js/prod') == -1 && matchedWord.indexOf("cordova.js") == -1  && matchedWord.indexOf("lib/") == -1 && matchedWord.indexOf("templates.js") == -1 && matchedWord.indexOf("style.css") == -1 ){
+						if( matchedWord.indexOf("shake.js") == -1 && matchedWord.indexOf('js/prod') == -1 && matchedWord.indexOf("cordova.js") == -1  
+								&& matchedWord.indexOf("lib/") == -1 && matchedWord.indexOf("templates.js") == -1 && matchedWord.indexOf("style.css") == -1 
+								&& matchedWord.indexOf("GoogleTagManager") == -1){
                             retunStr = '' ;
                         }
                         return retunStr;

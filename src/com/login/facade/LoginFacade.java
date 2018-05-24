@@ -273,7 +273,10 @@ public class LoginFacade {
 	       }else {
 	    	   ipAddress= ipAddress.contains(",") ? ipAddress.split(",")[0] : ipAddress;
 	       }
-	       loginVO.setIpAddress(ipAddress);
+	       if (StringUtils.isNoneBlank(ipAddress)) {  
+	    	   loginVO.setIpAddress(ipAddress);
+	       }
+	       
 	       String httpsURL ="https://api.whatismybrowser.com/api/v2/user_agent_parse";
 	       String method = "POST";
 	       String data = "{\r\n" + 
@@ -285,22 +288,28 @@ public class LoginFacade {
 	       String parsedResponse = MangoDB.makeExternalRequest(httpsURL,method,data,headers);
 	       Gson  json = new Gson();
 	       UserAgent userAgent  = json.fromJson(parsedResponse, new TypeToken<UserAgent>() {}.getType());
-	       loginVO.setUserAgent(userAgent.getParse().getOperating_system()+" # "+userAgent.getParse().getSoftware_name()+" # "+userAgent.getParse().getSoftware_version());
-	       loginVO.setUserAgentObj(userAgent);
 	       
-	       Map<String, String> requestHeaders = new HashMap<>();
+	       if (null != userAgent && null != userAgent.getParse() && StringUtils.isNoneBlank(userAgent.getParse().getOperating_system()) ) {
+	    	   loginVO.setUserAgent(userAgent.getParse().getOperating_system()+" # "+userAgent.getParse().getSoftware_name()+" # "+userAgent.getParse().getSoftware_version());
+		       loginVO.setUserAgentObj(userAgent);
+		       
+		       Map<String, String> requestHeaders = new HashMap<>();
 
-	        Enumeration<String> headerNames = request.getHeaderNames();
-	        while (headerNames.hasMoreElements()) {
-	            String key = (String) headerNames.nextElement();
-	            String value = request.getHeader(key);
-	            requestHeaders.put(key, value);
-	        }
-	        
-	        
-	       loginVO.setRequestHeaders(requestHeaders);
-	       String loginVOStr = json.toJson(loginVO, new TypeToken<LoginVO>() {}.getType());
-			 MangoDB.updateData("remind-me-on", "registered-users", loginVOStr, loginVO.get_id(),null);
+		        Enumeration<String> headerNames = request.getHeaderNames();
+		        while (headerNames.hasMoreElements()) {
+		            String key = (String) headerNames.nextElement();
+		            String value = request.getHeader(key);
+		            requestHeaders.put(key, value);
+		        }
+		        
+		        
+		       loginVO.setRequestHeaders(requestHeaders);
+		       String loginVOStr = json.toJson(loginVO, new TypeToken<LoginVO>() {}.getType());
+				 MangoDB.updateData("remind-me-on", "registered-users", loginVOStr, loginVO.get_id(),null);
+	       }
+	       
+	       
+	      
 	}
 
 }
