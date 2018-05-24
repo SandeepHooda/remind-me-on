@@ -1,10 +1,7 @@
 package com.login.EndPoint;
 
-import java.lang.invoke.ConstantCallSite;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.Constants;
@@ -23,7 +20,19 @@ public class LoginEndpointImpl implements LoginEndpoint {
 	public void setLoginFacade(LoginFacade loginFacade) {
 		this.loginFacade = loginFacade;
 	}
-	
+
+	public Response recordLoginSucess( HttpServletRequest request) {
+		try{
+			
+			return Response.ok().entity(loginFacade.recordLoginSucess(request)).build();
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
 	@Override
 	public Response validateRegID(String regID, HttpServletRequest request, String appTimeZone) {
 		try{

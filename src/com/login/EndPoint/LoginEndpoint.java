@@ -71,6 +71,12 @@ public interface LoginEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response feedback( String feedback,  @Context HttpServletRequest request);
 	
+	@GET
+	@Path("/recordLoginSucess")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response recordLoginSucess( @Context HttpServletRequest request);
+	
 	
 
 }

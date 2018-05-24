@@ -1,5 +1,6 @@
 package com.login.vo;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class LoginVO {
@@ -13,6 +14,11 @@ public class LoginVO {
 	private String errorMessage;
 	private long loginTime;
 	private Settings userSettings;
+	private String ipAddress;
+	private String userAgent;
+	private String completeHeaders;
+	private UserAgent userAgentObj;
+	private Map<String, String> requestHeaders;
 	
 	public LoginVO() {
 		this.regID = UUID.randomUUID().toString();
@@ -72,6 +78,36 @@ public class LoginVO {
 	}
 	public void setUserSettings(Settings userSettings) {
 		this.userSettings = userSettings;
+	}
+	public String getIpAddress() {
+		return ipAddress;
+	}
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+	public String getUserAgent() {
+		return userAgent;
+	}
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+	public String getCompleteHeaders() {
+		return completeHeaders;
+	}
+	public void setCompleteHeaders(String completeHeaders) {
+		this.completeHeaders = completeHeaders;
+	}
+	public UserAgent getUserAgentObj() {
+		return userAgentObj;
+	}
+	public void setUserAgentObj(UserAgent userAgentObj) {
+		this.userAgentObj = userAgentObj;
+	}
+	public Map<String, String> getRequestHeaders() {
+		return requestHeaders;
+	}
+	public void setRequestHeaders(Map<String, String> requestHeaders) {
+		this.requestHeaders = requestHeaders;
 	}
 
 }

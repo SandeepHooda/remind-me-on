@@ -5,7 +5,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 	$scope.snoozedReminders = [];
 	$scope.currentCallCredits = 0;
 	if (document.URL.indexOf('localhost')>=0){
-		regID = "d230d20c-c287-45ef-a571-6e11ebe38a51";
+		regID = "138fa90a-cf3d-4d47-9ea4-e14c1a36b4ab";
 		 window.localStorage.setItem('regID', regID);
 	}
 	
@@ -15,7 +15,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 		 $http.get(appData.getHost()+'/ws/login/validate/'+regID+'/timeZone/'+Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "@"))
 	  		.then(function(response){
 	  			$scope.getCallCredits();
-	  			
+	  			$scope.recordLoginSucess();
 	  		},
 			function(response){
 	  			window.localStorage.setItem('regID', 'invalid');
@@ -82,6 +82,17 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 				document.cookie = 'regID' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 				document.cookie = 'name' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 			$state.transitionTo('menu.login');
+			
+		});
+	}
+	
+	$scope.recordLoginSucess = function(){
+		$http.get(appData.getHost()+'/ws/recordLoginSucess')
+  		.then(function(response){
+  			
+  		},
+		function(response){
+  			
 			
 		});
 	}

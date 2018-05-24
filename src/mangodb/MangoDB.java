@@ -6,6 +6,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.urlfetch.FetchOptions;
@@ -23,6 +26,44 @@ public class MangoDB {
 	private static final Logger log = Logger.getLogger(MangoDB.class.getName());
 	private static FetchOptions lFetchOptions = FetchOptions.Builder.doNotValidateCertificate().setDeadline(300d);
 	private static URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
+	
+	public static String makeExternalRequest(String httpsURL, String method, String data, Map<String, String> headers) {
+		try {
+			
+	        URL url = new URL(httpsURL);
+            HTTPRequest req = null;
+            if ("POST".equalsIgnoreCase(method)) {
+            	req = new HTTPRequest(url, HTTPMethod.POST, lFetchOptions);
+            }else {
+            	req = new HTTPRequest(url, HTTPMethod.GET, lFetchOptions);
+            }
+            
+           
+            Set<String>  keys=  headers.keySet();
+            for (String key: keys) {
+            	 HTTPHeader header = new HTTPHeader(key, headers.get(key));
+                 req.setHeader(header);
+            }
+           
+            /*String contentType = headers.get("Content-type");
+			if (null == contentType) {
+				contentType = "application/json";//"Content-type"
+			}*/
+			
+           
+            req.setPayload(data.getBytes());
+            HTTPResponse res =fetcher.fetch(req);
+            if(res.getResponseCode() >=200 && res.getResponseCode()  <300) {
+            	return (new String(res.getContent()));
+            }else {
+            	return null;
+            }
+            
+ 
+        } catch (IOException e) {
+        	return null;
+        }
+	}
 	
 	public static String getDocumentWithQuery(String dbName, String collection,  String documentKey, String keyName, boolean isKeyString, String mlabApiKey, String query){
 		if (null == mlabApiKey) {

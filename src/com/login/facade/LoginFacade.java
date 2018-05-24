@@ -4,9 +4,13 @@ package com.login.facade;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +25,7 @@ import com.login.vo.LoginVO;
 import com.login.vo.OtpCounter;
 import com.login.vo.Phone;
 import com.login.vo.Settings;
+import com.login.vo.UserAgent;
 import com.reminder.facade.ReminderFacade;
 
 import mangodb.MangoDB;
@@ -246,6 +251,56 @@ public class LoginFacade {
 		 }
 		
        
+	}
+	
+	public LoginVO recordLoginSucess(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String regID = (String)session.getAttribute("regID");
+		
+		  String loginVOJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users", regID,null, true, null, null);
+			 Gson  json = new Gson();
+			 LoginVO loginVO  = json.fromJson(loginVOJson, new TypeToken<LoginVO>() {}.getType());
+			 if (null != loginVO) {
+				 populateClientDetails( loginVO, request);
+				 
+			 }
+			 return loginVO;
+	}
+	private void populateClientDetails( LoginVO loginVO,HttpServletRequest request) {
+		String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+	       if (StringUtils.isBlank(ipAddress)) {  
+	         ipAddress = request.getRemoteAddr();  
+	       }else {
+	    	   ipAddress= ipAddress.contains(",") ? ipAddress.split(",")[0] : ipAddress;
+	       }
+	       loginVO.setIpAddress(ipAddress);
+	       String httpsURL ="https://api.whatismybrowser.com/api/v2/user_agent_parse";
+	       String method = "POST";
+	       String data = "{\r\n" + 
+	       		"    \"user_agent\": \""+request.getHeader("User-Agent")+"\"	}";
+	       
+	       Map<String, String> headers = new HashMap<String, String>();
+	       headers.put("Content-type", "application/json");
+	       headers.put("X-API-KEY", "3426e30b9f398dee01e98e1ce71ed5a7");
+	       String parsedResponse = MangoDB.makeExternalRequest(httpsURL,method,data,headers);
+	       Gson  json = new Gson();
+	       UserAgent userAgent  = json.fromJson(parsedResponse, new TypeToken<UserAgent>() {}.getType());
+	       loginVO.setUserAgent(userAgent.getParse().getOperating_system()+" # "+userAgent.getParse().getSoftware_name()+" # "+userAgent.getParse().getSoftware_version());
+	       loginVO.setUserAgentObj(userAgent);
+	       
+	       Map<String, String> requestHeaders = new HashMap<>();
+
+	        Enumeration<String> headerNames = request.getHeaderNames();
+	        while (headerNames.hasMoreElements()) {
+	            String key = (String) headerNames.nextElement();
+	            String value = request.getHeader(key);
+	            requestHeaders.put(key, value);
+	        }
+	        
+	        
+	       loginVO.setRequestHeaders(requestHeaders);
+	       String loginVOStr = json.toJson(loginVO, new TypeToken<LoginVO>() {}.getType());
+			 MangoDB.updateData("remind-me-on", "registered-users", loginVOStr, loginVO.get_id(),null);
 	}
 
 }
