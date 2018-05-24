@@ -160,6 +160,9 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 						dbResponse[i].nextExecutionDisplayTime = ": Day after Tomorrow at "+date.toString("HH:mm");
 					}
 					
+					/*if (dbResponse[i].frequencyWithDate == 'Once'){
+						dbResponse[i].displayTime  = dbResponse[i].nextExecutionDisplayTime 
+					}*/
 					formattedReminders.push(dbResponse[i]);
 					
 				}

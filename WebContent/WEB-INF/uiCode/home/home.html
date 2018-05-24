@@ -74,8 +74,9 @@
 					SMS
 				</button>
 		  		
-		  		 <span ng-show="reminder.makeACall || reminder.sendText">On {{reminder.selectedPhone}}</span> Time: <span> {{reminder.displayTime}}</span></span><br/>
-		  		  <span class="italicGreen"> Next due time <span> {{reminder.nextExecutionDisplayTime}}</span></span> 
+		  		 <span ng-show="reminder.makeACall || reminder.sendText">On {{reminder.selectedPhone}}</span>
+		  		 <span ng-if="reminder.frequencyWithDate != 'Once'"> Time: <span> {{reminder.displayTime}}</span></span><br/>
+		  		  <span class="italicGreen"> Next due time <span> {{reminder.nextExecutionDisplayTime}}</span> 
 		   </div>
 		 </ion-item>
 	</div>
