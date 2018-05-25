@@ -25,8 +25,9 @@
 	<div class="fullwidth">
 		<hr/>
 	</div>
-	<span class="userName blockDisplay">Filter reminders</span>
+	
 	<div id="filterDiv1" >
+	<span class="userName">Filter reminders</span> 
 	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter(null,null)">
 					"All"
 	</button>
@@ -34,15 +35,15 @@
 					"Once"
 	</button>
 	
-	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Date', 'Yearly')">
-					"Yearly"
-	</button> 
+	
 	
 	</div>
 	
 	
 	<div id="filterDiv2" style="padding-top: 10px;" >
-	
+	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Date', 'Yearly')">
+					"Yearly"
+	</button> 
 	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Date', 'Monthly')">
 					"Monthly"
 	</button>
