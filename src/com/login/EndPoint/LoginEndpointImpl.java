@@ -232,7 +232,7 @@ public class LoginEndpointImpl implements LoginEndpoint {
 			if (null == userName) {
 				userName = "";
 			}
-			Constants.sendEmail("sonu.hooda@gmail.com", "Feebkack from Reminder app ", userName+" - "+email+" has profided feedback: <br/><br/> "+feedback);
+			Constants.sendEmail("sonu.hooda@gmail.com", "Feebkack from Reminder app ", userName+" - "+email+" has provided feedback: <br/><br/> "+feedback);
 			LoginVO vo = new LoginVO();
 			vo.setErrorMessage("Feedback received ");
 			return Response.ok().entity(vo).build(); 

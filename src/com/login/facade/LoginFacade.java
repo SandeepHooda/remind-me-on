@@ -284,11 +284,14 @@ public class LoginFacade {
 				       String loginVOStr = json.toJson(loginVO, new TypeToken<LoginVO>() {}.getType());
 						 MangoDB.updateData("remind-me-on", "registered-users", loginVOStr, loginVO.get_id(),null);
 			    	 //Notify sandeep via email
-						 EmailAddess toAddress = new EmailAddess();
-						 toAddress.setAddress("sonu.hooda@gmail.com");
-						new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to Remind-me-on app by \n\r", 	loginVO.getEmailID() +" "+loginVO.getName()
-						+" Location "+loginVO.getIpAddressLocation().getCity() +", "+loginVO.getIpAddressLocation().getCountry()
-						+"\n\r Precise location  "+loginVO.getGoogleGeoLocation().getResults().get(0).getFormatted_address(), null, null));
+						 if (!"sonu.hooda@gmail.com".equalsIgnoreCase(loginVO.getEmailID())) {
+							 EmailAddess toAddress = new EmailAddess();
+							 toAddress.setAddress("sonu.hooda@gmail.com");
+							new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to Remind-me-on app by \n\r", 	loginVO.getEmailID() +" "+loginVO.getName()
+							+" Location "+loginVO.getIpAddressLocation().getCity() +", "+loginVO.getIpAddressLocation().getCountry()
+							+"\n\r Precise location  "+loginVO.getGoogleGeoLocation().getResults().get(0).getFormatted_address(), null, null));
+						 }
+						
 			       }
 				
 			 }
@@ -305,11 +308,14 @@ public class LoginFacade {
 			 if (null != loginVO) {
 				//https://maps.googleapis.com/maps/api/geocode/json?latlng=30.7275903,76.842473&key=AIzaSyAxUqib9tTNICwmFUxPXaPKPqZqn8Swmtw
 				 
-				//Notify sandeep via email
-				 EmailAddess toAddress = new EmailAddess();
-				 toAddress.setAddress("sonu.hooda@gmail.com");
-				new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to Remind-me-on app by \n\r", 	loginVO.getEmailID() +" "+loginVO.getName()
-				+" Location "+loginVO.getIpAddressLocation().getCity() +", "+loginVO.getIpAddressLocation().getCountry(), null, null));
+				 if (!"sonu.hooda@gmail.com".equalsIgnoreCase(loginVO.getEmailID())) {
+					//Notify sandeep via email
+					 EmailAddess toAddress = new EmailAddess();
+					 toAddress.setAddress("sonu.hooda@gmail.com");
+					new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to Remind-me-on app by \n\r", 	loginVO.getEmailID() +" "+loginVO.getName()
+					+" Location "+loginVO.getIpAddressLocation().getCity() +", "+loginVO.getIpAddressLocation().getCountry(), null, null));
+				 }
+				
 			 }
 			 return loginVO;
 	}
