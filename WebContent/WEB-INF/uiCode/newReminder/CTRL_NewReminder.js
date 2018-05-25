@@ -83,7 +83,9 @@ var monthNames =[
 		}
 	}
 	
-	
+	$scope.addPhoneNoToProfile = function(){
+		$state.transitionTo('menu.addcontacts');
+	}
 	$scope.toggleCall = function (){
 		if($scope.verifiedPhones.length <= 0){
 				$scope.reminder.makeACall = false;

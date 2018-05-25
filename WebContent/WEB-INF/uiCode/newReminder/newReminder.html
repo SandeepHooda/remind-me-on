@@ -80,6 +80,9 @@
 		  &nbsp;<select ng-show="verifiedPhones.length > 1" class="selectFrequency" ng-model="$ctrl.selectedPhone" ng-options="x for x in verifiedPhones"></select>
 		  <span  class="userName" ng-show="verifiedPhones.length == 1">{{$ctrl.selectedPhone}}</span>
 		  </span>
+		  <button ng-if="verifiedPhones.length <=0 "  class="button button-balanced buttonAnimationTiny"  ng-click="addPhoneNoToProfile()"> 
+				 + Phone
+			</button>
 	<div class="notifyButtons">
 	 <div class="inline">
 			<span class="iconSize">
