@@ -46,6 +46,38 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 		$scope.$emit('logOut');
 	}
 	
+	
+	$scope.showPosition = function(position) {
+	  
+	   var latLang = {};
+	   latLang.latitude = position.coords.latitude;
+	   latLang.longitude = position.coords.longitude;
+	   
+	    
+	    $http.post(appData.getHost()+'/ws/updatePreciseLocation/',latLang , config)
+  		.then(function(response){
+  		},
+		function(response){
+  			});
+	}
+	
+	$scope.getLocation = function() {
+		$scope.geoLocationPermissionGranted = true;
+		window.localStorage.setItem('geoLocationPermissionGranted',''+$scope.geoLocationPermissionGranted);
+	    if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition($scope.showPosition);
+	    } 
+	}
+	$scope.geoLocationPermissionGranted = false;
+	if (window.localStorage.getItem('geoLocationPermissionGranted')){
+		$scope.geoLocationPermissionGranted = true;
+		if (!$rootScope.gotPreciseLocation){
+			$scope.getLocation();
+		}
+		$rootScope.gotPreciseLocation = true;
+		
+		
+	}
 	$scope.updateReminder = function(reminder){
 		$http.put(appData.getHost()+'/ws/reminder/', reminder, config)
   		.then(function(response){
@@ -131,7 +163,7 @@ APP.CONTROLLERS.controller ('CTRL_HOME',['$scope','$state','$rootScope','$ionicL
 	  		},
 			function(response){
 	  			 $scope.hideBusy();
-	  			$scope.popUp('Sorry '+response, 'Could not fectch data. Do you want to retry now?','menu.login' );
+	  			$scope.popUp('Sorry ', 'Could not fectch data. Do you want to retry now?','menu.login' );
 			});
 	}
 	

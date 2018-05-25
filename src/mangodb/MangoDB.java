@@ -51,7 +51,10 @@ public class MangoDB {
 			}*/
 			
            
-            req.setPayload(data.getBytes());
+            if(null != data) {
+            	req.setPayload(data.getBytes());
+            }
+            
             HTTPResponse res =fetcher.fetch(req);
             if(res.getResponseCode() >=200 && res.getResponseCode()  <300) {
             	return (new String(res.getContent()));

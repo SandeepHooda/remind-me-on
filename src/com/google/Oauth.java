@@ -109,10 +109,7 @@ public class Oauth extends HttpServlet {
 		
          MangoDB.createNewDocumentInCollection("remind-me-on", "registered-users", data, null);
 		
-		//Notify sandeep via email
-		 EmailAddess toAddress = new EmailAddess();
-		 toAddress.setAddress("sonu.hooda@gmail.com");
-		new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to Remind-me-on app by ", 	email +" "+name, null, null));
+		
 	}
 	private void addCookie(String cookieName, String cookieValue ,HttpServletRequest request, HttpServletResponse response){
 		Cookie cookie = new Cookie(cookieName,cookieValue);
@@ -223,26 +220,6 @@ public class Oauth extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	private static EmailVO prepareEmailVO( EmailAddess toAddress, String subject , String htmlBody, String base64attachment, String attachmentName ) {
-		EmailVO emailVO = new EmailVO();
-		
-		emailVO.setUserName( "myshopemailnotification@gmail.com");
-		emailVO.setPassword( "gizmtcibqjnqhqtz");
-		EmailAddess fromAddress = new EmailAddess();
-		fromAddress.setAddress(emailVO.getUserName());
-		fromAddress.setLabel("Reminder App");
-		emailVO.setFromAddress( fromAddress);
-		
-		
-		List<EmailAddess> toAddressList = new ArrayList<EmailAddess>();
-		
-		toAddressList.add(toAddress);
-		emailVO.setToAddress(toAddressList);
-		emailVO.setSubject(subject);
-		emailVO.setHtmlContent(htmlBody);
-		emailVO.setBase64Attachment(base64attachment);
-		emailVO.setAttachmentName(attachmentName);
-		return emailVO;
-	}
+	
 
 }

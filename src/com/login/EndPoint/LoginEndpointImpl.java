@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 
 import com.Constants;
 import com.login.facade.LoginFacade;
+import com.login.vo.LatLang;
 import com.login.vo.LoginVO;
 import com.login.vo.Phone;
 import com.login.vo.Settings;
@@ -25,6 +26,19 @@ public class LoginEndpointImpl implements LoginEndpoint {
 		try{
 			
 			return Response.ok().entity(loginFacade.recordLoginSucess(request)).build();
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+	
+	public Response updatePreciseLocation( LatLang latLang, HttpServletRequest request) {
+		try{
+			
+			return Response.ok().entity(loginFacade.updatePreciseLocation(latLang, request)).build();
 		}catch(Exception e){
 			e.printStackTrace();
 			LoginVO vo = new LoginVO();

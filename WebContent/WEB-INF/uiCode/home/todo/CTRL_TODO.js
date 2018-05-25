@@ -65,7 +65,7 @@ APP.CONTROLLERS.controller ('CTRL_TODO',['$scope','$state','$rootScope','$ionicL
 	  		},
 			function(response){
 	  			 $scope.hideBusy();
-	  			$scope.popUp('Sorry '+response, 'Could not fectch data. Do you want to retry now?','menu.login' );
+	  			$scope.popUp('Sorry ', 'Could not fectch data. Do you want to retry now?','menu.login' );
 			});
 		}
 	$scope.showToDos = function(data){

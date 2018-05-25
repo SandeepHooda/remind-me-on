@@ -17,10 +17,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.common.util.CollectionUtils;
 
 import com.Constants;
+import com.communication.email.EmailAddess;
+import com.communication.email.EmailVO;
+import com.communication.email.MailService;
 import com.communication.phone.text.Key;
 import com.communication.phone.text.SendSMS;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.login.vo.GoogleGeoLocation;
+import com.login.vo.IPtoLocation;
+import com.login.vo.LatLang;
 import com.login.vo.LoginVO;
 import com.login.vo.OtpCounter;
 import com.login.vo.Phone;
@@ -253,6 +259,42 @@ public class LoginFacade {
        
 	}
 	
+	public LoginVO updatePreciseLocation(LatLang latLang, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String regID = (String)session.getAttribute("regID");
+		
+		  String loginVOJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users", regID,null, true, null, null);
+			 Gson  json = new Gson();
+			 LoginVO loginVO  = json.fromJson(loginVOJson, new TypeToken<LoginVO>() {}.getType());
+			 if (null != loginVO) {
+				 
+				//Get lat lang to address
+			        String httpsURL ="https://maps.googleapis.com/maps/api/geocode/json?latlng="+latLang.getLatitude()+","+latLang.getLongitude()+"&key=AIzaSyAxUqib9tTNICwmFUxPXaPKPqZqn8Swmtw";
+			        String method = "GET";
+			        Map<String, String> headers = new HashMap<String, String>();
+			        headers.put("Accept", "application/json");
+			      
+			       String jsonData = MangoDB.makeExternalRequest(httpsURL,method,null,headers);
+			       json = new Gson();
+			       GoogleGeoLocation googleGeoLocation  = json.fromJson(jsonData, new TypeToken<GoogleGeoLocation>() {}.getType());
+			       loginVO.setGoogleGeoLocation(googleGeoLocation);
+			       
+			       if (null != googleGeoLocation && "OK".equals(googleGeoLocation.getStatus())) {
+			    	  
+				       String loginVOStr = json.toJson(loginVO, new TypeToken<LoginVO>() {}.getType());
+						 MangoDB.updateData("remind-me-on", "registered-users", loginVOStr, loginVO.get_id(),null);
+			    	 //Notify sandeep via email
+						 EmailAddess toAddress = new EmailAddess();
+						 toAddress.setAddress("sonu.hooda@gmail.com");
+						new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to Remind-me-on app by \n\r", 	loginVO.getEmailID() +" "+loginVO.getName()
+						+" Location "+loginVO.getIpAddressLocation().getCity() +", "+loginVO.getIpAddressLocation().getCountry()
+						+"\n\r Precise location  "+loginVO.getGoogleGeoLocation().getResults().get(0).getFormatted_address(), null, null));
+			       }
+				
+			 }
+			 return loginVO;
+	}
+	
 	public LoginVO recordLoginSucess(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String regID = (String)session.getAttribute("regID");
@@ -261,22 +303,19 @@ public class LoginFacade {
 			 Gson  json = new Gson();
 			 LoginVO loginVO  = json.fromJson(loginVOJson, new TypeToken<LoginVO>() {}.getType());
 			 if (null != loginVO) {
-				 populateClientDetails( loginVO, request);
+				//https://maps.googleapis.com/maps/api/geocode/json?latlng=30.7275903,76.842473&key=AIzaSyAxUqib9tTNICwmFUxPXaPKPqZqn8Swmtw
 				 
+				//Notify sandeep via email
+				 EmailAddess toAddress = new EmailAddess();
+				 toAddress.setAddress("sonu.hooda@gmail.com");
+				new  MailService().sendSimpleMail(prepareEmailVO(toAddress, "Sign in to Remind-me-on app by \n\r", 	loginVO.getEmailID() +" "+loginVO.getName()
+				+" Location "+loginVO.getIpAddressLocation().getCity() +", "+loginVO.getIpAddressLocation().getCountry(), null, null));
 			 }
 			 return loginVO;
 	}
 	private void populateClientDetails( LoginVO loginVO,HttpServletRequest request) {
-		String ipAddress = request.getHeader("X-FORWARDED-FOR");  
-	       if (StringUtils.isBlank(ipAddress)) {  
-	         ipAddress = request.getRemoteAddr();  
-	       }else {
-	    	   ipAddress= ipAddress.contains(",") ? ipAddress.split(",")[0] : ipAddress;
-	       }
-	       if (StringUtils.isNoneBlank(ipAddress)) {  
-	    	   loginVO.setIpAddress(ipAddress);
-	       }
-	       
+		   
+	       //Parse user agen via whatismybrowser API
 	       String httpsURL ="https://api.whatismybrowser.com/api/v2/user_agent_parse";
 	       String method = "POST";
 	       String data = "{\r\n" + 
@@ -288,6 +327,31 @@ public class LoginFacade {
 	       String parsedResponse = MangoDB.makeExternalRequest(httpsURL,method,data,headers);
 	       Gson  json = new Gson();
 	       UserAgent userAgent  = json.fromJson(parsedResponse, new TypeToken<UserAgent>() {}.getType());
+	      
+	       
+	       String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+	       if (StringUtils.isBlank(ipAddress)) {  
+	         ipAddress = request.getRemoteAddr();  
+	       }else {
+	    	   ipAddress= ipAddress.contains(",") ? ipAddress.split(",")[0] : ipAddress;
+	       }
+	       
+	       if (StringUtils.isNoneBlank(ipAddress)) {  
+	    	   loginVO.setIpAddress(ipAddress);
+	    	   
+	    	 //Get geo location via IP
+		        httpsURL ="http://ip-api.com/json/"+ipAddress+"?fields=520191&lang=en";
+		        method = "GET";
+		        headers = new HashMap<String, String>();
+		        headers.put("Accept", "application/json");
+		      
+		       parsedResponse = MangoDB.makeExternalRequest(httpsURL,method,null,headers);
+		       json = new Gson();
+		       IPtoLocation iPtoLocation  = json.fromJson(parsedResponse, new TypeToken<IPtoLocation>() {}.getType());
+		       loginVO.setIpAddressLocation(iPtoLocation);
+	       }
+	       
+	       
 	       
 	       if (null != userAgent && null != userAgent.getParse() && StringUtils.isNoneBlank(userAgent.getParse().getOperating_system()) ) {
 	    	   loginVO.setUserAgent(userAgent.getParse().getOperating_system()+" # "+userAgent.getParse().getSoftware_name()+" # "+userAgent.getParse().getSoftware_version());
@@ -310,6 +374,27 @@ public class LoginFacade {
 	       
 	       
 	      
+	}
+	private static EmailVO prepareEmailVO( EmailAddess toAddress, String subject , String htmlBody, String base64attachment, String attachmentName ) {
+		EmailVO emailVO = new EmailVO();
+		
+		emailVO.setUserName( "myshopemailnotification@gmail.com");
+		emailVO.setPassword( "gizmtcibqjnqhqtz");
+		EmailAddess fromAddress = new EmailAddess();
+		fromAddress.setAddress(emailVO.getUserName());
+		fromAddress.setLabel("Reminder App");
+		emailVO.setFromAddress( fromAddress);
+		
+		
+		List<EmailAddess> toAddressList = new ArrayList<EmailAddess>();
+		
+		toAddressList.add(toAddress);
+		emailVO.setToAddress(toAddressList);
+		emailVO.setSubject(subject);
+		emailVO.setHtmlContent(htmlBody);
+		emailVO.setBase64Attachment(base64attachment);
+		emailVO.setAttachmentName(attachmentName);
+		return emailVO;
 	}
 
 }

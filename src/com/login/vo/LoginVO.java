@@ -15,10 +15,13 @@ public class LoginVO {
 	private long loginTime;
 	private Settings userSettings;
 	private String ipAddress;
+	private IPtoLocation ipAddressLocation;
 	private String userAgent;
 	private String completeHeaders;
 	private UserAgent userAgentObj;
 	private Map<String, String> requestHeaders;
+	private GoogleGeoLocation googleGeoLocation;
+	 
 	
 	public LoginVO() {
 		this.regID = UUID.randomUUID().toString();
@@ -109,5 +112,18 @@ public class LoginVO {
 	public void setRequestHeaders(Map<String, String> requestHeaders) {
 		this.requestHeaders = requestHeaders;
 	}
+	public IPtoLocation getIpAddressLocation() {
+		return ipAddressLocation;
+	}
+	public void setIpAddressLocation(IPtoLocation ipAddressLocation) {
+		this.ipAddressLocation = ipAddressLocation;
+	}
+	public GoogleGeoLocation getGoogleGeoLocation() {
+		return googleGeoLocation;
+	}
+	public void setGoogleGeoLocation(GoogleGeoLocation googleGeoLocation) {
+		this.googleGeoLocation = googleGeoLocation;
+	}
+	
 
 }

@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.login.vo.LatLang;
 import com.login.vo.Phone;
 
 
@@ -77,6 +78,11 @@ public interface LoginEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response recordLoginSucess( @Context HttpServletRequest request);
 	
+	@POST
+	@Path("/updatePreciseLocation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response updatePreciseLocation(LatLang latLang , @Context HttpServletRequest request);
 	
 
 }

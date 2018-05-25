@@ -5,7 +5,7 @@ APP.CONTROLLERS.controller ('CTRL_SNOOZED',['$scope','$ionicSideMenuDelegate','$
 	$scope.snoozedReminders = [];
 	$scope.currentCallCredits = 0;
 	if (document.URL.indexOf('localhost')>=0){
-		regID = "138fa90a-cf3d-4d47-9ea4-e14c1a36b4ab";
+		regID = "070dd753-08e7-4a58-81f9-29ea3ad6c6c0";
 		 window.localStorage.setItem('regID', regID);
 	}
 	

@@ -1,4 +1,4 @@
-<ion-view title="Reminders" cache-view="false"  class="backhroundcolor " ng-init="getReminders()" ng-controller="CTRL_HOME as $ctrl">
+<ion-view title="Reminders" cache-view="false"  class="backhroundcolor " ng-init="getReminders();" ng-controller="CTRL_HOME as $ctrl">
 
 <ion-header-bar class="bar-positive">
       <h1 class="title">Reminders</h1>   
@@ -9,6 +9,23 @@
 	<span class="userName blockDisplay">{{userName}}</span> <span class="userName" ng-click="$ctrl.logOut()">
 	
 	Log Out &nbsp;<i class="icon ion-log-out"></i></span>
+	
+	<div id="geoLocationPermission" ng-if="!geoLocationPermissionGranted">
+		<div class="fullwidth">
+			<hr/>
+		</div>
+		<span class="userName blockDisplay">
+		To server you better we need to know you location
+		<button class="button button-balanced order-button buttonAnimationSmall" ng-click="getLocation()">
+						I am OK
+		</button> 
+		</span>
+	</div>
+	
+	<div class="fullwidth">
+		<hr/>
+	</div>
+	<span class="userName blockDisplay">Filter reminders</span>
 	<div id="filterDiv1" >
 	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter(null,null)">
 					"All"
@@ -23,6 +40,7 @@
 	
 	</div>
 	
+	
 	<div id="filterDiv2" style="padding-top: 10px;" >
 	
 	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Date', 'Monthly')">
@@ -31,6 +49,9 @@
 	<button class="button button-balanced order-button buttonAnimationSmall" ng-click="filter('Day', null)">
 					"Weekly"
 	</button>
+	</div>
+	<div class="fullwidth">
+		<hr/>
 	</div>
 	
 	</div>
