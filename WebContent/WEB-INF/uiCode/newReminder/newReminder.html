@@ -77,8 +77,8 @@
 		
 		<!-- verified Phone numbers -->
 		 <span ng-show="reminder.makeACall || reminder.sendText">
-		  &nbsp;<select ng-show="verifiedPhones.length > 1" class="selectFrequency" ng-model="selectedPhone" ng-options="x for x in verifiedPhones"></select>
-		  <span  class="userName" ng-show="verifiedPhones.length == 1">{{selectedPhone}}</span>
+		  &nbsp;<select ng-show="verifiedPhones.length > 1" class="selectFrequency" ng-model="$ctrl.selectedPhone" ng-options="x for x in verifiedPhones"></select>
+		  <span  class="userName" ng-show="verifiedPhones.length == 1">{{$ctrl.selectedPhone}}</span>
 		  </span>
 	<div class="notifyButtons">
 	 <div class="inline">

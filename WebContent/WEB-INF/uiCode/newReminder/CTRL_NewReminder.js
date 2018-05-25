@@ -2,6 +2,7 @@ APP.CONTROLLERS.controller ('CTRL_NewReminder',['$scope','$http','$rootScope','$
     function($scope, $http, $rootScope ,$ionicPopup,$state,$ionicLoading,$window,appData){
 
 	var theCtrl = this;
+	theCtrl.selectedPhone = "";
 	$scope.reminder = {}
 	 var config = {
             headers : {
@@ -82,7 +83,7 @@ var monthNames =[
 		}
 	}
 	
-	$scope.selectedPhone = "";
+	
 	$scope.toggleCall = function (){
 		if($scope.verifiedPhones.length <= 0){
 				$scope.reminder.makeACall = false;
@@ -186,7 +187,7 @@ var monthNames =[
 			reminderObj.sendText = $scope.reminder.sendText;
 			
 			reminderObj.frequencyType = $scope.frequencyType;
-			reminderObj.selectedPhone = $scope.selectedPhone;
+			reminderObj.selectedPhone = theCtrl.selectedPhone;
 		if($scope.frequencyType =='Date'){
 			reminderObj.frequencyWithDate = $scope.frequencyWithDate;//Once , Monthly, Yearly
 			reminderObj.date =$scope.reminder.year+"_"+$scope.reminder.month+"_"+$scope.reminder.day;
@@ -244,7 +245,7 @@ var monthNames =[
   			if (response.data){
   				$scope.verifiedPhones = response.data;
   				if($scope.verifiedPhones.length > 0){
-  					$scope.selectedPhone = $scope.verifiedPhones[0];
+  					theCtrl.selectedPhone = $scope.verifiedPhones[0];
   					
   					$scope.setCallAndTextSettings();
   				}else {
